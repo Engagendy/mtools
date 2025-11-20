@@ -1,0 +1,542 @@
+<!-- Ensure proper charset and language support for Arabic -->
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<style>
+    /* Use Almarai font for Arabic support */
+    * {
+        font-family: 'Almarai', Arial, sans-serif !important;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="color"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #1a1a1a;
+        background-color: #fafafa;
+    }
+
+    input[type="color"] {
+        width: 50px;
+        height: 40px;
+        padding: 2px;
+        cursor: pointer;
+    }
+
+    input[type="file"] {
+        padding: 8px;
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    /* Tab functionality - match business card style */
+    .discount-tab-content {
+        display: none;
+    }
+
+    .discount-tab-content.active {
+        display: block;
+    }
+
+    .tab-button.active {
+        background: white !important;
+        color: #1f2937 !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Text formatting panel */
+    #discount-text-formatting-panel {
+        background: #f8f9fa;
+        border: 2px solid #4F46E5;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    #discount-text-formatting-panel.hidden {
+        display: none;
+    }
+
+    .formatting-controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .formatting-controls label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        text-transform: none;
+    }
+
+    .btn-align {
+        padding: 8px 12px;
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background 0.3s;
+    }
+
+    .btn-align:hover {
+        background: #333;
+    }
+
+    .btn-align.active {
+        background: #4F46E5;
+    }
+
+    .btn-primary,
+    .btn-success,
+    .btn-danger {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        font-size: 13px;
+    }
+
+    .btn-primary {
+        background: #4F46E5;
+        color: white;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .btn-primary:hover {
+        background: #4338ca;
+    }
+
+    .btn-success {
+        background: #1a1a1a;
+        color: white;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-success:hover {
+        background: #333;
+    }
+
+    .btn-danger {
+        background: #ff4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #dd0000;
+    }
+
+    .canvas-container {
+        width: 100%;
+        background: #f5f5f5;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 800px;
+        border: 1px solid #ddd;
+    }
+
+    .section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .category-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .qr-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+
+        .category-row,
+        .qr-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Format selector buttons */
+    .discount-format-btn {
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid #ddd;
+        color: #333;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .discount-format-btn:hover {
+        background: #f5f5f5;
+        border-color: #4F46E5;
+    }
+
+    .discount-format-btn.active {
+        background: #4F46E5;
+        color: white;
+        border-color: #4F46E5;
+        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .discount-format-btn .format-name {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .discount-format-btn .format-size {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+</style>
+
+<!-- Discount Offer Tool - Clean Layout matching Business Card -->
+<div class="grid grid-cols-1 gap-6 min-h-[70vh]">
+    <!-- FORMAT SELECTOR -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fas fa-layer-group"></i>
+            <span data-i18n="discount_offer.format_selector.title">Select Template Format</span>
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button class="discount-format-btn active" onclick="selectDiscountFormat('story')">
+                <i class="fas fa-mobile-alt" style="font-size: 20px;"></i>
+                <span class="format-name" data-i18n="discount_offer.formats.story">Story</span>
+                <span class="format-size">9:16</span>
+            </button>
+            <button class="discount-format-btn" onclick="selectDiscountFormat('post')">
+                <i class="fas fa-square" style="font-size: 20px;"></i>
+                <span class="format-name" data-i18n="discount_offer.formats.post">Post</span>
+                <span class="format-size">1:1</span>
+            </button>
+            <button class="discount-format-btn" onclick="selectDiscountFormat('a4')">
+                <i class="fas fa-file-alt" style="font-size: 20px;"></i>
+                <span class="format-name" data-i18n="discount_offer.formats.a4">A4 Flyer</span>
+                <span class="format-size">A4</span>
+            </button>
+            <button class="discount-format-btn" onclick="selectDiscountFormat('wide')">
+                <i class="fas fa-panorama" style="font-size: 20px;"></i>
+                <span class="format-name" data-i18n="discount_offer.formats.wide">Banner</span>
+                <span class="format-size">16:9</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- EDITOR AND PREVIEW -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- LEFT PANEL: TABS & FORMS (1/3) -->
+        <div class="bg-white rounded-lg border border-gray-200 p-6">
+            <!-- Tab Navigation -->
+            <div class="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
+                <button
+                    class="tab-button active flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 bg-white text-gray-900 shadow-sm"
+                    onclick="switchDiscountTab('content')" data-i18n="discount_offer.tabs.content">Content</button>
+                <button
+                    class="tab-button flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-900"
+                    onclick="switchDiscountTab('design')" data-i18n="discount_offer.tabs.design">Design</button>
+                <button
+                    class="tab-button flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-900"
+                    onclick="switchDiscountTab('export')" data-i18n="discount_offer.tabs.export">Export</button>
+            </div>
+
+            <!-- CONTENT TAB -->
+            <div id="discount-tab-content" class="discount-tab-content active">
+                <div class="space-y-6">
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.content.store_info">🏪 Store Information</div>
+
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.store_name">Store Name</label>
+                            <input type="text" id="discount-store-name" placeholder="Alalamy Sharjah"
+                                value="Alalamy Sharjah">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.tagline">Tagline</label>
+                            <input type="text" id="discount-tagline" placeholder="العالمي ملك السعادة ❤️"
+                                value="العالمي ملك السعادة ❤️" style="text-align: right;">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.location">Location</label>
+                            <input type="text" id="discount-location" placeholder="فرع الشارقة" value="فرع الشارقة"
+                                style="text-align: right;">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.main_title">Main Title</label>
+                            <textarea id="discount-main-title" rows="2"
+                                style="text-align: right;">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.description">Description</label>
+                            <textarea id="discount-description" rows="4" style="text-align: right;">• لحامل هذه البطاقة فقط
+• لا يجمع مع عروض أخرى
+• متوفر في فرع الشارقة فقط</textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.content.categories">🏷️ Discount Categories</div>
+
+                    <div class="space-y-3">
+                        <div class="category-row">
+                            <input type="text" id="discount-cat1-name" placeholder="Category 1" value="كفرات موبايل"
+                                style="text-align: right;">
+                            <input type="number" id="discount-cat1-percent" placeholder="%" value="30" min="0"
+                                max="100">
+                        </div>
+                        <div class="category-row">
+                            <input type="text" id="discount-cat2-name" placeholder="Category 2" value="شواحن وكابلات"
+                                style="text-align: right;">
+                            <input type="number" id="discount-cat2-percent" placeholder="%" value="25" min="0"
+                                max="100">
+                        </div>
+                        <div class="category-row">
+                            <input type="text" id="discount-cat3-name" placeholder="Category 3"
+                                value="ماوس ولوحات مفاتيح" style="text-align: right;">
+                            <input type="number" id="discount-cat3-percent" placeholder="%" value="20" min="0"
+                                max="100">
+                        </div>
+                        <div class="category-row">
+                            <input type="text" id="discount-cat4-name" placeholder="Category 4"
+                                value="سماعات وأكسسوارات" style="text-align: right;">
+                            <input type="number" id="discount-cat4-percent" placeholder="%" value="15" min="0"
+                                max="100">
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.content.contact">📞 Contact Information</div>
+
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.expiry_date">Expiry Date</label>
+                            <input type="date" id="discount-expiry-date" value="2025-12-31">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.phone">Phone Number</label>
+                            <input type="tel" id="discount-phone" placeholder="+971 XX XXX XXXX">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.content.tiktok">TikTok Handle</label>
+                            <input type="text" id="discount-tiktok" placeholder="@alalamy.sharjah"
+                                value="alalamy.sharjah">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESIGN TAB -->
+            <div id="discount-tab-design" class="discount-tab-content">
+                <div class="space-y-6">
+                    <!-- Text Formatting Panel (shown when text is selected) -->
+                    <div id="discount-text-formatting-panel" class="hidden">
+                        <div class="section-title">
+                            <i class="fas fa-font"></i> <span data-i18n="discount_offer.design.text_formatting">Text
+                                Formatting</span>
+                        </div>
+                        <div class="formatting-controls">
+                            <label>
+                                <span data-i18n="discount_offer.design.font_size">Font Size</span>
+                                <input type="range" id="discount-text-font-size" min="12" max="72" value="24"
+                                    style="width: 120px;">
+                                <span id="discount-font-size-value">24px</span>
+                            </label>
+
+                            <label>
+                                <span data-i18n="discount_offer.design.font_family">Font Family</span>
+                                <select id="discount-text-font-family" style="width: 150px;">
+                                    <option value="Almarai">Almarai</option>
+                                    <option value="Cairo">Cairo</option>
+                                    <option value="Tajawal">Tajawal</option>
+                                    <option value="Arial">Arial</option>
+                                </select>
+                            </label>
+
+                            <div>
+                                <label data-i18n="discount_offer.design.alignment">Alignment</label>
+                                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                                    <button class="btn-align" id="discount-text-align-left" data-align="left"><i
+                                            class="fas fa-align-left"></i></button>
+                                    <button class="btn-align" id="discount-text-align-center" data-align="center"><i
+                                            class="fas fa-align-center"></i></button>
+                                    <button class="btn-align" id="discount-text-align-right" data-align="right"><i
+                                            class="fas fa-align-right"></i></button>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" id="discount-element-copy" style="width: auto; margin-top: 0;">
+                                <i class="fas fa-copy"></i> <span data-i18n="discount_offer.design.copy">Copy</span>
+                            </button>
+
+                            <button class="btn-danger" id="discount-element-delete" style="width: auto;">
+                                <i class="fas fa-trash"></i> <span
+                                    data-i18n="discount_offer.design.delete">Delete</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.design.colors">🎨 Colors</div>
+
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.background_color">Background Color</label>
+                            <input type="color" id="discount-bg-color" value="#4F46E5">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.badge_color">Badge Color</label>
+                            <input type="color" id="discount-badge-color" value="#FF0000">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.text_color">Text Color</label>
+                            <input type="color" id="discount-text-color" value="#ffffff">
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.design.images">🖼️ Images</div>
+
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.logo">Logo</label>
+                            <input type="file" id="discount-logo-upload" accept="image/*">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.qr_codes">QR Codes (4 slots)</label>
+                            <div class="space-y-2">
+                                <input type="file" id="discount-qr1-upload" accept="image/*" placeholder="QR 1">
+                                <input type="file" id="discount-qr2-upload" accept="image/*" placeholder="QR 2">
+                                <input type="file" id="discount-qr3-upload" accept="image/*" placeholder="QR 3">
+                                <input type="file" id="discount-qr4-upload" accept="image/*" placeholder="QR 4">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="discount_offer.design.background_image">Background Image</label>
+                            <input type="file" id="discount-bg-image-upload" accept="image/*">
+                            <small data-i18n="discount_offer.design.bg_image_note">Will overlay background color</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPORT TAB -->
+            <div id="discount-tab-export" class="discount-tab-content">
+                <div class="space-y-6">
+                    <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200"
+                        data-i18n="discount_offer.export.title">💾 Export Options</div>
+
+                    <p style="color: #666; margin-bottom: 20px;" data-i18n="discount_offer.export.description">
+                        Export your discount flyer as a high-quality PNG image.
+                    </p>
+
+                    <button class="btn-success" onclick="exportDiscountFlyer()">
+                        <i class="fas fa-image"></i> <span data-i18n="discount_offer.export.export_png">Export as
+                            PNG</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Update Button (always visible) -->
+            <button class="btn-primary" onclick="updateDiscountPreview()">
+                <i class="fas fa-sync-alt"></i> <span data-i18n="discount_offer.update_preview">Update Preview</span>
+            </button>
+        </div>
+
+        <!-- RIGHT PANEL: CANVAS PREVIEW (2/3) -->
+        <div class="lg:col-span-2 bg-white rounded-lg border border-gray-200 p-6">
+            <div class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-eye"></i>
+                <span data-i18n="discount_offer.preview.title">Live Preview</span>
+            </div>
+            <div class="canvas-container">
+                <div id="discount-canvas"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/discount-tool-new.js"></script>

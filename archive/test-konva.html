@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Konva Test</title>
+    <script src="https://unpkg.com/konva@10/konva.min.js"></script>
+</head>
+<body>
+    <h1>Konva Canvas Test</h1>
+    <div id="konvaContainer" style="border: 2px solid red; width: 500px; height: 400px;"></div>
+    
+    <script>
+        console.log('Starting Konva test...');
+        console.log('Konva available:', typeof Konva !== 'undefined');
+        
+        window.addEventListener('load', function() {
+            console.log('Window loaded, creating stage...');
+            
+            const container = document.getElementById('konvaContainer');
+            console.log('Container:', container);
+            
+            try {
+                const stage = new Konva.Stage({
+                    container: 'konvaContainer',
+                    width: 400,
+                    height: 300
+                });
+                console.log('Stage created:', stage);
+                
+                const layer = new Konva.Layer();
+                
+                const rect = new Konva.Rect({
+                    x: 50,
+                    y: 50,
+                    width: 100,
+                    height: 100,
+                    fill: 'green',
+                    stroke: 'black',
+                    strokeWidth: 2
+                });
+                
+                const text = new Konva.Text({
+                    x: 50,
+                    y: 180,
+                    text: 'Hello Konva!',
+                    fontSize: 24,
+                    fill: 'blue'
+                });
+                
+                layer.add(rect);
+                layer.add(text);
+                stage.add(layer);
+                layer.draw();
+                
+                console.log('Rectangle and text added successfully!');
+                console.log('Container HTML after:', container.innerHTML);
+                
+            } catch (error) {
+                console.error('Error creating Konva stage:', error);
+            }
+        });
+    </script>
+</body>
+</html>

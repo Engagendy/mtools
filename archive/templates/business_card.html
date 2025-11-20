@@ -1,0 +1,1543 @@
+<!-- Ensure proper charset and language support for Arabic -->
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<style>
+    :root {
+        --card-bg: #1a1a1a;
+        --card-text: #ffffff;
+    }
+    
+    
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="color"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 13px;
+        transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="url"]:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #1a1a1a;
+        background-color: #fafafa;
+    }
+    
+    input[type="color"] {
+        width: 50px;
+        height: 40px;
+        padding: 2px;
+        cursor: pointer;
+    }
+    
+    input[type="file"] {
+        padding: 8px;
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+    
+    .color-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .service-input-group {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+    
+    .service-input-group input {
+        flex: 1;
+    }
+    
+    .btn-small {
+        padding: 6px 10px;
+        background: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        font-size: 11px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    .btn-small:hover {
+        background: #dd0000;
+    }
+    
+    .btn-add {
+        padding: 8px 16px;
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .btn-add:hover {
+        background: #333;
+    }
+    
+    .service-list {
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    
+    .service-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px;
+        background: white;
+        margin-bottom: 4px;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+    
+    .logo-preview {
+        width: 60px;
+        height: 60px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 10px;
+        border: 2px solid #ddd;
+        overflow: hidden;
+    }
+    
+    .logo-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    /* Tab functionality */
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+    
+    .tab-button.active {
+        background: white !important;
+        color: #1f2937 !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    /* CARD STYLES */
+    .card {
+        width: 100%;
+        max-width: 400px;
+        aspect-ratio: 3.4 / 2;
+        background: var(--card-bg);
+        color: var(--card-text);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        border-radius: 8px;
+        font-family: inherit;
+    }
+    
+    .card::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    
+    .card::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: -30px;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 8px;
+    }
+    
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid var(--card-text);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+    
+    .logo-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .header-text h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.1;
+    }
+    
+    .header-text p {
+        font-size: 10px;
+        color: rgba(255,255,255,0.7);
+        margin: 3px 0 0 0;
+        letter-spacing: 1px;
+    }
+    
+    .card-middle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        gap: 0;
+        margin: 0;
+    }
+    
+    .services {
+        flex: 1;
+    }
+    
+    .service-title {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+    
+    .service-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .service-badge {
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        color: #ffffff !important;
+        padding: 5px 12px !important;
+        border-radius: 15px !important;
+        font-size: 10px !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        display: inline-block !important;
+        margin: 3px !important;
+        min-width: 50px !important;
+        text-align: center !important;
+        font-family: 'Almarai', Arial, sans-serif !important;
+        line-height: 1.3 !important;
+        box-sizing: border-box !important;
+        vertical-align: middle !important;
+        -webkit-font-smoothing: antialiased !important;
+        text-rendering: optimizeLegibility !important;
+    }
+
+    /* Ensure service badges export with correct styling */
+    #cardEnglish .service-badge,
+    #cardArabic .service-badge {
+        background-color: rgba(255,255,255,0.15) !important;
+        border-color: rgba(255,255,255,0.4) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    .qr-section {
+        text-align: center;
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        min-width: 85px;
+    }
+    
+    .qr-placeholder {
+        width: 75px;
+        height: 75px;
+        background: #f5f5f5;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: #999;
+        font-weight: 700;
+        overflow: hidden;
+    }
+    
+    .qr-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .qr-text {
+        font-size: 8px;
+        color: #333;
+        margin-top: 4px;
+        font-weight: 600;
+    }
+    
+    .card-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: relative;
+        z-index: 2;
+        margin-top: 8px;
+    }
+    
+    .divider {
+        height: 1px;
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .contact-info {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 9px;
+        color: rgba(255,255,255,0.8);
+    }
+    
+    .contact-icon {
+        width: 14px;
+        height: 14px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7px;
+        color: var(--card-text);
+        flex-shrink: 0;
+    }
+    
+    .website {
+        font-size: 9px;
+        color: rgba(255,255,255,0.7);
+    }
+    
+    /* ENGLISH SIDE - Explicit LTR */
+    .card:not(.card-arabic) {
+        direction: ltr;
+        text-align: left;
+    }
+    
+    .card:not(.card-arabic) .card-header {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+    
+    .card:not(.card-arabic) .header-text {
+        text-align: left;
+    }
+    
+    .card:not(.card-arabic) .header-text h1,
+    .card:not(.card-arabic) .header-text p {
+        text-align: left;
+    }
+    
+    .card:not(.card-arabic) .services {
+        text-align: left;
+    }
+    
+    .card:not(.card-arabic) .service-items {
+        justify-content: flex-start;
+        flex-direction: row;
+    }
+    
+    .card:not(.card-arabic) .card-middle {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .card:not(.card-arabic) .card-footer {
+        text-align: left;
+    }
+    
+    .card:not(.card-arabic) .contact-info {
+        justify-content: flex-start;
+        flex-direction: row;
+    }
+    
+    .card:not(.card-arabic) .contact-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        direction: ltr;
+    }
+    
+    .card:not(.card-arabic) .website {
+        text-align: left;
+    }
+    
+    /* ARABIC SIDE */
+    .card-arabic {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    .card-arabic .card-header {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+    
+    .card-arabic .header-text {
+        text-align: right;
+    }
+    
+    .card-arabic .header-text h1,
+    .card-arabic .header-text p {
+        text-align: right;
+    }
+    
+    .card-arabic .services {
+        text-align: right;
+    }
+    
+    .card-arabic .service-items {
+        justify-content: flex-end;
+        flex-direction: row-reverse;
+    }
+    
+    .card-arabic .card-middle {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+    
+    .card-arabic .card-footer {
+        text-align: right;
+    }
+    
+    .card-arabic .contact-info {
+        justify-content: flex-end;
+        flex-direction: row-reverse;
+    }
+    
+    .card-arabic .contact-item {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        direction: ltr;
+    }
+    
+    .card-arabic .contact-item span {
+        direction: ltr;
+        text-align: left;
+    }
+    
+    .card-arabic .website {
+        text-align: right;
+    }
+    
+    .print-button {
+        padding: 12px 24px;
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-family: inherit;
+    }
+    
+    .print-button:hover {
+        background: #333;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .button-group button {
+        flex: 1;
+    }
+    
+    .tabs {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+    }
+    
+    .tab-button {
+        padding: 10px 15px;
+        background: none;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+        color: #999;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+    
+    .tab-button.active {
+        color: #1a1a1a;
+        border-bottom-color: #1a1a1a;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    @media print {
+        .container {
+            grid-template-columns: 1fr;
+        }
+        .control-panel {
+            display: none;
+        }
+        .preview-wrapper {
+            background: white;
+            padding: 0;
+        }
+    }
+    
+    @media (max-width: 1200px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- Business Card Tool - Clean 1/3-2/3 Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[70vh]">
+    <!-- LEFT PANEL: TABS & FORMS (1/3) -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <!-- Tab Navigation -->
+        <div class="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
+            <button class="tab-button active flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 bg-white text-gray-900 shadow-sm" onclick="businessCard.switchTab('english')" data-i18n="business_card.tabs.english">English Side</button>
+            <button class="tab-button flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-900" onclick="businessCard.switchTab('arabic')" data-i18n="business_card.tabs.arabic">Arabic Side</button>
+        </div>
+        
+        <!-- ENGLISH TAB CONTENT -->
+        <div id="english" class="tab-content active">
+            <div class="space-y-6">
+                <div class="text-sm font-semibold text-gray-700 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200" data-i18n="business_card.english.shop_details">👔 English Shop Details</div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="form-label" data-i18n="business_card.english.shop_name">Shop Name (English)</label>
+                        <input type="text" class="form-input" id="shopNameEn" data-i18n-placeholder="business_card.english.shop_name_placeholder" placeholder="AL-ALAMIA" value="AL-ALAMIA" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div>
+                        <label class="form-label" data-i18n="business_card.english.tagline">Tagline/Location</label>
+                        <input type="text" class="form-input" id="taglineEn" data-i18n-placeholder="business_card.english.tagline_placeholder" placeholder="Sharjah, UAE" value="Sharjah, UAE" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div>
+                        <label class="form-label" data-i18n="business_card.english.phone">Phone Number</label>
+                        <input type="tel" class="form-input" id="phoneEn" data-i18n-placeholder="business_card.english.phone_placeholder" placeholder="+971 XX XXX XXXX" value="+971 XX XXX XXXX" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div>
+                        <label class="form-label" data-i18n="business_card.english.email">Email</label>
+                        <input type="email" class="form-input" id="emailEn" data-i18n-placeholder="business_card.english.email_placeholder" placeholder="info@alamia.ae" value="info@alamia.ae" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div>
+                        <label class="form-label" data-i18n="business_card.english.website">Website</label>
+                        <input type="url" class="form-input" id="websiteEn" data-i18n-placeholder="business_card.english.website_placeholder" placeholder="www.alamia-sharjah.ae" value="www.alamia-sharjah.ae" oninput="businessCard.updateAllCards()">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title" data-i18n="business_card.english.services_title">📱 Services</div>
+                    <div class="service-list" id="serviceListEn"></div>
+                    <input type="text" id="newServiceEn" data-i18n-placeholder="business_card.english.new_service_placeholder" placeholder="Add new service..." onkeypress="if(event.key==='Enter') businessCard.addService('En')">
+                    <button class="btn-add" onclick="businessCard.addService('En')" data-i18n="business_card.english.add_service">+ Add Service</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ARABIC TAB CONTENT -->
+        <div id="arabic" class="tab-content">
+            <div class="space-y-6">
+                <div class="section-title" data-i18n="business_card.arabic.shop_details">👔 تفاصيل المتجر العربية</div>
+                
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label data-i18n="business_card.arabic.shop_name">اسم المتجر (عربي)</label>
+                        <input type="text" id="shopNameAr" data-i18n-placeholder="business_card.arabic.shop_name_placeholder" placeholder="العالمى الشارقة" value="العالمى الشارقة" oninput="businessCard.updateAllCards()" style="text-align: right;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="business_card.arabic.tagline">الشعار/الموقع</label>
+                        <input type="text" id="taglineAr" data-i18n-placeholder="business_card.arabic.tagline_placeholder" placeholder="الإمارات العربية المتحدة" value="الإمارات العربية المتحدة" oninput="businessCard.updateAllCards()" style="text-align: right;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="business_card.arabic.phone">رقم الهاتف</label>
+                        <input type="tel" id="phoneAr" data-i18n-placeholder="business_card.arabic.phone_placeholder" placeholder="+971 XX XXX XXXX" value="+971 XX XXX XXXX" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="business_card.arabic.email">البريد الإلكتروني</label>
+                        <input type="email" id="emailAr" data-i18n-placeholder="business_card.arabic.email_placeholder" placeholder="info@alamia.ae" value="info@alamia.ae" oninput="businessCard.updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="business_card.arabic.website">الموقع الإلكتروني</label>
+                        <input type="url" id="websiteAr" data-i18n-placeholder="business_card.arabic.website_placeholder" placeholder="www.alamia-sharjah.ae" value="www.alamia-sharjah.ae" oninput="businessCard.updateAllCards()">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title" data-i18n="business_card.arabic.services_title">📱 الخدمات</div>
+                    <div class="service-list" id="serviceListAr"></div>
+                    <input type="text" id="newServiceAr" data-i18n-placeholder="business_card.arabic.new_service_placeholder" placeholder="إضافة خدمة جديدة..." onkeypress="if(event.key==='Enter') businessCard.addService('Ar')" style="text-align: right;">
+                    <button class="btn-add" onclick="businessCard.addService('Ar')" data-i18n="business_card.arabic.add_service">+ إضافة خدمة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- RIGHT PANEL: DESIGN & PREVIEW (2/3) -->
+    <div class="col-span-2 bg-gray-50 p-6 rounded-lg">
+        <!-- Card Previews Section -->
+        <div class="space-y-6 mb-6">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2 font-almarai" data-i18n="business_card.preview.title">Card Preview</h3>
+                <p class="text-sm text-gray-600 mb-4" data-i18n="business_card.preview.description">Your business cards will appear below</p>
+            </div>
+            
+            <!-- English Card -->
+            <div class="bg-white rounded-lg p-6 flex items-center justify-center shadow-sm border border-gray-200">
+                <div class="card" id="cardEnglish" lang="en">
+                    <div class="card-header">
+                        <div class="logo-icon" id="logoEn">📱</div>
+                        <div class="header-text">
+                            <h1 id="shopNameEnDisplay">AL-ALAMIA</h1>
+                            <p id="taglineEnDisplay">Sharjah, UAE</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <div class="services">
+                            <div class="service-title" data-i18n="business_card.services_en">Services</div>
+                            <div class="service-items" id="servicesEnDisplay"></div>
+                        </div>
+                        
+                        <div class="qr-section">
+                            <div class="qr-placeholder" id="qrDisplayEn">QR</div>
+                            <div class="qr-text" id="qrLabelDisplay">SCAN ME</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="divider"></div>
+                        <div class="contact-info" id="contactEnDisplay"></div>
+                        <div class="website" id="websiteEnDisplay"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Arabic Card -->
+            <div class="bg-white rounded-lg p-6 flex items-center justify-center shadow-sm border border-gray-200">
+                <div class="card card-arabic" id="cardArabic" dir="rtl" lang="ar">
+                    <div class="card-header">
+                        <div class="header-text">
+                            <h1 id="shopNameArDisplay">العالمى الشارقة</h1>
+                            <p id="taglineArDisplay">الإمارات العربية المتحدة</p>
+                        </div>
+                        <div class="logo-icon" id="logoAr">📱</div>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <div class="qr-section">
+                            <div class="qr-placeholder" id="qrDisplayAr">QR</div>
+                            <div class="qr-text" id="qrLabelAr">SCAN ME</div>
+                        </div>
+                        
+                        <div class="services">
+                            <div class="service-title" data-i18n="business_card.services_ar">الخدمات</div>
+                            <div class="service-items" id="servicesArDisplay"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="divider"></div>
+                        <div class="contact-info" id="contactArDisplay"></div>
+                        <div class="website" id="websiteArDisplay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Design Controls -->
+        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 font-almarai" data-i18n="business_card.design.colors_title">🎨 Colors & Design</h3>
+            
+            <!-- Color Controls Section -->
+            <div class="mb-6">
+                <h4 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide" data-i18n="business_card.design.color_settings">Color Settings</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Background Color -->
+                    <div class="space-y-2">
+                        <label class="form-label" data-i18n="business_card.design.bg_color">Background Color</label>
+                        <div class="flex items-center space-x-3">
+                            <input type="color" class="h-12 w-16 rounded-lg border border-gray-300 shadow-sm" id="bgColor" value="#1a1a1a" oninput="businessCard.changeBackgroundColor(this.value)">
+                            <input type="text" class="form-input flex-1 text-sm font-mono" id="bgColorHex" value="#1a1a1a" oninput="businessCard.changeBackgroundColor(this.value)">
+                        </div>
+                    </div>
+                    
+                    <!-- Text Color -->
+                    <div class="space-y-2">
+                        <label class="form-label" data-i18n="business_card.design.text_color">Text Color</label>
+                        <div class="flex items-center space-x-3">
+                            <input type="color" class="h-12 w-16 rounded-lg border border-gray-300 shadow-sm" id="textColor" value="#ffffff" oninput="businessCard.changeTextColor(this.value)">
+                            <input type="text" class="form-input flex-1 text-sm font-mono" id="textColorHex" value="#ffffff" oninput="businessCard.changeTextColor(this.value)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Asset Controls Section -->
+            <div class="mb-6">
+                <h4 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide" data-i18n="business_card.design.assets">Logo & QR Code</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Logo/Icon -->
+                    <div class="space-y-2">
+                        <label class="form-label" data-i18n="business_card.design.logo_label">Logo/Icon</label>
+                        <input type="text" class="form-input text-sm mb-2" id="logoEmoji" data-i18n-placeholder="business_card.design.logo_placeholder" placeholder="📱" value="📱" maxlength="50" oninput="businessCard.updateAllCards()">
+                        <div class="logo-drop-zone border-2 border-dashed border-gray-300 rounded-lg p-4 text-center transition-colors hover:border-blue-400 hover:bg-blue-50" 
+                             ondrop="businessCard.handleLogoDrop(event)" 
+                             ondragover="businessCard.handleDragOver(event)" 
+                             ondragleave="businessCard.handleDragLeave(event)">
+                            <div class="text-sm text-gray-600 mb-2">Drop logo image here or</div>
+                            <input type="file" class="block w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" id="logoUpload" accept="image/*" onchange="businessCard.uploadLogo()">
+                        </div>
+                    </div>
+                    
+                    <!-- QR Code -->
+                    <div class="space-y-2">
+                        <label class="form-label" data-i18n="business_card.design.qr_label">QR Label</label>
+                        <input type="text" class="form-input text-sm mb-2" id="qrLabel" data-i18n-placeholder="business_card.design.qr_label_placeholder" placeholder="SCAN ME" value="SCAN ME" oninput="businessCard.updateAllCards()">
+                        <div class="qr-drop-zone border-2 border-dashed border-gray-300 rounded-lg p-4 text-center transition-colors hover:border-blue-400 hover:bg-blue-50" 
+                             ondrop="businessCard.handleQRDrop(event)" 
+                             ondragover="businessCard.handleDragOver(event)" 
+                             ondragleave="businessCard.handleDragLeave(event)">
+                            <div class="text-sm text-gray-600 mb-2">Drop QR code image here or</div>
+                            <input type="file" class="block w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200" id="qrUpload" accept="image/*" onchange="businessCard.uploadQR()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Export Buttons -->
+            <div class="border-t border-gray-200 pt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-almarai w-full" onclick="businessCard.exportEnglishCard()" data-i18n="business_card.design.export_english">
+                        📥 <span class="ml-2">Export English Card</span>
+                    </button>
+                    <button class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-almarai w-full" onclick="businessCard.exportArabicCard()" data-i18n="business_card.design.export_arabic">
+                        📥 <span class="ml-2">Export Arabic Card</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+window.businessCard = {
+    servicesEn: ['Mobile Phones', 'Laptops', 'Tablets', 'Buy', 'Sell', 'Trade-In'],
+    servicesAr: ['هواتف ذكية', 'أجهزة كمبيوتر', 'أجهزة لوحية', 'شراء', 'بيع', 'تبديل'],
+    
+    switchTab: function(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        event.target.classList.add('active');
+    },
+    
+    changeBackgroundColor: function(value) {
+        document.getElementById('bgColor').value = value;
+        document.getElementById('bgColorHex').value = value;
+        document.documentElement.style.setProperty('--card-bg', value);
+    },
+    
+    changeTextColor: function(value) {
+        document.getElementById('textColor').value = value;
+        document.getElementById('textColorHex').value = value;
+        document.documentElement.style.setProperty('--card-text', value);
+    },
+    
+    addService: function(lang) {
+        const inputId = lang === 'En' ? 'newServiceEn' : 'newServiceAr';
+        const input = document.getElementById(inputId);
+        const service = input.value.trim();
+        
+        if (service) {
+            if (lang === 'En') {
+                this.servicesEn.push(service);
+            } else {
+                this.servicesAr.push(service);
+            }
+            input.value = '';
+            this.updateAllCards();
+        }
+    },
+    
+    removeService: function(lang, index) {
+        if (lang === 'En') {
+            this.servicesEn.splice(index, 1);
+        } else {
+            this.servicesAr.splice(index, 1);
+        }
+        this.updateAllCards();
+    },
+    
+    updateServiceLists: function() {
+        const listEn = document.getElementById('serviceListEn');
+        if (listEn) {
+            listEn.innerHTML = this.servicesEn.map((service, index) => `
+                <div class="service-item">
+                    <span>${service}</span>
+                    <button class="btn-small" onclick="businessCard.removeService('En', ${index})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        const listAr = document.getElementById('serviceListAr');
+        if (listAr) {
+            listAr.innerHTML = this.servicesAr.map((service, index) => `
+                <div class="service-item">
+                    <span>${service}</span>
+                    <button class="btn-small" onclick="businessCard.removeService('Ar', ${index})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        // Update card previews to reflect service changes
+        this.updateAllCards();
+    },
+    
+    updateAllCards: function() {
+        // Get form values
+        const shopNameEn = document.getElementById('shopNameEn').value;
+        const taglineEn = document.getElementById('taglineEn').value;
+        const phoneEn = document.getElementById('phoneEn').value;
+        const emailEn = document.getElementById('emailEn').value;
+        const websiteEn = document.getElementById('websiteEn').value;
+        
+        const shopNameAr = document.getElementById('shopNameAr').value;
+        const taglineAr = document.getElementById('taglineAr').value;
+        const phoneAr = document.getElementById('phoneAr').value;
+        const emailAr = document.getElementById('emailAr').value;
+        const websiteAr = document.getElementById('websiteAr').value;
+        
+        const logoEmoji = document.getElementById('logoEmoji').value;
+        const qrLabel = document.getElementById('qrLabel').value;
+        
+        // Update English card
+        document.getElementById('shopNameEnDisplay').textContent = shopNameEn;
+        document.getElementById('taglineEnDisplay').textContent = taglineEn;
+        document.getElementById('websiteEnDisplay').textContent = websiteEn ? '🌐 ' + websiteEn : '';
+        document.getElementById('logoEn').textContent = logoEmoji;
+        document.getElementById('servicesEnDisplay').innerHTML = this.servicesEn.map(s => 
+            `<span class="service-badge">${s}</span>`
+        ).join('');
+        document.getElementById('contactEnDisplay').innerHTML = `
+            ${phoneEn ? `<div class="contact-item"><div class="contact-icon">📱</div><span>${phoneEn}</span></div>` : ''}
+            ${emailEn ? `<div class="contact-item"><div class="contact-icon">✉️</div><span>${emailEn}</span></div>` : ''}
+        `;
+        
+        // Update Arabic card
+        document.getElementById('shopNameArDisplay').textContent = shopNameAr;
+        document.getElementById('taglineArDisplay').textContent = taglineAr;
+        document.getElementById('websiteArDisplay').textContent = websiteAr ? '🌐 ' + websiteAr : '';
+        document.getElementById('logoAr').textContent = logoEmoji;
+        document.getElementById('servicesArDisplay').innerHTML = this.servicesAr.map(s => 
+            `<span class="service-badge">${s}</span>`
+        ).join('');
+        document.getElementById('contactArDisplay').innerHTML = `
+            ${phoneAr ? `<div class="contact-item"><span>${phoneAr}</span><div class="contact-icon">📱</div></div>` : ''}
+            ${emailAr ? `<div class="contact-item"><span>${emailAr}</span><div class="contact-icon">✉️</div></div>` : ''}
+        `;
+        
+        document.getElementById('qrLabelDisplay').textContent = qrLabel;
+        document.getElementById('qrLabelAr').textContent = qrLabel;
+        
+        this.updateServiceLists();
+    },
+    
+    uploadLogo: function() {
+        const file = document.getElementById('logoUpload').files[0];
+        if (file) {
+            this.processLogoFile(file);
+        }
+    },
+    
+    uploadQR: function() {
+        const file = document.getElementById('qrUpload').files[0];
+        if (file) {
+            this.processQRFile(file);
+        }
+    },
+    
+    exportCard: function(cardElement, filename) {
+        // Force style refresh before export
+        this.prepareCardForExport(cardElement);
+        
+        // Use the same simple approach as other tools that work well
+        if (typeof html2canvas !== 'undefined') {
+            console.log('📸 Using proven html2canvas method (same as other tools)');
+            this.exportWithSimpleHtml2Canvas(cardElement, filename);
+        } else {
+            console.log('🎨 Using canvas fallback');
+            this.exportWithCanvas(cardElement, filename);
+        }
+    },
+
+    prepareCardForExport: function(cardElement) {
+        // Simple preparation - just force a layout recalculation
+        cardElement.offsetHeight;
+        
+        // Ensure all service badges have consistent styling for export
+        const badges = cardElement.querySelectorAll('.service-badge');
+        badges.forEach(badge => {
+            // Apply minimal inline styling to ensure consistency
+            badge.style.fontFamily = 'Almarai, Arial, sans-serif';
+            badge.style.fontWeight = '500';
+        });
+    },
+    
+    exportWithSimpleHtml2Canvas: function(cardElement, filename) {
+        const isArabicCard = cardElement.classList.contains('card-arabic');
+        
+        // FIX: Store document direction and temporarily force LTR for better html2canvas rendering
+        const originalDocDir = document.documentElement.dir;
+        const originalDocLang = document.documentElement.lang;
+        const originalBodyDir = document.body.dir;
+        
+        // Store original inline styles that might affect rendering
+        const originalInlineStyles = [];
+        const allElements = cardElement.querySelectorAll('*');
+        
+        allElements.forEach(element => {
+            const computedStyle = window.getComputedStyle(element);
+            originalInlineStyles.push({
+                element: element,
+                originalDir: element.dir,
+                originalTextAlign: element.style.textAlign,
+                originalDirection: element.style.direction,
+                originalFontFamily: computedStyle.fontFamily
+            });
+            
+            // Preserve individual element RTL for Arabic cards, but fix document-level issues
+            if (!isArabicCard || !element.closest('[dir="rtl"]')) {
+                element.dir = '';
+                element.style.direction = '';
+            }
+            
+            // Keep original Almarai font since it's not the issue
+            // element.style.fontFamily = 'Arial, sans-serif';
+        });
+        
+        // Temporarily set document to LTR for html2canvas processing
+        if (originalDocDir === 'rtl') {
+            document.documentElement.dir = 'ltr';
+            document.body.dir = 'ltr';
+        }
+        
+        // Wait for direction changes to apply
+        setTimeout(() => {
+            html2canvas(cardElement, {
+                scale: 3,
+                backgroundColor: null,
+                logging: false,
+                allowTaint: true,
+                useCORS: true
+            }).then(canvas => {
+                // Restore all original settings
+                document.documentElement.dir = originalDocDir;
+                document.documentElement.lang = originalDocLang;
+                document.body.dir = originalBodyDir;
+                
+                originalInlineStyles.forEach(({element, originalDir, originalTextAlign, originalDirection, originalFontFamily}) => {
+                    if (originalDir) element.dir = originalDir;
+                    if (originalTextAlign) element.style.textAlign = originalTextAlign;
+                    if (originalDirection) element.style.direction = originalDirection;
+                    // Let CSS handle font (Almarai restored)
+                });
+                
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                console.log('✅ Export successful with RTL/LTR fix!');
+            }).catch(err => {
+                // Restore all settings even on error
+                document.documentElement.dir = originalDocDir;
+                document.documentElement.lang = originalDocLang;
+                document.body.dir = originalBodyDir;
+                
+                originalInlineStyles.forEach(({element, originalDir, originalTextAlign, originalDirection}) => {
+                    if (originalDir) element.dir = originalDir;
+                    if (originalTextAlign) element.style.textAlign = originalTextAlign;
+                    if (originalDirection) element.style.direction = originalDirection;
+                    // Let CSS handle font (Almarai restored)
+                });
+                
+                console.error('Export failed:', err);
+                this.exportWithCanvas(cardElement, filename);
+            });
+        }, 200); // Longer wait for direction changes
+    },
+    
+    exportWithDomToImage: function(cardElement, filename) {
+        const domToImage = window.domtoimage || window.domToImage;
+        
+        if (!domToImage) {
+            console.warn('dom-to-image not available, falling back');
+            if (typeof html2canvas !== 'undefined') {
+                this.exportWithHtml2Canvas(cardElement, filename);
+            } else {
+                this.exportWithCanvas(cardElement, filename);
+            }
+            return;
+        }
+
+        const options = {
+            quality: 1.0,
+            width: cardElement.offsetWidth * 3,
+            height: cardElement.offsetHeight * 3,
+            bgcolor: '#1a1a1a',
+            cacheBust: true,
+            imagePlaceholder: undefined,
+            style: {
+                transform: 'scale(3)',
+                transformOrigin: 'top left',
+                fontFamily: '"Almarai", Arial, sans-serif',
+                direction: cardElement.classList.contains('card-arabic') ? 'rtl' : 'ltr'
+            },
+            filter: function(node) {
+                // Include all nodes for better rendering
+                return true;
+            }
+        };
+        
+        // Wait for fonts to load
+        document.fonts.ready.then(() => {
+            domToImage.toPng(cardElement, options)
+                .then(function(dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    console.log('✅ dom-to-image export successful');
+                })
+                .catch(function(error) {
+                    console.error('❌ dom-to-image failed, falling back to html2canvas:', error);
+                    if (typeof html2canvas !== 'undefined') {
+                        window.businessCard.exportWithHtml2Canvas(cardElement, filename);
+                    } else {
+                        window.businessCard.exportWithCanvas(cardElement, filename);
+                    }
+                });
+        }).catch(err => {
+            console.warn('Font loading failed, proceeding with dom-to-image anyway:', err);
+            domToImage.toPng(cardElement, options)
+                .then(function(dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .catch(function(error) {
+                    console.error('dom-to-image failed completely:', error);
+                    if (typeof html2canvas !== 'undefined') {
+                        window.businessCard.exportWithHtml2Canvas(cardElement, filename);
+                    } else {
+                        window.businessCard.exportWithCanvas(cardElement, filename);
+                    }
+                });
+        });
+    },
+    
+    exportWithHtml2Canvas: function(cardElement, filename) {
+        // Ensure fonts are loaded before capture
+        document.fonts.ready.then(() => {
+            const options = {
+                scale: 3,
+                backgroundColor: null,
+                allowTaint: true,
+                useCORS: true,
+                logging: false,
+                width: cardElement.offsetWidth,
+                height: cardElement.offsetHeight,
+                letterRendering: true,
+                foreignObjectRendering: false,
+                imageTimeout: 0
+            };
+            
+            html2canvas(cardElement, options).then(canvas => {
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png', 1.0);
+            }).catch(err => {
+                console.error('html2canvas failed, falling back to basic export:', err);
+                this.exportWithCanvas(cardElement, filename);
+            });
+        }).catch(err => {
+            console.warn('Font loading failed, proceeding with export:', err);
+            // Continue with export even if font loading fails
+            const options = {
+                scale: 3,
+                backgroundColor: null,
+                allowTaint: true,
+                useCORS: true,
+                logging: false,
+                width: cardElement.offsetWidth,
+                height: cardElement.offsetHeight
+            };
+            
+            html2canvas(cardElement, options).then(canvas => {
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png', 1.0);
+            }).catch(err => {
+                console.error('html2canvas failed, falling back to basic export:', err);
+                this.exportWithCanvas(cardElement, filename);
+            });
+        });
+    },
+    
+    exportWithCanvas: function(cardElement, filename) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set high resolution canvas (3.5" x 2" at 300 DPI)
+        const scale = 3;
+        canvas.width = 1050 * scale;
+        canvas.height = 600 * scale;
+        ctx.scale(scale, scale);
+        
+        // Get computed styles and check if RTL
+        const cardData = {
+            bgColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim(),
+            textColor: getComputedStyle(document.documentElement).getPropertyValue('--card-text').trim(),
+            isRTL: cardElement.classList.contains('card-arabic'),
+            direction: cardElement.dir === 'rtl' || cardElement.classList.contains('card-arabic')
+        };
+        
+        // Set font for Arabic support
+        ctx.font = '14px "Almarai", Arial, sans-serif';
+        
+        // Enable Arabic text shaping if supported
+        if (ctx.textDirection) {
+            ctx.textDirection = cardData.direction ? 'rtl' : 'ltr';
+        }
+        
+        // Draw card background
+        ctx.fillStyle = cardData.bgColor || '#1a1a1a';
+        ctx.fillRect(0, 0, 1050, 600);
+        
+        // Draw gradient effects
+        const gradient1 = ctx.createRadialGradient(900, 100, 0, 900, 100, 180);
+        gradient1.addColorStop(0, 'rgba(255,255,255,0.05)');
+        gradient1.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient1;
+        ctx.fillRect(0, 0, 1050, 600);
+        
+        const self = this;
+        Promise.all([
+            self.loadImageIfExists(cardElement, '.logo-icon img'),
+            self.loadImageIfExists(cardElement, '.qr-placeholder img')
+        ]).then(([logoImg, qrImg]) => {
+            // Configure positioning based on RTL
+            const isRTL = cardData.isRTL;
+            const logoX = isRTL ? 940 : 50;
+            const textStartX = isRTL ? 880 : 130;
+            const qrX = isRTL ? 50 : 850;
+            const servicesX = isRTL ? 750 : 100;
+            
+            // Set text alignment
+            ctx.textAlign = isRTL ? 'right' : 'left';
+            ctx.direction = isRTL ? 'rtl' : 'ltr';
+            
+            // Draw logo
+            if (logoImg) {
+                ctx.drawImage(logoImg, logoX, 40, 60, 60);
+            } else {
+                // Draw emoji fallback
+                const logoText = cardElement.querySelector('.logo-icon').textContent;
+                if (logoText && logoText !== '📱') {
+                    ctx.font = '60px "Almarai", Arial, sans-serif';
+                    ctx.fillStyle = cardData.textColor || '#ffffff';
+                    ctx.fillText(logoText, logoX, 70);
+                }
+            }
+            
+            // Set text properties
+            ctx.fillStyle = cardData.textColor || '#ffffff';
+            ctx.textBaseline = 'top';
+            
+            // Draw content
+            const shopName = cardElement.querySelector('h1').textContent;
+            const tagline = cardElement.querySelector('p').textContent;
+            const services = Array.from(cardElement.querySelectorAll('.service-badge')).map(el => el.textContent);
+            const website = cardElement.querySelector('.website').textContent;
+            
+            // Title with Almarai font
+            ctx.font = 'bold 48px "Almarai", Arial, sans-serif';
+            ctx.fillText(shopName, textStartX, 50);
+            
+            // Tagline
+            ctx.font = '20px "Almarai", Arial, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.fillText(tagline, textStartX, 110);
+            
+            // Services title
+            ctx.fillStyle = cardData.textColor || '#ffffff';
+            ctx.font = 'bold 16px "Almarai", Arial, sans-serif';
+            const serviceTitle = cardElement.querySelector('.service-title').textContent;
+            ctx.fillText(serviceTitle.toUpperCase(), servicesX, 200);
+            
+            // Service badges
+            ctx.font = '14px "Almarai", Arial, sans-serif';
+            services.forEach((service, index) => {
+                const badgeX = isRTL ? servicesX - (index % 3) * 120 - 100 : servicesX + (index % 3) * 120;
+                const badgeY = 230 + Math.floor(index / 3) * 25;
+                
+                // Draw badge background
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                const badgeWidth = service.length * 8 + 20;
+                ctx.fillRect(badgeX, badgeY, badgeWidth, 20);
+                ctx.strokeRect(badgeX, badgeY, badgeWidth, 20);
+                
+                // Draw badge text
+                ctx.fillStyle = cardData.textColor || '#ffffff';
+                ctx.fillText(service, badgeX + 10, badgeY + 4);
+            });
+            
+            // QR section background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(qrX, 350, 150, 150);
+            
+            // Draw QR code or placeholder
+            if (qrImg) {
+                ctx.drawImage(qrImg, qrX + 10, 360, 130, 130);
+            } else {
+                ctx.fillStyle = '#f5f5f5';
+                ctx.fillRect(qrX + 10, 360, 130, 130);
+                ctx.fillStyle = '#999';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('QR', qrX + 75, 420);
+            }
+            
+            // QR label
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 12px "Almarai", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            const qrLabelText = cardElement.querySelector('.qr-text').textContent;
+            ctx.fillText(qrLabelText, qrX + 75, 510);
+            
+            // Reset text alignment for contact info
+            ctx.textAlign = isRTL ? 'right' : 'left';
+            
+            // Contact info
+            const contactInfo = cardElement.querySelector('.contact-info');
+            if (contactInfo) {
+                ctx.fillStyle = cardData.textColor || '#ffffff';
+                ctx.font = '18px "Almarai", Arial, sans-serif';
+                const contacts = contactInfo.textContent.replace(/📱|✉️/g, '').trim();
+                const contactX = isRTL ? 950 : 100;
+                ctx.fillText(contacts, contactX, 450);
+            }
+            
+            // Website
+            ctx.font = '16px "Almarai", Arial, sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            const websiteX = isRTL ? 950 : 100;
+            ctx.fillText(website, websiteX, 520);
+            
+            // Download the image
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png', 1.0);
+        }).catch(err => {
+            console.error('Error loading images for export:', err);
+            // Fallback: export without images but with proper layout
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png', 1.0);
+        });
+    },
+    
+    loadImageIfExists: function(cardElement, selector) {
+        return new Promise((resolve) => {
+            const imgElement = cardElement.querySelector(selector);
+            if (imgElement && imgElement.src) {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => resolve(img);
+                img.onerror = () => resolve(null);
+                img.src = imgElement.src;
+            } else {
+                resolve(null);
+            }
+        });
+    },
+    
+    exportEnglishCard: function() {
+        const englishCard = document.getElementById('cardEnglish');
+        if (englishCard) {
+            this.exportCard(englishCard, 'business-card-english.png');
+        }
+    },
+    
+    exportArabicCard: function() {
+        const arabicCard = document.getElementById('cardArabic');
+        if (arabicCard) {
+            this.exportCard(arabicCard, 'business-card-arabic.png');
+        }
+    },
+    
+    // Drag and Drop functionality
+    handleDragOver: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.currentTarget.classList.add('border-blue-500', 'bg-blue-100');
+        event.currentTarget.classList.remove('border-gray-300');
+    },
+    
+    handleDragLeave: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.currentTarget.classList.remove('border-blue-500', 'bg-blue-100');
+        event.currentTarget.classList.add('border-gray-300');
+    },
+    
+    handleLogoDrop: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Reset visual state
+        event.currentTarget.classList.remove('border-blue-500', 'bg-blue-100');
+        event.currentTarget.classList.add('border-gray-300');
+        
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+                this.processLogoFile(file);
+            }
+        }
+    },
+    
+    handleQRDrop: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Reset visual state
+        event.currentTarget.classList.remove('border-blue-500', 'bg-blue-100');
+        event.currentTarget.classList.add('border-gray-300');
+        
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('image/')) {
+                this.processQRFile(file);
+            }
+        }
+    },
+    
+    processLogoFile: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            // Update both English and Arabic card logos
+            document.getElementById('logoEn').innerHTML = `<img src="${e.target.result}" alt="Logo">`;
+            document.getElementById('logoAr').innerHTML = `<img src="${e.target.result}" alt="Logo">`;
+            // Clear the emoji field since we're using an image now
+            document.getElementById('logoEmoji').value = '';
+        };
+        reader.readAsDataURL(file);
+    },
+    
+    processQRFile: function(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('qrDisplayEn').innerHTML = `<img src="${e.target.result}" alt="QR Code">`;
+            document.getElementById('qrDisplayAr').innerHTML = `<img src="${e.target.result}" alt="QR Code">`;
+        };
+        reader.readAsDataURL(file);
+    },
+    
+    // Initialize the component
+    init: function() {
+        console.log('🔧 Business card initializing...');
+        this.updateServiceLists();
+        this.updateAllCards();
+        
+        // Force update service title translations
+        this.updateServiceTitles();
+        
+        console.log('✅ Business card initialized');
+    },
+    
+    // Force update service titles with correct text
+    updateServiceTitles: function() {
+        const enServiceTitle = document.querySelector('#cardEnglish .service-title');
+        const arServiceTitle = document.querySelector('#cardArabic .service-title');
+        
+        if (enServiceTitle) {
+            enServiceTitle.textContent = 'Services';
+        }
+        
+        if (arServiceTitle) {
+            arServiceTitle.textContent = 'الخدمات';
+        }
+    }
+};
+
+// Load html2canvas library for better exports
+if (!window.html2canvas) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = () => console.log('html2canvas loaded successfully');
+    script.onerror = () => console.warn('html2canvas failed to load, using fallback export');
+    document.head.appendChild(script);
+}
+
+// Using same proven html2canvas approach as other tools
+
+// Initialize when loaded - compatible with dynamic loading
+function initializeBusinessCard() {
+    if (window.businessCard) {
+        console.log('Initializing business card...');
+        window.businessCard.init();
+    }
+}
+
+// Try immediate initialization (for dynamic loading)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeBusinessCard);
+} else {
+    // DOM is already ready, initialize immediately
+    setTimeout(initializeBusinessCard, 100);
+}
+</script>

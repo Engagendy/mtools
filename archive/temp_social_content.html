@@ -1,0 +1,706 @@
+<style>
+    .social-media-tool * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .social-media-tool {
+        font-family: 'Almarai', sans-serif;
+        direction: rtl;
+        min-height: 100vh;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .social-media-tool .main-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .social-media-tool .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .social-media-tool .header h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .social-media-tool .header p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+    .social-media-tool .badge {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-right: 10px;
+    }
+
+    .social-media-tool .platforms-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .social-media-tool .platform-btn {
+        padding: 15px;
+        border: 3px solid white;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s;
+        text-align: center;
+    }
+
+    .social-media-tool .platform-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .social-media-tool .platform-btn.active {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-media-tool .content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .social-media-tool .editor-panel {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .social-media-tool .panel-title {
+        font-size: 20px;
+        font-weight: 900;
+        color: #667eea;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .social-media-tool .section-group {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .social-media-tool .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .social-media-tool .form-group {
+        margin-bottom: 12px;
+    }
+
+    .social-media-tool label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 6px;
+    }
+
+    .social-media-tool input[type="text"],
+    .social-media-tool input[type="tel"],
+    .social-media-tool input[type="number"],
+    .social-media-tool input[type="color"],
+    .social-media-tool input[type="file"],
+    .social-media-tool textarea,
+    .social-media-tool select {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 13px;
+        font-family: 'Almarai', sans-serif;
+        transition: border-color 0.3s;
+    }
+
+    .social-media-tool input:focus,
+    .social-media-tool textarea:focus,
+    .social-media-tool select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
+    .social-media-tool textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .social-media-tool input[type="color"] {
+        height: 45px;
+        cursor: pointer;
+    }
+
+    .social-media-tool .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .social-media-tool .preview-panel {
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    .social-media-tool .preview-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+
+    .social-media-tool .preview-info {
+        text-align: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .social-media-tool .preview-platform {
+        font-size: 16px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 5px;
+    }
+
+    .social-media-tool .preview-dimensions {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .social-media-tool .canvas-container {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        background: #f5f5f5;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .social-media-tool .tools-panel {
+        background: #f8f9fa;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .social-media-tool .tools-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .social-media-tool .tool-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .social-media-tool .tool-btn {
+        padding: 8px 12px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .social-media-tool .tool-btn:hover {
+        background: #5a67d8;
+        transform: translateY(-1px);
+    }
+
+    .social-media-tool .tool-btn.danger {
+        background: #e53e3e;
+    }
+
+    .social-media-tool .tool-btn.danger:hover {
+        background: #c53030;
+    }
+
+    .social-media-tool .tool-btn.active {
+        background: #667eea;
+        color: white;
+    }
+
+    .social-media-tool .tool-btn.active:hover {
+        background: #5a67d8;
+    }
+
+    .social-media-tool .export-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        margin-top: 10px;
+    }
+
+    .social-media-tool .export-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    @media (max-width: 1200px) {
+        .social-media-tool .content {
+            grid-template-columns: 1fr;
+        }
+
+        .social-media-tool .preview-panel {
+            position: static;
+            top: auto;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .social-media-tool .platforms-selector {
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+
+        .social-media-tool .editor-panel {
+            max-height: none;
+        }
+    }
+</style>
+
+<div class="social-media-tool">
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-magic"></i>
+                منشئ عروض وسائل التواصل المتطور
+                <span class="badge">Konva.js</span>
+            </h1>
+            <p>أداة تصميم احترافية مع إمكانيات السحب والإفلات والتغيير في الحجم</p>
+        </div>
+
+        <!-- Platform Selection -->
+        <div class="platforms-selector">
+            <button class="platform-btn active" onclick="selectPlatform('instagram')">
+                <i class="fab fa-instagram"></i><br>Instagram<br>1080×1350
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('instastory')">
+                <i class="fab fa-instagram"></i><br>Story<br>1080×1920
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('facebook')">
+                <i class="fab fa-facebook"></i><br>Facebook<br>1200×1500
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('twitter')">
+                <i class="fab fa-twitter"></i><br>Twitter<br>1024×512
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Editor Panel -->
+            <div class="editor-panel">
+                <div class="panel-title">
+                    <i class="fas fa-edit"></i> محرر التصميم المتطور
+                </div>
+
+                <!-- Selection Info -->
+                <div class="tools-panel">
+                    <div class="tools-title">
+                        <i class="fas fa-mouse-pointer"></i> العنصر المحدد
+                    </div>
+                    <div id="selectionInfo" style="font-size: 12px; color: #666; margin-bottom: 10px; min-height: 20px;">
+                        اضغط على أي عنصر لتحديده والتحكم به
+                    </div>
+                </div>
+
+                <!-- Text Formatting Tools -->
+                <div class="tools-panel" id="textFormattingPanel" style="display: none;">
+                    <div class="tools-title">
+                        <i class="fas fa-font"></i> تنسيق النص
+                    </div>
+                    
+                    <!-- Direction Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">اتجاه النص</label>
+                        <div class="tool-buttons" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <button class="tool-btn" id="rtlBtn" onclick="setTextDirection('rtl')">
+                                <i class="fas fa-arrow-right"></i> RTL
+                            </button>
+                            <button class="tool-btn" id="ltrBtn" onclick="setTextDirection('ltr')">
+                                <i class="fas fa-arrow-left"></i> LTR
+                            </button>
+                            <button class="tool-btn" onclick="autoDetectDirection()" style="background: #28a745;">
+                                <i class="fas fa-magic"></i> تلقائي
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Alignment Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">محاذاة النص</label>
+                        <div class="tool-buttons" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <button class="tool-btn" id="leftBtn" onclick="setTextAlign('left')">
+                                <i class="fas fa-align-left"></i> يسار
+                            </button>
+                            <button class="tool-btn" id="centerBtn" onclick="setTextAlign('center')">
+                                <i class="fas fa-align-center"></i> وسط
+                            </button>
+                            <button class="tool-btn" id="rightBtn" onclick="setTextAlign('right')">
+                                <i class="fas fa-align-right"></i> يمين
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Font Family Selection -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">نوع الخط</label>
+                        <select id="fontFamilySelect" onchange="changeFontFamily()" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-family: 'Almarai', sans-serif; font-size: 12px;">
+                            <optgroup label="خطوط عربية">
+                                <option value="Almarai">الماريا - Almarai</option>
+                                <option value="Cairo">القاهرة - Cairo</option>
+                                <option value="Tajawal">تجوال - Tajawal</option>
+                                <option value="Amiri">أميري - Amiri</option>
+                                <option value="Rubik">روبيك - Rubik</option>
+                            </optgroup>
+                            <optgroup label="خطوط إنجليزية">
+                                <option value="Inter">Inter</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Source Sans Pro">Source Sans Pro</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Font Size Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">حجم الخط</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="tool-btn" onclick="adjustFontSize(-2)" style="flex: 0 0 auto; padding: 6px 8px;">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="fontSizeDisplay" style="flex: 1; text-align: center; font-size: 12px; font-weight: 600;">--</span>
+                            <button class="tool-btn" onclick="adjustFontSize(2)" style="flex: 0 0 auto; padding: 6px 8px;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Tools -->
+                <div class="tools-panel">
+                    <div class="tools-title">
+                        <i class="fas fa-tools"></i> أدوات التصميم
+                    </div>
+                    <div class="tool-buttons">
+                        <button class="tool-btn" onclick="duplicateSelected()">
+                            <i class="fas fa-copy"></i> نسخ
+                        </button>
+                        <button class="tool-btn" onclick="deleteSelected()">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                        <button class="tool-btn" onclick="bringToFront()">
+                            <i class="fas fa-arrow-up"></i> للأمام
+                        </button>
+                        <button class="tool-btn" onclick="sendToBack()">
+                            <i class="fas fa-arrow-down"></i> للخلف
+                        </button>
+                        <button class="tool-btn danger" onclick="clearAll()">
+                            <i class="fas fa-trash-alt"></i> مسح الكل
+                        </button>
+                        <button class="tool-btn" onclick="resetPositions()">
+                            <i class="fas fa-undo"></i> إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Store Information -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-store"></i> معلومات المتجر
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المتجر</label>
+                        <input type="text" id="storeName" value="Alalamy Sharjah" placeholder="أدخل اسم المتجر" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>الشعار أو الجملة الترويجية</label>
+                        <input type="text" id="tagline" value="العالمي ملك السعادة ❤️" placeholder="أدخل الشعار" onchange="updateCanvas()">
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-heading"></i> المحتوى
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان العرض</label>
+                        <textarea id="mainTitle" placeholder="أدخل عنوان العرض" onchange="updateCanvas()">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>نص الخصم الرئيسي</label>
+                        <input type="text" id="badgeText" value="من 15% إلى 30%" placeholder="نص الخصم" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف الإضافي</label>
+                        <textarea id="subtitle" placeholder="نص إضافي أو استدعاء للإجراء" onchange="updateCanvas()">اضغط الآن لعرض أفضل العروض</textarea>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-tags"></i> الفئات والخصومات
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 1</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category1" value="كفرات موبايل" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount1" value="30" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 2</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category2" value="شواحن وكابلات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount2" value="25" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 3</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category3" value="ماوس ولوحات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount3" value="20" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 12px; color: #666;">الفئة 4</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category4" value="سماعات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount4" value="15" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-phone"></i> معلومات الاتصال
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف (اختياري)</label>
+                        <input type="tel" id="phoneNumber" placeholder="+971 50 123 4567" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>حساب وسائل التواصل</label>
+                        <input type="text" id="socialHandle" value="@alalamy.sharjah" placeholder="@username" onchange="updateCanvas()">
+                    </div>
+                </div>
+
+                <!-- Background and Colors -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i> الخلفية والألوان
+                    </div>
+                    
+                    <!-- Background Type Selection -->
+                    <div class="form-group">
+                        <label>نوع الخلفية</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <button type="button" class="tool-btn" id="gradientBgBtn" onclick="selectBackgroundType('gradient')" style="padding: 8px 12px;">
+                                <i class="fas fa-fill-drip"></i> تدرج لوني
+                            </button>
+                            <button type="button" class="tool-btn" id="imageBgBtn" onclick="selectBackgroundType('image')" style="padding: 8px 12px;">
+                                <i class="fas fa-image"></i> صورة
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gradient Background Controls -->
+                    <div id="gradientControls">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label>لون الخلفية الأساسي</label>
+                                <input type="color" id="bgColor1" value="#007BFF" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>لون الخلفية الثانوي</label>
+                                <input type="color" id="bgColor2" value="#0056b3" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Background Controls -->
+                    <div id="imageControls" style="display: none;">
+                        <div class="form-group">
+                            <label>رفع صورة الخلفية</label>
+                            <input type="file" id="backgroundImageInput" accept="image/*" onchange="handleBackgroundImage()" style="margin-bottom: 8px;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 8px;">يُنصح بالصور عالية الجودة (1080px أو أكثر)</div>
+                        </div>
+                        
+                        <!-- Background Image Preview -->
+                        <div id="backgroundImagePreview" style="display: none; margin-bottom: 12px;">
+                            <img id="backgroundPreviewImg" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;">
+                            <div style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button type="button" class="tool-btn" onclick="removeBackgroundImage()" style="background: #dc3545; padding: 6px 12px;">
+                                    <i class="fas fa-trash"></i> حذف الصورة
+                                </button>
+                                <button type="button" class="tool-btn" onclick="resetBackgroundPosition()" style="padding: 6px 12px;">
+                                    <i class="fas fa-expand-arrows-alt"></i> ملء الشاشة
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Background Image Controls -->
+                        <div id="imagePositionControls" style="display: none;">
+                            <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">تحكم في موضع الصورة</label>
+                            <div class="input-row">
+                                <div class="form-group">
+                                    <label>الموضع الأفقي (%)</label>
+                                    <input type="range" id="bgImageX" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" style="width: 100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label>الموضع العمودي (%)</label>
+                                    <input type="range" id="bgImageY" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" style="width: 100%;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>حجم الصورة (%)</label>
+                                <input type="range" id="bgImageScale" min="50" max="200" value="100" onchange="updateBackgroundPosition()" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text and Accent Colors -->
+                    <div class="input-row" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                        <div class="form-group">
+                            <label>لون النص الأساسي</label>
+                            <input type="color" id="textColor" value="#ffffff" onchange="updateCanvas()">
+                        </div>
+                        <div class="form-group">
+                            <label>لون الخصم</label>
+                            <input type="color" id="accentColor" value="#FF0000" onchange="updateCanvas()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-download"></i> التصدير عالي الجودة
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="png" checked style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>PNG (شفاف)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="jpg" style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>JPG (أصغر حجماً)</span>
+                        </label>
+                    </div>
+                    <div class="input-row">
+                        <button class="export-btn" onclick="exportFlyer(1)">
+                            <i class="fas fa-download"></i> تصدير جودة عادية
+                        </button>
+                        <button class="export-btn" onclick="exportFlyer(2)">
+                            <i class="fas fa-download"></i> تصدير جودة عالية (2x)
+                        </button>
+                    </div>
+                    <button class="export-btn" onclick="exportFlyer(3)" style="background: linear-gradient(135deg, #28a745, #20c997); margin-top: 8px;">
+                        <i class="fas fa-star"></i> تصدير جودة فائقة (3x)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-info">
+                        <div class="preview-platform" id="platformName">Instagram Feed</div>
+                        <div class="preview-dimensions" id="platformDimensions">1080 × 1350 px</div>
+                    </div>
+                    <div class="canvas-container" id="canvasContainer">
+                        <div id="konvaContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

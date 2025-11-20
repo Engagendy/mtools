@@ -557,26 +557,6 @@
             border-radius: 4px;
         }
 
-        .draggable-section {
-            cursor: grab;
-            user-select: none;
-            transition: box-shadow 0.2s;
-            touch-action: none;
-            position: relative;
-            display: inline-block;
-        }
-
-        .draggable-section:active {
-            cursor: grabbing;
-        }
-
-        .draggable-section.selected {
-            outline: 3px dashed #FFD700;
-            outline-offset: 2px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-            border-radius: 4px;
-        }
-
         /* Floating Toolbar */
         .floating-toolbar {
             position: fixed;
@@ -790,6 +770,18 @@
                 </div>
             </div>
 
+            <!-- التخصيص والألوان -->
+            <div class="section-group">
+                <div class="section-title">
+                    <i class="fas fa-palette"></i> الألوان والتخصيص
+                </div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>لون الخصم</label>
+                        <input type="color" id="discountColor" value="#FF0000">
+                    </div>
+                </div>
+            </div>
 
             <div class="section-group">
                 <div class="section-title">
@@ -983,60 +975,60 @@
                         <div class="discount-badge draggable-text" id="previewBadge">من 15% إلى 30% خصم</div>
                     </div>
 
-                    <div class="benefits" id="benefitsSection">
-                        <div class="benefit-item draggable-section" id="benefitItem1">
+                    <div class="benefits">
+                        <div class="benefit-item">
                             <i class="fas fa-mobile-alt"></i>
-                            <div class="draggable-text" id="benefitLabel1">كفرات موبايل</div>
-                            <div class="discount-percentage draggable-text" id="benefitDiscount1">30% خصم</div>
+                            <div id="benefitLabel1">كفرات موبايل</div>
+                            <div class="discount-percentage" id="benefitDiscount1">30% خصم</div>
                         </div>
-                        <div class="benefit-item draggable-section" id="benefitItem2">
+                        <div class="benefit-item">
                             <i class="fas fa-charging-station"></i>
-                            <div class="draggable-text" id="benefitLabel2">شواحن وكابلات</div>
-                            <div class="discount-percentage draggable-text" id="benefitDiscount2">25% خصم</div>
+                            <div id="benefitLabel2">شواحن وكابلات</div>
+                            <div class="discount-percentage" id="benefitDiscount2">25% خصم</div>
                         </div>
-                        <div class="benefit-item draggable-section" id="benefitItem3">
+                        <div class="benefit-item">
                             <i class="fas fa-mouse"></i>
-                            <div class="draggable-text" id="benefitLabel3">ماوس ولوحات مفاتيح</div>
-                            <div class="discount-percentage draggable-text" id="benefitDiscount3">20% خصم</div>
+                            <div id="benefitLabel3">ماوس ولوحات مفاتيح</div>
+                            <div class="discount-percentage" id="benefitDiscount3">20% خصم</div>
                         </div>
-                        <div class="benefit-item draggable-section" id="benefitItem4">
+                        <div class="benefit-item">
                             <i class="fas fa-headphones"></i>
-                            <div class="draggable-text" id="benefitLabel4">سماعات وأكسسوارات</div>
-                            <div class="discount-percentage draggable-text" id="benefitDiscount4">15% خصم</div>
+                            <div id="benefitLabel4">سماعات وأكسسوارات</div>
+                            <div class="discount-percentage" id="benefitDiscount4">15% خصم</div>
                         </div>
                     </div>
 
                     <div class="description" id="previewDescription">
-                        <strong class="draggable-text" id="descriptionTitle">⚠️ الشروط والملاحظات:</strong><br>
-                        <div class="draggable-text" id="descriptionContent" style="margin-top: 10px; line-height: 1.8; font-size: 13px;">
+                        <strong>⚠️ الشروط والملاحظات:</strong><br>
+                        <div style="margin-top: 10px; line-height: 1.8; font-size: 13px;">
                             • لحامل هذه البطاقة فقط<br>
                             • لا يجمع مع عروض أخرى<br>
                             • متوفر في فرع الشارقة فقط
                         </div>
                     </div>
 
-                    <div class="qr-section" id="qrSection">
-                        <div class="qr-text draggable-text" id="qrTextLabel">تابعنا:</div>
+                    <div class="qr-section">
+                        <div class="qr-text">تابعنا:</div>
                         <div class="qr-codes-container">
-                            <div class="qr-code draggable-section" id="previewQR1">
+                            <div class="qr-code" id="previewQR1">
                                 <div style="text-align: center;">
                                     <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
                                     <div style="font-size: 9px; color: #007BFF;">QR 1</div>
                                 </div>
                             </div>
-                            <div class="qr-code draggable-section" id="previewQR2">
+                            <div class="qr-code" id="previewQR2">
                                 <div style="text-align: center;">
                                     <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
                                     <div style="font-size: 9px; color: #007BFF;">QR 2</div>
                                 </div>
                             </div>
-                            <div class="qr-code draggable-section" id="previewQR3">
+                            <div class="qr-code" id="previewQR3">
                                 <div style="text-align: center;">
                                     <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
                                     <div style="font-size: 9px; color: #007BFF;">QR 3</div>
                                 </div>
                             </div>
-                            <div class="qr-code draggable-section" id="previewQR4">
+                            <div class="qr-code" id="previewQR4">
                                 <div style="text-align: center;">
                                     <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
                                     <div style="font-size: 9px; color: #007BFF;">QR 4</div>
@@ -1045,17 +1037,17 @@
                         </div>
                         <div class="social-follow">
                             تابعنا على<br>
-                            <span class="social-handle draggable-text" id="previewTikTok">@alalamy.sharjah</span>
+                            <span class="social-handle" id="previewTikTok">@alalamy.sharjah</span>
                         </div>
                     </div>
 
-                    <div class="footer" id="footerSection">
-                        <div class="expiry-date draggable-text" id="previewExpiry">صالح حتى 31 ديسمبر 2025</div>
-                        <div class="contact-info draggable-text" id="previewContact">
+                    <div class="footer">
+                        <div class="expiry-date" id="previewExpiry">صالح حتى 31 ديسمبر 2025</div>
+                        <div class="contact-info" id="previewContact">
                             <span><i class="fas fa-phone"></i> اتصل بنا</span>
                             <span><i class="fas fa-map-marker-alt"></i> الشارقة</span>
                         </div>
-                        <div class="draggable-text" id="thankYouMessage" style="margin-top: 10px; font-size: 11px; color: #666;">
+                        <div style="margin-top: 10px; font-size: 11px; color: #666;">
                             شكراً لك على اختيارك Alalamy Sharjah ✨
                         </div>
                     </div>
@@ -1186,15 +1178,12 @@
             }
 
             const descriptionDiv = document.getElementById('previewDescription');
-            const descriptionTitle = document.getElementById('descriptionTitle');
-            const descriptionContent = document.getElementById('descriptionContent');
-            
-            if (descriptionTitle) {
-                descriptionTitle.textContent = '⚠️ الشروط والملاحظات:';
-            }
-            if (descriptionContent) {
-                descriptionContent.innerHTML = description.split('\n').map(line => `${line}`).join('<br>');
-            }
+            descriptionDiv.innerHTML = `
+                <strong>⚠️ الشروط والملاحظات:</strong><br>
+                <div style="margin-top: 10px; line-height: 1.8; font-size: 13px;">
+                    ${description.split('\n').map(line => `${line}`).join('<br>')}
+                </div>
+            `;
 
             const expiryElement = document.getElementById('previewExpiry');
             expiryElement.textContent = `صالح حتى ${arabicDate}`;
@@ -1230,11 +1219,6 @@
                     `;
                 }
             }
-            
-            // Re-initialize drag and drop for all elements
-            setTimeout(() => {
-                initDragAndDrop();
-            }, 50);
         }
 
         function exportAsPNG() {
@@ -1406,7 +1390,7 @@
         });
 
         function initDragAndDrop() {
-            const draggables = document.querySelectorAll('.draggable-text, .draggable-image, .draggable-section');
+            const draggables = document.querySelectorAll('.draggable-text, .draggable-image');
             
             draggables.forEach(element => {
                 element.onmousedown = null;

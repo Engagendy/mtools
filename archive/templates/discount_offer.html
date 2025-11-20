@@ -1,0 +1,1600 @@
+<!-- Discount Offer Template -->
+<style>
+/* Discount Offer Tool Styles */
+.discount-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+.discount-editor-panel {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.discount-panel-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #4F46E5;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.discount-section-group {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.discount-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.discount-form-group {
+    margin-bottom: 12px;
+}
+
+.discount-form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.discount-form-group input,
+.discount-form-group textarea,
+.discount-form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    transition: border-color 0.3s;
+}
+
+.discount-form-group input:focus,
+.discount-form-group textarea:focus,
+.discount-form-group select:focus {
+    outline: none;
+    border-color: #4F46E5;
+    box-shadow: 0 0 5px rgba(79, 70, 229, 0.3);
+}
+
+.discount-form-group input[type="color"] {
+    height: 45px;
+    cursor: pointer;
+}
+
+.discount-form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.discount-update-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4F46E5, #4338CA);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: sticky;
+    bottom: 80px;
+    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+    z-index: 10;
+    margin-bottom: 10px;
+}
+
+.discount-update-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.discount-export-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: sticky;
+    bottom: 20px;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    z-index: 10;
+}
+
+.discount-export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+}
+
+.discount-preview-panel {
+    position: sticky;
+    top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.discount-card {
+    width: 100%;
+    max-width: 500px;
+    background: linear-gradient(135deg, #4F46E5 0%, #4338CA 50%, #ffffff 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(79, 70, 229, 0.3);
+    padding: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.discount-decoration {
+    position: absolute;
+    opacity: 0.1;
+    font-size: 100px;
+}
+
+.discount-decoration-1 {
+    top: -20px;
+    left: -20px;
+}
+
+.discount-decoration-2 {
+    bottom: -30px;
+    right: -30px;
+}
+
+.discount-content {
+    position: relative;
+    z-index: 10;
+}
+
+.discount-header {
+    margin-bottom: 30px;
+}
+
+.discount-logo {
+    font-size: 32px;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    word-break: break-word;
+}
+
+.discount-tagline {
+    color: #FFD700;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    word-break: break-word;
+}
+
+.discount-location {
+    color: #ffffff;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.discount-main-title {
+    font-size: 36px;
+    font-weight: 900;
+    color: white;
+    margin: 25px 0;
+    line-height: 1.3;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    word-break: break-word;
+}
+
+.discount-badge {
+    display: inline-block;
+    background: #FF0000;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 28px;
+    font-weight: 900;
+    margin: 15px 0;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+    animation: discountPulse 2s infinite;
+    text-align: center;
+    line-height: 1.0;
+    min-height: 50px;
+    vertical-align: middle;
+}
+
+@keyframes discountPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.discount-benefits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.discount-benefit-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #333;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.discount-benefit-item i {
+    color: #FF0000;
+    font-size: 20px;
+}
+
+.discount-percentage {
+    background: linear-gradient(135deg, #FF0000, #FF6B6B);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 900;
+    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
+    display: inline-block;
+    text-align: center;
+    line-height: 1.0;
+    min-height: 24px;
+    vertical-align: middle;
+}
+
+.discount-description {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+    color: #333;
+    line-height: 1.6;
+    font-size: 13px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.discount-qr-section {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.discount-qr-codes-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.discount-qr-code {
+    width: 100%;
+    aspect-ratio: 1;
+    background: white;
+    border: 2px solid #4F46E5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #4F46E5;
+    padding: 8px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.discount-qr-code img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.discount-qr-text {
+    font-size: 12px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.discount-social-follow {
+    font-size: 12px;
+    color: #333;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.discount-social-handle {
+    color: #FF0000;
+    font-weight: 900;
+}
+
+.discount-footer {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 20px;
+    color: #333;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.discount-contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    font-size: 11px;
+}
+
+.discount-contact-info span {
+    font-weight: 600;
+}
+
+.discount-expiry-date {
+    background: #FF0000;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 50px;
+    font-weight: 900;
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 12px;
+}
+
+.discount-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.discount-toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.discount-toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.discount-toggle-btn:hover {
+    background: #f0f0f0;
+    border-color: #4F46E5;
+}
+
+.discount-toggle-btn.active {
+    background: #4F46E5;
+    color: white;
+    border-color: #4F46E5;
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+}
+
+.discount-bg-section {
+    display: none;
+}
+
+.discount-bg-section.active {
+    display: block;
+}
+
+/* Draggable Elements */
+.discount-draggable-text {
+    cursor: grab;
+    user-select: none;
+    transition: box-shadow 0.2s;
+    touch-action: none;
+    position: relative;
+}
+
+.discount-draggable-text:active {
+    cursor: grabbing;
+}
+
+.discount-draggable-text.selected {
+    outline: 3px dashed #FFD700;
+    outline-offset: 2px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    border-radius: 4px;
+}
+
+.discount-draggable-image {
+    cursor: grab;
+    user-select: none;
+    transition: box-shadow 0.2s;
+    touch-action: none;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.discount-draggable-image:active {
+    cursor: grabbing;
+}
+
+.discount-draggable-image.selected {
+    outline: 3px dashed #FFD700;
+    outline-offset: 2px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    border-radius: 4px;
+}
+
+.discount-draggable-section {
+    cursor: grab;
+    user-select: none;
+    transition: box-shadow 0.2s;
+    touch-action: none;
+    position: relative;
+    display: inline-block;
+}
+
+.discount-draggable-section:active {
+    cursor: grabbing;
+}
+
+.discount-draggable-section.selected {
+    outline: 3px dashed #FFD700;
+    outline-offset: 2px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    border-radius: 4px;
+}
+
+/* Floating Toolbar */
+.discount-floating-toolbar {
+    position: fixed;
+    background: white;
+    border: 2px solid #4F46E5;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    z-index: 5000;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 350px;
+}
+
+.discount-toolbar-button {
+    padding: 8px 12px;
+    background: #f0f0f0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.discount-toolbar-button:hover {
+    background: #4F46E5;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.discount-toolbar-button.active {
+    background: #4F46E5;
+    color: white;
+    border-color: #4338CA;
+}
+
+.discount-toolbar-divider {
+    width: 1px;
+    background: #ddd;
+    margin: 0 4px;
+}
+
+.discount-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    z-index: 10000;
+    animation: discountSlideIn 0.3s ease-in-out;
+}
+
+@keyframes discountSlideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes discountSlideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .discount-container {
+        grid-template-columns: 1fr;
+    }
+
+    .discount-preview-panel {
+        position: static;
+        top: auto;
+    }
+
+    .discount-editor-panel {
+        max-height: none;
+    }
+}
+
+small {
+    color: #999;
+    font-size: 12px;
+}
+</style>
+
+<div class="discount-container">
+    <!-- Editor Panel -->
+    <div class="discount-editor-panel">
+        <div class="discount-panel-title">
+            <i class="fas fa-edit"></i> <span data-i18n="discount.editor.title">محرر العرض</span>
+        </div>
+
+        <!-- Store Information -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-store"></i> <span data-i18n="discount.store.title">معلومات المتجر</span>
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.store.name">اسم المتجر</label>
+                <input type="text" id="discount-store-name" data-i18n-placeholder="discount.store.name_placeholder" value="Alalamy Sharjah">
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.store.tagline">الشعار أو الجملة الترويجية</label>
+                <input type="text" id="discount-tagline" data-i18n-placeholder="discount.store.tagline_placeholder" value="العالمي ملك السعادة ❤️">
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.store.location">المكان/المدينة</label>
+                <input type="text" id="discount-location" data-i18n-placeholder="discount.store.location_placeholder" value="فرع الشارقة">
+            </div>
+        </div>
+
+        <!-- Main Title and Description -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-heading"></i> <span data-i18n="discount.content.title">العناوين والوصف</span>
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.content.main_title">عنوان العرض الرئيسي</label>
+                <textarea id="discount-main-title" data-i18n-placeholder="discount.content.main_title_placeholder">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</textarea>
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.content.description">الشروط والملاحظات</label>
+                <textarea id="discount-description" data-i18n-placeholder="discount.content.description_placeholder">• لحامل هذه البطاقة فقط
+• لا يجمع مع عروض أخرى
+• متوفر في فرع الشارقة فقط</textarea>
+            </div>
+        </div>
+
+        <!-- Logo and Background -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-image"></i> <span data-i18n="discount.logo.title">الشعار والخلفية</span>
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.logo.upload">تحميل شعار الشركة</label>
+                <input type="file" id="discount-logo-image" accept="image/*">
+                <small data-i18n="discount.logo.upload_help">📤 اختر صورة للشعار (PNG/JPG) - سيظهر في أعلى العرض</small>
+            </div>
+            <div class="discount-input-row">
+                <div class="discount-form-group">
+                    <label data-i18n="discount.logo.width">عرض الشعار</label>
+                    <input type="range" id="discount-logo-width" min="20" max="150" value="60">
+                    <span id="discount-logo-width-value">60</span>px
+                </div>
+                <div class="discount-form-group">
+                    <label data-i18n="discount.logo.height">ارتفاع الشعار</label>
+                    <input type="range" id="discount-logo-height" min="20" max="150" value="60">
+                    <span id="discount-logo-height-value">60</span>px
+                </div>
+            </div>
+            <div class="discount-form-group">
+                <label>
+                    <input type="checkbox" id="discount-show-logo">
+                    <span data-i18n="discount.logo.show">إظهار الشعار</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Background Options -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-image"></i> <span data-i18n="discount.background.title">الخلفية</span>
+            </div>
+            
+            <div class="discount-toggle-group">
+                <button type="button" class="discount-toggle-btn active" id="discount-toggle-color">
+                    <i class="fas fa-palette"></i> <span data-i18n="discount.background.color">لون</span>
+                </button>
+                <button type="button" class="discount-toggle-btn" id="discount-toggle-image">
+                    <i class="fas fa-image"></i> <span data-i18n="discount.background.image">صورة</span>
+                </button>
+            </div>
+
+            <div class="discount-bg-section active" id="discount-color-section">
+                <div class="discount-form-group">
+                    <label data-i18n="discount.background.bg_color">لون الخلفية</label>
+                    <input type="color" id="discount-bg-color" value="#4F46E5">
+                    <small data-i18n="discount.background.bg_color_help">اختر اللون المفضل للخلفية</small>
+                </div>
+            </div>
+
+            <div class="discount-bg-section" id="discount-image-section">
+                <div class="discount-form-group">
+                    <label data-i18n="discount.background.bg_image">صورة الخلفية</label>
+                    <input type="file" id="discount-background-image" accept="image/*">
+                    <small data-i18n="discount.background.bg_image_help">📤 اختر صورة للخلفية (PNG/JPG)</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories and Discounts -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-tags"></i> <span data-i18n="discount.categories.title">الخصومات والفئات</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                    <strong style="font-size: 12px; color: #666;" data-i18n="discount.categories.category1">الفئة 1</strong>
+                    <div class="discount-form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                        <label data-i18n="discount.categories.name">اسم الفئة</label>
+                        <input type="text" id="discount-category1" value="كفرات موبايل">
+                    </div>
+                    <div class="discount-form-group">
+                        <label data-i18n="discount.categories.percentage">النسبة (%)</label>
+                        <input type="number" id="discount-percent1" value="30" min="0" max="100">
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                    <strong style="font-size: 12px; color: #666;" data-i18n="discount.categories.category2">الفئة 2</strong>
+                    <div class="discount-form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                        <label data-i18n="discount.categories.name">اسم الفئة</label>
+                        <input type="text" id="discount-category2" value="شواحن وكابلات">
+                    </div>
+                    <div class="discount-form-group">
+                        <label data-i18n="discount.categories.percentage">النسبة (%)</label>
+                        <input type="number" id="discount-percent2" value="25" min="0" max="100">
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                    <strong style="font-size: 12px; color: #666;" data-i18n="discount.categories.category3">الفئة 3</strong>
+                    <div class="discount-form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                        <label data-i18n="discount.categories.name">اسم الفئة</label>
+                        <input type="text" id="discount-category3" value="ماوس ولوحات مفاتيح">
+                    </div>
+                    <div class="discount-form-group">
+                        <label data-i18n="discount.categories.percentage">النسبة (%)</label>
+                        <input type="number" id="discount-percent3" value="20" min="0" max="100">
+                    </div>
+                </div>
+                <div>
+                    <strong style="font-size: 12px; color: #666;" data-i18n="discount.categories.category4">الفئة 4</strong>
+                    <div class="discount-form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                        <label data-i18n="discount.categories.name">اسم الفئة</label>
+                        <input type="text" id="discount-category4" value="سماعات وأكسسوارات">
+                    </div>
+                    <div class="discount-form-group">
+                        <label data-i18n="discount.categories.percentage">النسبة (%)</label>
+                        <input type="number" id="discount-percent4" value="15" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact and Dates -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-calendar"></i> <span data-i18n="discount.contact.title">التاريخ والاتصال</span>
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.contact.expiry">صالح حتى (التاريخ)</label>
+                <input type="date" id="discount-expiry-date" value="2025-12-31">
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.contact.phone">رقم الهاتف</label>
+                <input type="tel" id="discount-phone-number" data-i18n-placeholder="discount.contact.phone_placeholder">
+            </div>
+            <div class="discount-form-group">
+                <label data-i18n="discount.contact.tiktok">حساب TikTok @</label>
+                <input type="text" id="discount-tiktok-handle" value="alalamy.sharjah">
+            </div>
+        </div>
+
+        <!-- Colors and Customization -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-palette"></i> <span data-i18n="discount.colors.title">الألوان والتخصيص</span>
+            </div>
+            <div class="discount-input-row">
+                <div class="discount-form-group">
+                    <label data-i18n="discount.colors.discount_color">لون الخصم</label>
+                    <input type="color" id="discount-discount-color" value="#FF0000">
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Images -->
+        <div class="discount-section-group">
+            <div class="discount-section-title">
+                <i class="fas fa-qrcode"></i> <span data-i18n="discount.qr.title">صور QR Code (4 صور)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="discount-form-group">
+                    <label data-i18n="discount.qr.qr1">QR Code 1</label>
+                    <input type="file" id="discount-qr-image1" accept="image/*">
+                    <small data-i18n="discount.qr.upload_help">📤 اختر صورة QR</small>
+                </div>
+                <div class="discount-form-group">
+                    <label data-i18n="discount.qr.qr2">QR Code 2</label>
+                    <input type="file" id="discount-qr-image2" accept="image/*">
+                    <small data-i18n="discount.qr.upload_help">📤 اختر صورة QR</small>
+                </div>
+                <div class="discount-form-group">
+                    <label data-i18n="discount.qr.qr3">QR Code 3</label>
+                    <input type="file" id="discount-qr-image3" accept="image/*">
+                    <small data-i18n="discount.qr.upload_help">📤 اختر صورة QR</small>
+                </div>
+                <div class="discount-form-group">
+                    <label data-i18n="discount.qr.qr4">QR Code 4</label>
+                    <input type="file" id="discount-qr-image4" accept="image/*">
+                    <small data-i18n="discount.qr.upload_help">📤 اختر صورة QR</small>
+                </div>
+            </div>
+        </div>
+
+        <button class="discount-update-btn" id="discount-update-preview">
+            <i class="fas fa-sync-alt"></i> <span data-i18n="discount.actions.update">تحديث المعاينة</span>
+        </button>
+
+        <button class="discount-export-btn" id="discount-export-png">
+            <i class="fas fa-image"></i> <span data-i18n="discount.actions.export">تصدير كـ PNG</span>
+        </button>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="discount-preview-panel">
+        <div id="discount-canvas-container" style="display: flex; justify-content: center; align-items: center; background: #f5f5f5; border-radius: 20px; padding: 20px;">
+            <div id="discount-canvas"></div>
+        </div>
+        <div class="discount-card" id="discount-preview-card" style="display: none;">
+            <div class="discount-decoration discount-decoration-1">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="discount-decoration discount-decoration-2">
+                <i class="fas fa-laptop"></i>
+            </div>
+
+            <div class="discount-content">
+                <img class="discount-draggable-image" id="discount-preview-logo-image" style="display: none; width: 60px; height: 60px; margin-bottom: 15px; object-fit: contain;">
+                
+                <div class="discount-header">
+                    <div class="discount-logo discount-draggable-text" id="discount-preview-store-name">
+                        <i class="fas fa-shop"></i> Alalamy Sharjah
+                    </div>
+                    <div class="discount-tagline discount-draggable-text" id="discount-preview-tagline">العالمي ملك السعادة ❤️</div>
+                    <div class="discount-location discount-draggable-text">
+                        <i class="fas fa-map-marker-alt"></i> <span id="discount-preview-location">فرع الشارقة</span>
+                    </div>
+                </div>
+
+                <div class="discount-main-title discount-draggable-text" id="discount-preview-main-title">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</div>
+
+                <div style="text-align: center;">
+                    <div class="discount-badge discount-draggable-text" id="discount-preview-badge">من 15% إلى 30% خصم</div>
+                </div>
+
+                <div class="discount-benefits" id="discount-benefits-section">
+                    <div class="discount-benefit-item discount-draggable-section" id="discount-benefit-item1">
+                        <i class="fas fa-mobile-alt"></i>
+                        <div class="discount-draggable-text" id="discount-benefit-label1">كفرات موبايل</div>
+                        <div class="discount-percentage discount-draggable-text" id="discount-benefit-discount1">30% خصم</div>
+                    </div>
+                    <div class="discount-benefit-item discount-draggable-section" id="discount-benefit-item2">
+                        <i class="fas fa-charging-station"></i>
+                        <div class="discount-draggable-text" id="discount-benefit-label2">شواحن وكابلات</div>
+                        <div class="discount-percentage discount-draggable-text" id="discount-benefit-discount2">25% خصم</div>
+                    </div>
+                    <div class="discount-benefit-item discount-draggable-section" id="discount-benefit-item3">
+                        <i class="fas fa-mouse"></i>
+                        <div class="discount-draggable-text" id="discount-benefit-label3">ماوس ولوحات مفاتيح</div>
+                        <div class="discount-percentage discount-draggable-text" id="discount-benefit-discount3">20% خصم</div>
+                    </div>
+                    <div class="discount-benefit-item discount-draggable-section" id="discount-benefit-item4">
+                        <i class="fas fa-headphones"></i>
+                        <div class="discount-draggable-text" id="discount-benefit-label4">سماعات وأكسسوارات</div>
+                        <div class="discount-percentage discount-draggable-text" id="discount-benefit-discount4">15% خصم</div>
+                    </div>
+                </div>
+
+                <div class="discount-description" id="discount-preview-description">
+                    <strong class="discount-draggable-text" id="discount-description-title">⚠️ الشروط والملاحظات:</strong><br>
+                    <div class="discount-draggable-text" id="discount-description-content" style="margin-top: 10px; line-height: 1.8; font-size: 13px;">
+                        • لحامل هذه البطاقة فقط<br>
+                        • لا يجمع مع عروض أخرى<br>
+                        • متوفر في فرع الشارقة فقط
+                    </div>
+                </div>
+
+                <div class="discount-qr-section" id="discount-qr-section">
+                    <div class="discount-qr-text discount-draggable-text" id="discount-qr-text-label">تابعنا:</div>
+                    <div class="discount-qr-codes-container">
+                        <div class="discount-qr-code discount-draggable-section" id="discount-preview-qr1">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+                                <div style="font-size: 9px; color: #4F46E5;">QR 1</div>
+                            </div>
+                        </div>
+                        <div class="discount-qr-code discount-draggable-section" id="discount-preview-qr2">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+                                <div style="font-size: 9px; color: #4F46E5;">QR 2</div>
+                            </div>
+                        </div>
+                        <div class="discount-qr-code discount-draggable-section" id="discount-preview-qr3">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+                                <div style="font-size: 9px; color: #4F46E5;">QR 3</div>
+                            </div>
+                        </div>
+                        <div class="discount-qr-code discount-draggable-section" id="discount-preview-qr4">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+                                <div style="font-size: 9px; color: #4F46E5;">QR 4</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="discount-social-follow">
+                        تابعنا على<br>
+                        <span class="discount-social-handle discount-draggable-text" id="discount-preview-tiktok">@alalamy.sharjah</span>
+                    </div>
+                </div>
+
+                <div class="discount-footer" id="discount-footer-section">
+                    <div class="discount-expiry-date discount-draggable-text" id="discount-preview-expiry">صالح حتى 31 ديسمبر 2025</div>
+                    <div class="discount-contact-info discount-draggable-text" id="discount-preview-contact">
+                        <span><i class="fas fa-phone"></i> اتصل بنا</span>
+                        <span><i class="fas fa-map-marker-alt"></i> الشارقة</span>
+                    </div>
+                    <div class="discount-draggable-text" id="discount-thank-you-message" style="margin-top: 10px; font-size: 11px; color: #666;">
+                        شكراً لك على اختيارك Alalamy Sharjah ✨
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize the Konva-based discount tool
+if (typeof initializeDiscountTool === 'function') {
+    setTimeout(() => {
+        initializeDiscountTool();
+    }, 100);
+}
+
+// Namespace all discount offer functions
+window.DiscountOfferTool = {
+    selectedElement: null,
+    currentToolbar: null,
+    elementPositions: {},
+    elementStyles: {},
+    currentBackgroundImage: null,
+
+    init: function() {
+        this.bindEvents();
+        // Don't call updateFlyer since we're using Konva now
+        setTimeout(() => {
+            if (typeof initializeDiscountTool === 'function') {
+                initializeDiscountTool();
+            }
+        }, 100);
+    },
+
+    bindEvents: function() {
+        // Update preview button - now calls Konva update
+        document.getElementById('discount-update-preview').addEventListener('click', () => {
+            if (typeof updateDiscountFromForm === 'function') {
+                updateDiscountFromForm();
+            }
+        });
+
+        // Export button - now uses Konva export
+        document.getElementById('discount-export-png').addEventListener('click', () => {
+            if (typeof exportDiscountOffer === 'function') {
+                exportDiscountOffer();
+            }
+        });
+
+        // Logo handlers
+        document.getElementById('discount-logo-image').addEventListener('change', (e) => {
+            if (typeof handleDiscountLogoUpload === 'function') {
+                handleDiscountLogoUpload(e);
+            }
+        });
+
+        document.getElementById('discount-logo-width').addEventListener('input', (e) => {
+            document.getElementById('discount-logo-width-value').textContent = e.target.value;
+            if (discountCardData) {
+                discountCardData.design.logoWidth = parseInt(e.target.value);
+                if (typeof createDiscountCardDesign === 'function') {
+                    createDiscountCardDesign();
+                }
+            }
+        });
+
+        document.getElementById('discount-logo-height').addEventListener('input', (e) => {
+            document.getElementById('discount-logo-height-value').textContent = e.target.value;
+            if (discountCardData) {
+                discountCardData.design.logoHeight = parseInt(e.target.value);
+                if (typeof createDiscountCardDesign === 'function') {
+                    createDiscountCardDesign();
+                }
+            }
+        });
+
+        // Show logo checkbox
+        document.getElementById('discount-show-logo').addEventListener('change', (e) => {
+            if (discountCardData) {
+                discountCardData.design.showLogo = e.target.checked;
+                if (typeof createDiscountCardDesign === 'function') {
+                    createDiscountCardDesign();
+                }
+            }
+        });
+
+        // Background image handler
+        document.getElementById('discount-background-image').addEventListener('change', (e) => {
+            if (typeof handleDiscountBackgroundUpload === 'function') {
+                handleDiscountBackgroundUpload(e);
+            }
+        });
+
+        // Color handlers
+        document.getElementById('discount-bg-color').addEventListener('change', () => {
+            if (typeof updateDiscountFromForm === 'function') {
+                updateDiscountFromForm();
+            }
+        });
+        document.getElementById('discount-bg-color').addEventListener('input', () => {
+            if (typeof updateDiscountFromForm === 'function') {
+                updateDiscountFromForm();
+            }
+        });
+
+        document.getElementById('discount-discount-color').addEventListener('change', () => {
+            if (typeof updateDiscountFromForm === 'function') {
+                updateDiscountFromForm();
+            }
+        });
+
+        // QR code handlers
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`discount-qr-image${i}`).addEventListener('change', (e) => {
+                if (typeof handleDiscountQRUpload === 'function') {
+                    handleDiscountQRUpload(i, e);
+                }
+            });
+        }
+
+        // Auto-update on input changes - now calls Konva update
+        const inputs = document.querySelectorAll('#discount-store-name, #discount-tagline, #discount-location, #discount-main-title, #discount-description, #discount-category1, #discount-category2, #discount-category3, #discount-category4, #discount-percent1, #discount-percent2, #discount-percent3, #discount-percent4, #discount-expiry-date, #discount-phone-number, #discount-tiktok-handle');
+
+        inputs.forEach(input => {
+            if (input) {
+                input.addEventListener('change', () => {
+                    if (typeof updateDiscountFromForm === 'function') {
+                        updateDiscountFromForm();
+                    }
+                });
+                input.addEventListener('input', () => {
+                    if (typeof updateDiscountFromForm === 'function') {
+                        updateDiscountFromForm();
+                    }
+                });
+            }
+        });
+
+        // Background toggle buttons
+        document.getElementById('discount-toggle-color').addEventListener('click', () => {
+            document.getElementById('discount-color-section').classList.add('active');
+            document.getElementById('discount-image-section').classList.remove('active');
+            document.getElementById('discount-toggle-color').classList.add('active');
+            document.getElementById('discount-toggle-image').classList.remove('active');
+        });
+
+        document.getElementById('discount-toggle-image').addEventListener('click', () => {
+            document.getElementById('discount-color-section').classList.remove('active');
+            document.getElementById('discount-image-section').classList.add('active');
+            document.getElementById('discount-toggle-color').classList.remove('active');
+            document.getElementById('discount-toggle-image').classList.add('active');
+        });
+    },
+
+    toggleBackground: function(mode) {
+        const colorSection = document.getElementById('discount-color-section');
+        const imageSection = document.getElementById('discount-image-section');
+        const toggleColor = document.getElementById('discount-toggle-color');
+        const toggleImage = document.getElementById('discount-toggle-image');
+        
+        if (mode === 'color') {
+            colorSection.classList.add('active');
+            imageSection.classList.remove('active');
+            toggleColor.classList.add('active');
+            toggleImage.classList.remove('active');
+            
+            const previewCard = document.getElementById('discount-preview-card');
+            const bgColor = document.getElementById('discount-bg-color').value;
+            previewCard.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${bgColor}dd 50%, #ffffff 100%)`;
+            previewCard.style.backgroundImage = 'none';
+            this.currentBackgroundImage = null;
+            document.getElementById('discount-background-image').value = '';
+        } else {
+            colorSection.classList.remove('active');
+            imageSection.classList.add('active');
+            toggleColor.classList.remove('active');
+            toggleImage.classList.add('active');
+        }
+    },
+
+    handleLogoUpload: function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const logoImg = document.getElementById('discount-preview-logo-image');
+                logoImg.src = event.target.result;
+                document.getElementById('discount-show-logo').checked = true;
+                this.updateFlyer();
+                setTimeout(() => this.initDragAndDrop(), 50);
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+
+    handleBackgroundUpload: function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.currentBackgroundImage = event.target.result;
+                this.toggleBackground('image');
+                this.updateFlyer();
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+
+    updateBackgroundColor: function() {
+        const bgColor = document.getElementById('discount-bg-color').value;
+        const previewCard = document.getElementById('discount-preview-card');
+        const imageSection = document.getElementById('discount-image-section');
+        const isImageMode = imageSection.classList.contains('active');
+        
+        if (!isImageMode || !this.currentBackgroundImage) {
+            const gradient = `linear-gradient(135deg, ${bgColor} 0%, ${bgColor}dd 50%, #ffffff 100%)`;
+            previewCard.style.background = gradient;
+            previewCard.style.backgroundImage = 'none';
+            previewCard.style.backgroundColor = bgColor;
+        }
+        previewCard.style.boxShadow = `0 10px 40px ${bgColor}66`;
+    },
+
+    updateFlyer: function() {
+        const storeName = document.getElementById('discount-store-name').value || 'Alalamy Sharjah';
+        const tagline = document.getElementById('discount-tagline').value;
+        const location = document.getElementById('discount-location').value;
+        const mainTitle = document.getElementById('discount-main-title').value;
+        const description = document.getElementById('discount-description').value;
+        
+        const d1 = document.getElementById('discount-percent1').value;
+        const d2 = document.getElementById('discount-percent2').value;
+        const d3 = document.getElementById('discount-percent3').value;
+        const d4 = document.getElementById('discount-percent4').value;
+        
+        const cat1 = document.getElementById('discount-category1').value;
+        const cat2 = document.getElementById('discount-category2').value;
+        const cat3 = document.getElementById('discount-category3').value;
+        const cat4 = document.getElementById('discount-category4').value;
+        
+        const expiryDate = document.getElementById('discount-expiry-date').value;
+        const phoneNumber = document.getElementById('discount-phone-number').value;
+        const tiktokHandle = document.getElementById('discount-tiktok-handle').value;
+        
+        const bgColor = document.getElementById('discount-bg-color').value;
+        const discountColor = document.getElementById('discount-discount-color').value;
+
+        const discounts = [parseInt(d1), parseInt(d2), parseInt(d3), parseInt(d4)];
+        const minDiscount = Math.min(...discounts);
+        const maxDiscount = Math.max(...discounts);
+
+        const dateObj = new Date(expiryDate);
+        const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
+                       'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+        const arabicDate = `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+        const previewCard = document.getElementById('discount-preview-card');
+        
+        // Handle background
+        const imageSection = document.getElementById('discount-image-section');
+        const isImageMode = imageSection.classList.contains('active');
+        
+        if (isImageMode && this.currentBackgroundImage) {
+            previewCard.style.background = '';
+            previewCard.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${this.currentBackgroundImage}')`;
+            previewCard.style.backgroundSize = 'cover';
+            previewCard.style.backgroundPosition = 'center';
+        } else {
+            const gradient = `linear-gradient(135deg, ${bgColor} 0%, ${bgColor}dd 50%, #ffffff 100%)`;
+            previewCard.style.backgroundImage = 'none';
+            previewCard.style.backgroundColor = bgColor;
+            previewCard.style.background = gradient;
+        }
+        previewCard.style.boxShadow = `0 10px 40px ${bgColor}66`;
+
+        // Handle logo
+        const showLogo = document.getElementById('discount-show-logo').checked;
+        const logoImg = document.getElementById('discount-preview-logo-image');
+        const logoWidth = document.getElementById('discount-logo-width').value;
+        const logoHeight = document.getElementById('discount-logo-height').value;
+        
+        if (showLogo && logoImg.src) {
+            logoImg.style.display = 'block';
+            logoImg.style.width = logoWidth + 'px';
+            logoImg.style.height = logoHeight + 'px';
+        } else {
+            logoImg.style.display = 'none';
+        }
+
+        // Update preview content
+        document.getElementById('discount-preview-store-name').innerHTML = `<i class="fas fa-shop"></i> ${storeName}`;
+        document.getElementById('discount-preview-tagline').textContent = tagline;
+        document.getElementById('discount-preview-location').textContent = location;
+        document.getElementById('discount-preview-main-title').textContent = mainTitle;
+
+        const badgeElement = document.getElementById('discount-preview-badge');
+        badgeElement.textContent = `من ${minDiscount}% إلى ${maxDiscount}% خصم`;
+        badgeElement.style.background = `linear-gradient(135deg, ${discountColor}, ${discountColor}cc)`;
+        badgeElement.style.boxShadow = `0 5px 15px ${discountColor}66`;
+
+        // Update categories
+        for (let i = 1; i <= 4; i++) {
+            const labelElement = document.getElementById(`discount-benefit-label${i}`);
+            const discountElement = document.getElementById(`discount-benefit-discount${i}`);
+            const categoryValue = document.getElementById(`discount-category${i}`).value;
+            const discountValue = document.getElementById(`discount-percent${i}`).value;
+            
+            if (labelElement) labelElement.textContent = categoryValue;
+            if (discountElement) {
+                discountElement.textContent = `${discountValue}% خصم`;
+                discountElement.style.background = `linear-gradient(135deg, ${discountColor}, ${discountColor}aa)`;
+                discountElement.style.boxShadow = `0 2px 8px ${discountColor}77`;
+            }
+        }
+
+        // Update description
+        const descriptionTitle = document.getElementById('discount-description-title');
+        const descriptionContent = document.getElementById('discount-description-content');
+        
+        if (descriptionTitle) {
+            descriptionTitle.textContent = '⚠️ الشروط والملاحظات:';
+        }
+        if (descriptionContent) {
+            descriptionContent.innerHTML = description.split('\n').map(line => `${line}`).join('<br>');
+        }
+
+        // Update footer
+        const expiryElement = document.getElementById('discount-preview-expiry');
+        expiryElement.textContent = `صالح حتى ${arabicDate}`;
+        expiryElement.style.background = discountColor;
+
+        const contactInfo = document.getElementById('discount-preview-contact');
+        let contactHTML = '';
+        if (phoneNumber) {
+            contactHTML += `<span><i class="fas fa-phone"></i> ${phoneNumber}</span>`;
+        }
+        contactHTML += `<span><i class="fas fa-map-marker-alt"></i> ${location}</span>`;
+        contactInfo.innerHTML = contactHTML;
+
+        document.getElementById('discount-preview-tiktok').textContent = `@${tiktokHandle}`;
+
+        // Handle QR codes
+        for (let i = 1; i <= 4; i++) {
+            const qrFile = document.getElementById(`discount-qr-image${i}`).files[0];
+            const qrElement = document.getElementById(`discount-preview-qr${i}`);
+            
+            if (qrFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    qrElement.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">`;
+                };
+                reader.readAsDataURL(qrFile);
+            } else {
+                qrElement.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+                        <div style="font-size: 9px; color: #4F46E5;">QR ${i}</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Re-initialize drag and drop
+        setTimeout(() => {
+            this.initDragAndDrop();
+        }, 50);
+    },
+
+    exportAsPNG: function() {
+        const previewCard = document.getElementById('discount-preview-card');
+        const storeName = document.getElementById('discount-store-name').value || 'discount';
+        
+        // Use html2canvas if available, otherwise show message
+        if (typeof html2canvas !== 'undefined') {
+            // FIX: Store document direction and temporarily force LTR for better html2canvas rendering
+            const originalDocDir = document.documentElement.dir;
+            const originalDocLang = document.documentElement.lang;
+            const originalBodyDir = document.body.dir;
+            
+            // Store original inline styles that might affect rendering
+            const originalInlineStyles = [];
+            const allElements = previewCard.querySelectorAll('*');
+            
+            allElements.forEach(element => {
+                const computedStyle = window.getComputedStyle(element);
+                originalInlineStyles.push({
+                    element: element,
+                    originalDir: element.dir,
+                    originalTextAlign: element.style.textAlign,
+                    originalDirection: element.style.direction,
+                    originalFontFamily: computedStyle.fontFamily,
+                    originalPaddingTop: element.style.paddingTop,
+                    originalPaddingBottom: element.style.paddingBottom,
+                    originalLineHeight: element.style.lineHeight
+                });
+                
+                // Temporarily remove RTL settings for html2canvas
+                element.dir = '';
+                element.style.direction = '';
+                // Keep original Almarai font - it's not the issue
+            });
+            
+            // Fine-tune vertical alignment for perfect centering
+            const badgeElements = previewCard.querySelectorAll('.discount-badge, .discount-percentage');
+            badgeElements.forEach(el => {
+                // Perfect centering approach for html2canvas
+                el.style.lineHeight = '1.1';  // Slightly higher for better centering
+                el.style.paddingTop = '12px'; // Equal padding for centering (slightly larger for bigger badges)
+                el.style.paddingBottom = '12px';
+                el.style.verticalAlign = 'middle';
+                el.style.display = 'inline-block'; // Ensure proper display mode
+                el.style.textAlign = 'center';
+            });
+            
+            // Temporarily set document to LTR for html2canvas processing
+            if (originalDocDir === 'rtl') {
+                document.documentElement.dir = 'ltr';
+                document.body.dir = 'ltr';
+            }
+            
+            // Wait for direction changes to apply
+            setTimeout(() => {
+                html2canvas(previewCard, {
+                    scale: 3,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    allowTaint: true,
+                    useCORS: true
+                }).then(canvas => {
+                    // Restore all original settings
+                    document.documentElement.dir = originalDocDir;
+                    document.documentElement.lang = originalDocLang;
+                    document.body.dir = originalBodyDir;
+                    
+                    originalInlineStyles.forEach(({element, originalDir, originalTextAlign, originalDirection, originalPaddingTop, originalPaddingBottom, originalLineHeight}) => {
+                        if (originalDir) element.dir = originalDir;
+                        if (originalTextAlign) element.style.textAlign = originalTextAlign;
+                        if (originalDirection) element.style.direction = originalDirection;
+                        // Restore original padding and line-height
+                        element.style.paddingTop = originalPaddingTop;
+                        element.style.paddingBottom = originalPaddingBottom;
+                        element.style.lineHeight = originalLineHeight;
+                        // Let CSS handle font (Almarai restored)
+                    });
+                    
+                    const image = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = image;
+                    link.download = `${storeName}-discount-flyer.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    this.showNotification('✅ تم تصدير الصورة بنجاح!');
+                }).catch(err => {
+                    // Restore all settings even on error
+                    document.documentElement.dir = originalDocDir;
+                    document.documentElement.lang = originalDocLang;
+                    document.body.dir = originalBodyDir;
+                    
+                    originalInlineStyles.forEach(({element, originalDir, originalTextAlign, originalDirection, originalPaddingTop, originalPaddingBottom, originalLineHeight}) => {
+                        if (originalDir) element.dir = originalDir;
+                        if (originalTextAlign) element.style.textAlign = originalTextAlign;
+                        if (originalDirection) element.style.direction = originalDirection;
+                        // Restore original padding and line-height
+                        element.style.paddingTop = originalPaddingTop;
+                        element.style.paddingBottom = originalPaddingBottom;
+                        element.style.lineHeight = originalLineHeight;
+                        // Let CSS handle font (Almarai restored)
+                    });
+                    console.error('خطأ في التصدير:', err);
+                    this.showNotification('❌ حدث خطأ في التصدير', 'error');
+                });
+            }, 200); // Longer wait for direction changes
+        } else {
+            this.showNotification('❌ أداة التصدير غير متوفرة', 'error');
+        }
+    },
+
+    showNotification: function(message, type = 'success') {
+        // Use the global showNotification function
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(message, type);
+        } else if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: type === 'error' ? 'error' : 'success',
+                title: message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        } else {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    },
+
+    initDragAndDrop: function() {
+        const draggables = document.querySelectorAll('.discount-draggable-text, .discount-draggable-image, .discount-draggable-section');
+        
+        draggables.forEach(element => {
+            element.onmousedown = null;
+            element.onclick = null;
+            element.style.position = 'relative';
+            element.style.transform = this.elementPositions[element.id]?.transform || 'translate(0, 0)';
+
+            element.onmousedown = (e) => {
+                if (e.button !== 0) return;
+                e.preventDefault();
+                e.stopPropagation();
+                this.selectElement(element);
+                this.startDrag(e, element);
+            };
+
+            element.onclick = (e) => {
+                e.stopPropagation();
+                this.selectElement(element);
+                if (element.classList.contains('discount-draggable-text')) {
+                    this.showTextToolbar(element);
+                }
+            };
+        });
+
+        const previewCard = document.getElementById('discount-preview-card');
+        previewCard.onclick = (e) => {
+            if (e.target === previewCard) {
+                this.deselectElement();
+            }
+        };
+    },
+
+    startDrag: function(e, element) {
+        const startX = e.clientX;
+        const startY = e.clientY;
+
+        const onMouseMove = (moveEvent) => {
+            const deltaX = moveEvent.clientX - startX;
+            const deltaY = moveEvent.clientY - startY;
+            element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            this.elementPositions[element.id] = { transform: element.style.transform };
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    },
+
+    selectElement: function(element) {
+        this.deselectElement();
+        this.selectedElement = element;
+        element.classList.add('selected');
+    },
+
+    deselectElement: function() {
+        if (this.selectedElement) {
+            this.selectedElement.classList.remove('selected');
+            this.selectedElement = null;
+        }
+        if (this.currentToolbar) {
+            this.currentToolbar.remove();
+            this.currentToolbar = null;
+        }
+    },
+
+    showTextToolbar: function(element) {
+        if (this.currentToolbar) this.currentToolbar.remove();
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'discount-floating-toolbar';
+
+        const currentAlign = window.getComputedStyle(element).textAlign || 'right';
+        const currentSize = window.getComputedStyle(element).fontSize;
+        const currentDirection = window.getComputedStyle(element).direction || 'rtl';
+
+        // Alignment buttons
+        const alignContainer = document.createElement('div');
+        alignContainer.style.display = 'flex';
+        alignContainer.style.gap = '4px';
+
+        ['يمين', 'وسط', 'يسار'].forEach((label, idx) => {
+            const alignments = ['right', 'center', 'left'];
+            const align = alignments[idx];
+            const btn = document.createElement('button');
+            btn.className = 'discount-toolbar-button';
+            if (currentAlign === align) btn.classList.add('active');
+            btn.innerHTML = `<i class="fas fa-align-${align}"></i> ${label}`;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                element.style.textAlign = align;
+                this.showTextToolbar(element);
+            };
+            alignContainer.appendChild(btn);
+        });
+        toolbar.appendChild(alignContainer);
+
+        // Direction buttons
+        const directionContainer = document.createElement('div');
+        directionContainer.style.display = 'flex';
+        directionContainer.style.gap = '4px';
+
+        ['RTL', 'LTR'].forEach((label) => {
+            const direction = label === 'RTL' ? 'rtl' : 'ltr';
+            const btn = document.createElement('button');
+            btn.className = 'discount-toolbar-button';
+            if (currentDirection === direction) btn.classList.add('active');
+            btn.innerHTML = `<i class="fas fa-arrow-${direction === 'rtl' ? 'right' : 'left'}"></i> ${label}`;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                element.style.direction = direction;
+                this.showTextToolbar(element);
+            };
+            directionContainer.appendChild(btn);
+        });
+        toolbar.appendChild(directionContainer);
+
+        // Font size
+        const sizeContainer = document.createElement('div');
+        sizeContainer.style.display = 'flex';
+        sizeContainer.style.alignItems = 'center';
+        sizeContainer.style.gap = '8px';
+
+        const sizeInput = document.createElement('input');
+        sizeInput.type = 'number';
+        sizeInput.min = '8';
+        sizeInput.max = '48';
+        sizeInput.value = parseInt(currentSize);
+        sizeInput.style.width = '60px';
+        sizeInput.style.padding = '4px';
+        sizeInput.oninput = (e) => {
+            element.style.fontSize = e.target.value + 'px';
+        };
+        sizeContainer.appendChild(sizeInput);
+
+        const unit = document.createElement('span');
+        unit.textContent = 'px';
+        unit.style.fontSize = '12px';
+        sizeContainer.appendChild(unit);
+        toolbar.appendChild(sizeContainer);
+
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'discount-toolbar-button';
+        closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            toolbar.remove();
+            this.currentToolbar = null;
+        };
+        toolbar.appendChild(closeBtn);
+
+        document.body.appendChild(toolbar);
+        this.currentToolbar = toolbar;
+
+        const rect = element.getBoundingClientRect();
+        toolbar.style.left = Math.max(10, rect.right - 180) + 'px';
+        toolbar.style.top = Math.max(10, rect.bottom + 15) + 'px';
+    }
+};
+
+// Initialize when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        DiscountOfferTool.init();
+    });
+} else {
+    DiscountOfferTool.init();
+}
+
+// Additional initialization for Konva tool
+setTimeout(() => {
+    if (typeof initDiscountToolIfNeeded === 'function') {
+        initDiscountToolIfNeeded();
+    }
+}, 200);
+</script>

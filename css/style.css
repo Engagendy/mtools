@@ -1,0 +1,214 @@
+/* Marketing Tools Suite - Modern Tailwind UI */
+
+/* Configure Tailwind with Almarai font */
+.font-almarai {
+    font-family: 'Almarai', 'Inter', system-ui, sans-serif;
+}
+
+/* Custom component styles using @layer */
+@layer components {
+    /* Navigation Components */
+    .nav-link {
+        @apply flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-almarai;
+    }
+    
+    .nav-link.active {
+        @apply text-blue-600 bg-blue-50 font-semibold;
+    }
+
+    /* Button Components */
+    .btn-primary {
+        @apply inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-almarai;
+    }
+    
+    .btn-back {
+        @apply inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-sm font-almarai;
+    }
+
+    /* Card Components */
+    .card {
+        @apply bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+    }
+    
+    .tool-card {
+        @apply bg-white rounded-2xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer relative overflow-hidden group;
+    }
+    
+    .tool-card::before {
+        @apply absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300;
+        content: '';
+    }
+
+    /* Tool Section Layout */
+    .tool-section {
+        @apply min-h-screen bg-gray-50 font-almarai;
+    }
+    
+    .tool-content {
+        @apply py-8;
+    }
+    
+    .tool-container {
+        @apply bg-white rounded-3xl shadow-2xl border border-gray-100 min-h-[calc(100vh-12rem)] relative overflow-hidden;
+    }
+    
+    .tool-container::before {
+        @apply absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500;
+        content: '';
+    }
+
+    /* Form Components */
+    .form-input {
+        @apply block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 font-almarai;
+    }
+    
+    .form-label {
+        @apply block text-sm font-semibold text-gray-700 mb-2 font-almarai;
+    }
+    
+    .form-textarea {
+        @apply block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200 font-almarai;
+    }
+
+    /* Loading and Notification */
+    .loading-spinner {
+        @apply animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent;
+    }
+    
+    .notification {
+        @apply fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300 font-almarai;
+    }
+    
+    .notification.show {
+        @apply translate-x-0;
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+    margin-left: 0;
+    margin-right: 1rem;
+}
+
+[dir="rtl"] .space-x-6 > * + * {
+    margin-left: 0;
+    margin-right: 1.5rem;
+}
+
+/* Arabic spacing fixes for icons and text */
+[dir="rtl"] .space-x-1 > * + * {
+    margin-left: 0;
+    margin-right: 0.25rem;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-3 > * + * {
+    margin-left: 0;
+    margin-right: 0.75rem;
+}
+
+/* Fix margin utilities for RTL - ml-* becomes mr-* and mr-* becomes ml-* */
+[dir="rtl"] .ml-1 {
+    margin-left: 0 !important;
+    margin-right: 0.25rem !important;
+}
+
+[dir="rtl"] .ml-2 {
+    margin-left: 0 !important;
+    margin-right: 0.5rem !important;
+}
+
+[dir="rtl"] .ml-3 {
+    margin-left: 0 !important;
+    margin-right: 0.75rem !important;
+}
+
+[dir="rtl"] .ml-4 {
+    margin-left: 0 !important;
+    margin-right: 1rem !important;
+}
+
+/* Fix mr-* (margin-right) to become ml-* (margin-left) for RTL */
+[dir="rtl"] .mr-1 {
+    margin-right: 0 !important;
+    margin-left: 0.25rem !important;
+}
+
+[dir="rtl"] .mr-2 {
+    margin-right: 0 !important;
+    margin-left: 0.5rem !important;
+}
+
+[dir="rtl"] .mr-3 {
+    margin-right: 0 !important;
+    margin-left: 0.75rem !important;
+}
+
+[dir="rtl"] .mr-4 {
+    margin-right: 0 !important;
+    margin-left: 1rem !important;
+}
+
+/* Arabic Typography Improvements */
+[dir="rtl"] {
+    font-family: 'Almarai', 'Inter', system-ui, sans-serif;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+}
+
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Glass morphism effect for premium feel */
+.glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Tool-specific overrides */
+.tool-content h1, .tool-content h2, .tool-content h3 {
+    font-family: 'Almarai', 'Inter', system-ui, sans-serif !important;
+}
+
+.tool-content input, .tool-content textarea, .tool-content select, .tool-content button {
+    font-family: 'Almarai', 'Inter', system-ui, sans-serif !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .tool-container {
+        @apply p-4 rounded-2xl mx-2;
+    }
+    
+    .tool-content {
+        @apply px-2 py-4;
+    }
+}

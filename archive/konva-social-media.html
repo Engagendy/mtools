@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منشئ عروض وسائل التواصل - Konva.js</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Inter:wght@300;400;600;700&family=Cairo:wght@200;300;400;600;700;900&family=Rubik:wght@300;400;500;600;700;800&family=Tajawal:wght@200;300;400;500;700;800&family=Amiri:wght@400;700&family=Lato:wght@300;400;700;900&family=Open+Sans:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700;900&family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/konva@10/konva.min.js"></script>
+    <!-- RTL/LTR Text Direction Library -->
+    <script src="https://unpkg.com/bidi-js@1.0.3/dist/bidi.min.js"></script>
+    <!-- Text Measurement and Professional Typography -->
+    <script src="https://unpkg.com/opentype.js@1.3.4/dist/opentype.min.js"></script>
+    <!-- SweetAlert2 for Professional Toast Notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Almarai', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .platforms-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .platform-btn {
+            padding: 15px;
+            border: 3px solid white;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .platform-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .platform-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .editor-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="color"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Almarai', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input[type="color"] {
+            height: 45px;
+            cursor: pointer;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 10px;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .preview-panel {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .preview-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .preview-info {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .preview-platform {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .preview-dimensions {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tools-panel {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tools-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .tool-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .tool-btn.danger {
+            background: #e53e3e;
+        }
+
+        .tool-btn.danger:hover {
+            background: #c53030;
+        }
+
+        .tool-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tool-btn.active:hover {
+            background: #5a67d8;
+        }
+
+        /* SweetAlert2 Custom Styling */
+        .colored-toast.swal2-icon-success {
+            background: #28a745 !important;
+        }
+
+        .colored-toast.swal2-icon-error {
+            background: #dc3545 !important;
+        }
+
+        .colored-toast.swal2-icon-warning {
+            background: #ffc107 !important;
+        }
+
+        .swal2-popup.swal2-toast {
+            font-family: 'Almarai', sans-serif !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            direction: rtl !important;
+            text-align: center !important;
+            min-width: 350px !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .swal2-popup.swal2-toast .swal2-title {
+            font-family: 'Almarai', sans-serif !important;
+            font-size: 14px !important;
+            margin: 0 !important;
+            padding: 8px 16px !important;
+        }
+
+        .swal2-popup.swal2-toast .swal2-timer-progress-bar {
+            background: rgba(255, 255, 255, 0.6) !important;
+        }
+
+
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-panel {
+                position: static;
+                top: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platforms-selector {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .editor-panel {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-magic"></i>
+                منشئ عروض وسائل التواصل المتطور
+                <span class="badge">Konva.js</span>
+            </h1>
+            <p>أداة تصميم احترافية مع إمكانيات السحب والإفلات والتغيير في الحجم</p>
+        </div>
+
+        <!-- Platform Selection -->
+        <div class="platforms-selector">
+            <button class="platform-btn active" onclick="selectPlatform('instagram')">
+                <i class="fab fa-instagram"></i><br>Instagram<br>1080×1350
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('instastory')">
+                <i class="fab fa-instagram"></i><br>Story<br>1080×1920
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('facebook')">
+                <i class="fab fa-facebook"></i><br>Facebook<br>1200×1500
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('twitter')">
+                <i class="fab fa-twitter"></i><br>Twitter<br>1024×512
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Editor Panel -->
+            <div class="editor-panel">
+                <div class="panel-title">
+                    <i class="fas fa-edit"></i> محرر التصميم المتطور
+                </div>
+
+                <!-- Selection Info -->
+                <div class="tools-panel">
+                    <div class="tools-title">
+                        <i class="fas fa-mouse-pointer"></i> العنصر المحدد
+                    </div>
+                    <div id="selectionInfo" style="font-size: 12px; color: #666; margin-bottom: 10px; min-height: 20px;">
+                        اضغط على أي عنصر لتحديده والتحكم به
+                    </div>
+                </div>
+
+                <!-- Text Formatting Tools -->
+                <div class="tools-panel" id="textFormattingPanel" style="display: none;">
+                    <div class="tools-title">
+                        <i class="fas fa-font"></i> تنسيق النص
+                    </div>
+                    
+                    <!-- Direction Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">اتجاه النص</label>
+                        <div class="tool-buttons" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <button class="tool-btn" id="rtlBtn" onclick="setTextDirection('rtl')">
+                                <i class="fas fa-arrow-right"></i> RTL
+                            </button>
+                            <button class="tool-btn" id="ltrBtn" onclick="setTextDirection('ltr')">
+                                <i class="fas fa-arrow-left"></i> LTR
+                            </button>
+                            <button class="tool-btn" onclick="autoDetectDirection()" style="background: #28a745;">
+                                <i class="fas fa-magic"></i> تلقائي
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Alignment Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">محاذاة النص</label>
+                        <div class="tool-buttons" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <button class="tool-btn" id="leftBtn" onclick="setTextAlign('left')">
+                                <i class="fas fa-align-left"></i> يسار
+                            </button>
+                            <button class="tool-btn" id="centerBtn" onclick="setTextAlign('center')">
+                                <i class="fas fa-align-center"></i> وسط
+                            </button>
+                            <button class="tool-btn" id="rightBtn" onclick="setTextAlign('right')">
+                                <i class="fas fa-align-right"></i> يمين
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Font Family Selection -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">نوع الخط</label>
+                        <select id="fontFamilySelect" onchange="changeFontFamily()" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-family: 'Almarai', sans-serif; font-size: 12px;">
+                            <optgroup label="خطوط عربية">
+                                <option value="Almarai">الماريا - Almarai</option>
+                                <option value="Cairo">القاهرة - Cairo</option>
+                                <option value="Tajawal">تجوال - Tajawal</option>
+                                <option value="Amiri">أميري - Amiri</option>
+                                <option value="Rubik">روبيك - Rubik</option>
+                            </optgroup>
+                            <optgroup label="خطوط إنجليزية">
+                                <option value="Inter">Inter</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Source Sans Pro">Source Sans Pro</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Font Size Controls -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">حجم الخط</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="tool-btn" onclick="adjustFontSize(-2)" style="flex: 0 0 auto; padding: 6px 8px;">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="fontSizeDisplay" style="flex: 1; text-align: center; font-size: 12px; font-weight: 600;">--</span>
+                            <button class="tool-btn" onclick="adjustFontSize(2)" style="flex: 0 0 auto; padding: 6px 8px;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Tools -->
+                <div class="tools-panel">
+                    <div class="tools-title">
+                        <i class="fas fa-tools"></i> أدوات التصميم
+                    </div>
+                    <div class="tool-buttons">
+                        <button class="tool-btn" onclick="duplicateSelected()">
+                            <i class="fas fa-copy"></i> نسخ
+                        </button>
+                        <button class="tool-btn" onclick="deleteSelected()">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                        <button class="tool-btn" onclick="bringToFront()">
+                            <i class="fas fa-arrow-up"></i> للأمام
+                        </button>
+                        <button class="tool-btn" onclick="sendToBack()">
+                            <i class="fas fa-arrow-down"></i> للخلف
+                        </button>
+                        <button class="tool-btn danger" onclick="clearAll()">
+                            <i class="fas fa-trash-alt"></i> مسح الكل
+                        </button>
+                        <button class="tool-btn" onclick="resetPositions()">
+                            <i class="fas fa-undo"></i> إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Store Information -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-store"></i> معلومات المتجر
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المتجر</label>
+                        <input type="text" id="storeName" value="Alalamy Sharjah" placeholder="أدخل اسم المتجر" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>الشعار أو الجملة الترويجية</label>
+                        <input type="text" id="tagline" value="العالمي ملك السعادة ❤️" placeholder="أدخل الشعار" onchange="updateCanvas()">
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-heading"></i> المحتوى
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان العرض</label>
+                        <textarea id="mainTitle" placeholder="أدخل عنوان العرض" onchange="updateCanvas()">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>نص الخصم الرئيسي</label>
+                        <input type="text" id="badgeText" value="من 15% إلى 30%" placeholder="نص الخصم" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف الإضافي</label>
+                        <textarea id="subtitle" placeholder="نص إضافي أو استدعاء للإجراء" onchange="updateCanvas()">اضغط الآن لعرض أفضل العروض</textarea>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-tags"></i> الفئات والخصومات
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 1</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category1" value="كفرات موبايل" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount1" value="30" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 2</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category2" value="شواحن وكابلات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount2" value="25" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 3</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category3" value="ماوس ولوحات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount3" value="20" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 12px; color: #666;">الفئة 4</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category4" value="سماعات" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount4" value="15" min="0" max="100" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-phone"></i> معلومات الاتصال
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف (اختياري)</label>
+                        <input type="tel" id="phoneNumber" placeholder="+971 50 123 4567" onchange="updateCanvas()">
+                    </div>
+                    <div class="form-group">
+                        <label>حساب وسائل التواصل</label>
+                        <input type="text" id="socialHandle" value="@alalamy.sharjah" placeholder="@username" onchange="updateCanvas()">
+                    </div>
+                </div>
+
+                <!-- Background and Colors -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i> الخلفية والألوان
+                    </div>
+                    
+                    <!-- Background Type Selection -->
+                    <div class="form-group">
+                        <label>نوع الخلفية</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <button type="button" class="tool-btn" id="gradientBgBtn" onclick="selectBackgroundType('gradient')" style="padding: 8px 12px;">
+                                <i class="fas fa-fill-drip"></i> تدرج لوني
+                            </button>
+                            <button type="button" class="tool-btn" id="imageBgBtn" onclick="selectBackgroundType('image')" style="padding: 8px 12px;">
+                                <i class="fas fa-image"></i> صورة
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gradient Background Controls -->
+                    <div id="gradientControls">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label>لون الخلفية الأساسي</label>
+                                <input type="color" id="bgColor1" value="#007BFF" onchange="updateCanvas()">
+                            </div>
+                            <div class="form-group">
+                                <label>لون الخلفية الثانوي</label>
+                                <input type="color" id="bgColor2" value="#0056b3" onchange="updateCanvas()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Background Controls -->
+                    <div id="imageControls" style="display: none;">
+                        <div class="form-group">
+                            <label>رفع صورة الخلفية</label>
+                            <input type="file" id="backgroundImageInput" accept="image/*" onchange="handleBackgroundImage()" style="margin-bottom: 8px;">
+                            <div style="font-size: 11px; color: #666; margin-bottom: 8px;">يُنصح بالصور عالية الجودة (1080px أو أكثر)</div>
+                        </div>
+                        
+                        <!-- Background Image Preview -->
+                        <div id="backgroundImagePreview" style="display: none; margin-bottom: 12px;">
+                            <img id="backgroundPreviewImg" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;">
+                            <div style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button type="button" class="tool-btn" onclick="removeBackgroundImage()" style="background: #dc3545; padding: 6px 12px;">
+                                    <i class="fas fa-trash"></i> حذف الصورة
+                                </button>
+                                <button type="button" class="tool-btn" onclick="resetBackgroundPosition()" style="padding: 6px 12px;">
+                                    <i class="fas fa-expand-arrows-alt"></i> ملء الشاشة
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Background Image Controls -->
+                        <div id="imagePositionControls" style="display: none;">
+                            <label style="font-size: 11px; font-weight: 600; color: #667eea; margin-bottom: 6px;">تحكم في موضع الصورة</label>
+                            <div class="input-row">
+                                <div class="form-group">
+                                    <label>الموضع الأفقي (%)</label>
+                                    <input type="range" id="bgImageX" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" style="width: 100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label>الموضع العمودي (%)</label>
+                                    <input type="range" id="bgImageY" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" style="width: 100%;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>حجم الصورة (%)</label>
+                                <input type="range" id="bgImageScale" min="50" max="200" value="100" onchange="updateBackgroundPosition()" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text and Accent Colors -->
+                    <div class="input-row" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                        <div class="form-group">
+                            <label>لون النص الأساسي</label>
+                            <input type="color" id="textColor" value="#ffffff" onchange="updateCanvas()">
+                        </div>
+                        <div class="form-group">
+                            <label>لون الخصم</label>
+                            <input type="color" id="accentColor" value="#FF0000" onchange="updateCanvas()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-download"></i> التصدير عالي الجودة
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="png" checked style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>PNG (شفاف)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="jpg" style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>JPG (أصغر حجماً)</span>
+                        </label>
+                    </div>
+                    <div class="input-row">
+                        <button class="export-btn" onclick="exportFlyer(1)">
+                            <i class="fas fa-download"></i> تصدير جودة عادية
+                        </button>
+                        <button class="export-btn" onclick="exportFlyer(2)">
+                            <i class="fas fa-download"></i> تصدير جودة عالية (2x)
+                        </button>
+                    </div>
+                    <button class="export-btn" onclick="exportFlyer(3)" style="background: linear-gradient(135deg, #28a745, #20c997); margin-top: 8px;">
+                        <i class="fas fa-star"></i> تصدير جودة فائقة (3x)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-info">
+                        <div class="preview-platform" id="platformName">Instagram Feed</div>
+                        <div class="preview-dimensions" id="platformDimensions">1080 × 1350 px</div>
+                    </div>
+                    <div class="canvas-container" id="canvasContainer">
+                        <div id="konvaContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Platform configurations
+        const platforms = {
+            instagram: {
+                name: 'Instagram Feed',
+                width: 1080,
+                height: 1350,
+                display: '1080 × 1350 px'
+            },
+            instastory: {
+                name: 'Instagram Story',
+                width: 1080,
+                height: 1920,
+                display: '1080 × 1920 px'
+            },
+            facebook: {
+                name: 'Facebook',
+                width: 1200,
+                height: 1500,
+                display: '1200 × 1500 px'
+            },
+            twitter: {
+                name: 'Twitter',
+                width: 1024,
+                height: 512,
+                display: '1024 × 512 px'
+            }
+        };
+
+        let currentPlatform = 'instagram';
+        let stage, backgroundLayer, designLayer;
+        let transformer;
+        let selectedNode = null;
+        
+        // Background management
+        let currentBackgroundType = 'gradient';
+        let backgroundImage = null;
+        let backgroundImageNode = null;
+
+        // Design elements storage
+        let designElements = {
+            storeName: null,
+            tagline: null,
+            mainTitle: null,
+            badgeText: null,
+            subtitle: null,
+            socialHandle: null,
+            categories: [],
+            phoneNumber: null
+        };
+
+        function initializeCanvas() {
+            const platform = platforms[currentPlatform];
+            const container = document.getElementById('konvaContainer');
+            
+            // Clear existing canvas
+            if (stage) {
+                stage.destroy();
+            }
+
+            // Calculate canvas display size (scale down for preview) - Increased for better quality
+            const maxDisplayWidth = 500;
+            const maxDisplayHeight = 700;
+            const scale = Math.min(maxDisplayWidth / platform.width, maxDisplayHeight / platform.height);
+            
+            const displayWidth = platform.width * scale;
+            const displayHeight = platform.height * scale;
+
+            // Create Konva stage with high quality settings
+            stage = new Konva.Stage({
+                container: 'konvaContainer',
+                width: displayWidth,
+                height: displayHeight,
+                scaleX: scale,
+                scaleY: scale
+            });
+
+            // Improve canvas quality for better viewer display
+            // Set pixel ratio for all layers for sharper display
+            const pixelRatio = window.devicePixelRatio || 2;
+
+            // Create layers with high quality settings
+            backgroundLayer = new Konva.Layer({
+                imageSmoothingEnabled: true,
+                listening: false // Background doesn't need events
+            });
+            designLayer = new Konva.Layer({
+                imageSmoothingEnabled: true,
+                // Professional text rendering settings
+                clearBeforeDraw: true,
+                listening: true // Updated from deprecated hitGraphEnabled
+            });
+
+            stage.add(backgroundLayer);
+            stage.add(designLayer);
+            
+            // Apply pixel ratio to layers for sharp rendering
+            backgroundLayer.canvas.setPixelRatio(pixelRatio);
+            designLayer.canvas.setPixelRatio(pixelRatio);
+
+            // Create transformer for selection
+            transformer = new Konva.Transformer({
+                rotateEnabled: false,
+                borderStroke: '#667eea',
+                borderStrokeWidth: 2,
+                anchorStroke: '#667eea',
+                anchorStrokeWidth: 2,
+                anchorFill: '#ffffff',
+                anchorSize: 8
+            });
+            designLayer.add(transformer);
+
+            // Selection handling with enhanced feedback
+            stage.on('click tap', function (e) {
+                if (e.target === stage) {
+                    transformer.nodes([]);
+                    selectedNode = null;
+                    updateSelectionInfo();
+                    return;
+                }
+
+                if (e.target.hasName('design-element')) {
+                    transformer.nodes([e.target]);
+                    selectedNode = e.target;
+                    updateSelectionInfo();
+                } else {
+                    transformer.nodes([]);
+                    selectedNode = null;
+                    updateSelectionInfo();
+                }
+            });
+
+            // Double-click text editing functionality
+            stage.on('dblclick dbltap', function (e) {
+                if (e.target.hasName('design-element') && e.target.className === 'Text') {
+                    editTextElement(e.target);
+                }
+            });
+
+            // Create initial design
+            createBackground();
+            createDesignElements();
+            updateCanvas();
+        }
+
+        function createBackground() {
+            // Safety check - ensure background layer exists
+            if (!backgroundLayer) return;
+            
+            const platform = platforms[currentPlatform];
+
+            // Clear background layer
+            backgroundLayer.destroyChildren();
+
+            if (currentBackgroundType === 'image' && backgroundImage) {
+                // Create image background
+                const bgImageX = parseFloat(document.getElementById('bgImageX')?.value || 0);
+                const bgImageY = parseFloat(document.getElementById('bgImageY')?.value || 0);
+                const bgImageScale = parseFloat(document.getElementById('bgImageScale')?.value || 100) / 100;
+
+                backgroundImageNode = new Konva.Image({
+                    x: (platform.width * bgImageX) / 100,
+                    y: (platform.height * bgImageY) / 100,
+                    image: backgroundImage,
+                    width: platform.width * bgImageScale,
+                    height: platform.height * bgImageScale,
+                    listening: false
+                });
+
+                backgroundLayer.add(backgroundImageNode);
+            } else {
+                // Create gradient background
+                const bgColor1 = document.getElementById('bgColor1').value;
+                const bgColor2 = document.getElementById('bgColor2').value;
+
+                const background = new Konva.Rect({
+                    x: 0,
+                    y: 0,
+                    width: platform.width,
+                    height: platform.height,
+                    fillLinearGradientStartPoint: { x: 0, y: 0 },
+                    fillLinearGradientEndPoint: { x: platform.width, y: platform.height },
+                    fillLinearGradientColorStops: [0, bgColor1, 0.5, bgColor2, 1, '#ffffff']
+                });
+
+                backgroundLayer.add(background);
+            }
+
+            backgroundLayer.draw();
+        }
+
+        function createDesignElements() {
+            const platform = platforms[currentPlatform];
+            const isHorizontal = platform.width > platform.height;
+            const textColor = document.getElementById('textColor').value;
+
+            // Clear design layer (except transformer) properly
+            const childrenToRemove = designLayer.children.filter(child => child !== transformer);
+            childrenToRemove.forEach(child => child.destroy());
+            
+            // Reset design elements storage
+            designElements = {
+                storeName: null,
+                tagline: null,
+                mainTitle: null,
+                badgeText: null,
+                subtitle: null,
+                socialHandle: null,
+                categories: [],
+                phoneNumber: null
+            };
+
+            // Font sizes based on platform (proportional to canvas size)
+            let fontSizes;
+            const baseScale = Math.min(platform.width / 1080, platform.height / 1350);
+            
+            if (isHorizontal) {
+                fontSizes = { 
+                    logo: Math.round(32 * baseScale), 
+                    title: Math.round(40 * baseScale), 
+                    badge: Math.round(28 * baseScale), 
+                    text: Math.round(24 * baseScale), 
+                    category: Math.round(18 * baseScale) 
+                };
+            } else {
+                fontSizes = { 
+                    logo: Math.round(48 * baseScale), 
+                    title: Math.round(64 * baseScale), 
+                    badge: Math.round(36 * baseScale), 
+                    text: Math.round(28 * baseScale), 
+                    category: Math.round(22 * baseScale) 
+                };
+            }
+
+            // Proportional positioning based on canvas size
+            const spacing = {
+                top: platform.height * 0.06,      // 6% from top
+                logoToTagline: platform.height * 0.05,  // 5% spacing
+                titleY: isHorizontal ? platform.height * 0.25 : platform.height * 0.18,
+                badgeY: isHorizontal ? platform.height * 0.45 : platform.height * 0.32,
+                categoriesY: isHorizontal ? platform.height * 0.65 : platform.height * 0.45,
+                subtitleY: platform.height * 0.85,
+                socialY: platform.height * 0.92
+            };
+
+            // Store name with professional typography
+            designElements.storeName = new Konva.Text({
+                x: platform.width / 2,
+                y: spacing.top,
+                text: document.getElementById('storeName').value,
+                fontSize: fontSizes.logo,
+                fontFamily: 'Almarai',
+                fontStyle: 'bold',
+                fill: textColor,
+                align: 'center',
+                verticalAlign: 'middle',
+                draggable: true,
+                name: 'design-element',
+                // Professional text rendering
+                letterSpacing: 1,
+                lineHeight: 1.2,
+                textBaseline: 'middle',
+                perfectDrawEnabled: false // Better performance
+            });
+            designElements.storeName.offsetX(designElements.storeName.width() / 2);
+            
+            // Auto-detect and set direction
+            const storeNameDirection = analyzeTextDirection(document.getElementById('storeName').value);
+            designElements.storeName.setAttr('direction', storeNameDirection);
+
+            // Tagline
+            designElements.tagline = new Konva.Text({
+                x: platform.width / 2,
+                y: spacing.top + spacing.logoToTagline,
+                text: document.getElementById('tagline').value,
+                fontSize: fontSizes.text,
+                fontFamily: 'Almarai',
+                fill: textColor,
+                align: 'center',
+                verticalAlign: 'middle',
+                draggable: true,
+                name: 'design-element'
+            });
+            designElements.tagline.offsetX(designElements.tagline.width() / 2);
+
+            // Main title
+            designElements.mainTitle = new Konva.Text({
+                x: platform.width / 2,
+                y: spacing.titleY,
+                text: document.getElementById('mainTitle').value,
+                fontSize: fontSizes.title,
+                fontFamily: 'Almarai',
+                fontStyle: 'bold',
+                fill: textColor,
+                align: 'center',
+                verticalAlign: 'middle',
+                width: platform.width * 0.9, // 90% of canvas width
+                draggable: true,
+                name: 'design-element',
+                shadowColor: 'rgba(0,0,0,0.3)',
+                shadowBlur: 4,
+                shadowOffset: { x: 2, y: 2 }
+            });
+            designElements.mainTitle.offsetX(designElements.mainTitle.width() / 2);
+
+            // Badge elements (individual control) - proportional sizing
+            const badgeWidth = platform.width * 0.28; // 28% of canvas width
+            const badgeHeight = platform.height * 0.05; // 5% of canvas height
+            const badgeX = platform.width / 2 - badgeWidth / 2; // Center
+
+            // Badge background - individually selectable
+            const badgeRect = new Konva.Rect({
+                x: badgeX,
+                y: spacing.badgeY - badgeHeight / 2,
+                width: badgeWidth,
+                height: badgeHeight,
+                fill: document.getElementById('accentColor').value,
+                cornerRadius: badgeHeight / 2,
+                shadowColor: 'rgba(0,0,0,0.4)',
+                shadowBlur: 8,
+                shadowOffset: { x: 0, y: 4 },
+                draggable: true,
+                name: 'design-element badge-bg',
+                id: 'main-badge-bg'
+            });
+
+            // Badge text - individually selectable (ABOVE background)
+            const badgeTextNode = new Konva.Text({
+                x: badgeX,
+                y: spacing.badgeY - badgeHeight / 2,
+                width: badgeWidth,
+                height: badgeHeight,
+                text: document.getElementById('badgeText').value,
+                fontSize: fontSizes.badge,
+                fontFamily: 'Almarai',
+                fontStyle: 'bold',
+                fill: '#ffffff',
+                align: 'center',
+                verticalAlign: 'middle',
+                draggable: true,
+                name: 'design-element badge-text',
+                id: 'main-badge-text'
+            });
+
+            // Store both elements separately
+            designElements.badgeBg = badgeRect;
+            designElements.badgeText = badgeTextNode;
+
+            // Categories grid
+            createCategoriesGrid(isHorizontal, fontSizes);
+
+            // Subtitle
+            designElements.subtitle = new Konva.Text({
+                x: platform.width / 2,
+                y: spacing.subtitleY,
+                text: document.getElementById('subtitle').value,
+                fontSize: fontSizes.text,
+                fontFamily: 'Almarai',
+                fill: textColor,
+                align: 'center',
+                verticalAlign: 'middle',
+                width: platform.width * 0.85, // 85% of canvas width
+                draggable: true,
+                name: 'design-element'
+            });
+            designElements.subtitle.offsetX(designElements.subtitle.width() / 2);
+
+            // Phone number (if provided)
+            const phoneNumberValue = document.getElementById('phoneNumber').value.trim();
+            if (phoneNumberValue) {
+                designElements.phoneNumber = new Konva.Text({
+                    x: platform.width / 2,
+                    y: spacing.socialY - (fontSizes.text * 1.5), // Above social handle
+                    text: phoneNumberValue,
+                    fontSize: fontSizes.text,
+                    fontFamily: 'Almarai',
+                    fill: textColor,
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    draggable: true,
+                    name: 'design-element phone-number',
+                    id: 'phone-number-text'
+                });
+                designElements.phoneNumber.offsetX(designElements.phoneNumber.width() / 2);
+            }
+
+            // Social handle
+            designElements.socialHandle = new Konva.Text({
+                x: platform.width / 2,
+                y: spacing.socialY,
+                text: document.getElementById('socialHandle').value,
+                fontSize: fontSizes.text,
+                fontFamily: 'Almarai',
+                fontStyle: 'bold',
+                fill: textColor,
+                align: 'center',
+                verticalAlign: 'middle',
+                draggable: true,
+                name: 'design-element'
+            });
+            designElements.socialHandle.offsetX(designElements.socialHandle.width() / 2);
+
+            // Add elements in proper layering order: BACKGROUNDS FIRST, TEXT LAST
+            
+            // 1. Add badge background first
+            if (designElements.badgeBg) designLayer.add(designElements.badgeBg);
+            
+            // 2. Add category backgrounds and discount backgrounds
+            if (designElements.categories && designElements.categories.length > 0) {
+                designElements.categories.forEach(category => {
+                    // Only add backgrounds first (category-bg and discount-bg)
+                    if (category.hasName && (category.hasName('category-bg') || category.hasName('discount-bg'))) {
+                        designLayer.add(category);
+                    }
+                });
+            }
+            
+            // 3. Add all text elements (they'll appear on top)
+            Object.entries(designElements).forEach(([key, element]) => {
+                if (element && key !== 'categories' && key !== 'badgeBg') {
+                    designLayer.add(element);
+                }
+            });
+            
+            // 4. Add category text elements last (on top of everything)
+            if (designElements.categories && designElements.categories.length > 0) {
+                designElements.categories.forEach(category => {
+                    // Add text elements last (category-name and discount-text)
+                    if (category.hasName && (category.hasName('category-name') || category.hasName('discount-text'))) {
+                        designLayer.add(category);
+                    }
+                });
+            }
+
+            designLayer.draw();
+        }
+
+        function createCategoriesGrid(isHorizontal, fontSizes) {
+            const platform = platforms[currentPlatform];
+            const accentColor = document.getElementById('accentColor').value;
+            const baseScale = Math.min(platform.width / 1080, platform.height / 1350);
+            
+            designElements.categories = [];
+            
+            const categoryData = [
+                { name: document.getElementById('category1').value, discount: document.getElementById('discount1').value },
+                { name: document.getElementById('category2').value, discount: document.getElementById('discount2').value },
+                { name: document.getElementById('category3').value, discount: document.getElementById('discount3').value },
+                { name: document.getElementById('category4').value, discount: document.getElementById('discount4').value }
+            ];
+
+            // Proportional sizing and positioning
+            const spacing = {
+                categoriesY: isHorizontal ? platform.height * 0.65 : platform.height * 0.45
+            };
+            
+            const categoryWidth = isHorizontal ? (platform.width * 0.85) / 4 : (platform.width * 0.85) / 2;
+            const categoryHeight = platform.height * 0.08; // 8% of canvas height
+            const gap = platform.width * 0.02; // 2% of canvas width as gap
+
+            categoryData.forEach((data, index) => {
+                const col = isHorizontal ? index : index % 2;
+                const row = isHorizontal ? 0 : Math.floor(index / 2);
+                
+                const x = (platform.width * 0.075) + col * (categoryWidth + gap); // 7.5% margin
+                const y = spacing.categoriesY + row * (categoryHeight + gap);
+
+                // Proportional discount badge sizing
+                const discountBadgeWidth = categoryWidth * 0.3; // 30% of category width
+                const discountBadgeHeight = categoryHeight * 0.25; // 25% of category height
+
+                // Individual controllable elements (not grouped)
+                // BACKGROUNDS FIRST (so text appears on top)
+
+                // Category background - individually selectable
+                const categoryRect = new Konva.Rect({
+                    x: x,
+                    y: y,
+                    width: categoryWidth,
+                    height: categoryHeight,
+                    fill: 'rgba(255, 255, 255, 0.9)',
+                    cornerRadius: categoryHeight * 0.125, // Proportional corner radius
+                    shadowColor: 'rgba(0,0,0,0.2)',
+                    shadowBlur: 4 * baseScale,
+                    shadowOffset: { x: 0, y: 2 * baseScale },
+                    draggable: true,
+                    name: 'design-element category-bg',
+                    id: `category-bg-${index + 1}`
+                });
+
+                // Discount background - individually selectable
+                const discountRect = new Konva.Rect({
+                    x: x + categoryWidth / 2 - discountBadgeWidth / 2,
+                    y: y + categoryHeight - discountBadgeHeight - categoryHeight * 0.1,
+                    width: discountBadgeWidth,
+                    height: discountBadgeHeight,
+                    fill: accentColor,
+                    cornerRadius: discountBadgeHeight / 2,
+                    shadowColor: 'rgba(0,0,0,0.3)',
+                    shadowBlur: 3 * baseScale,
+                    shadowOffset: { x: 0, y: 2 * baseScale },
+                    draggable: true,
+                    name: 'design-element discount-bg',
+                    id: `discount-bg-${index + 1}`
+                });
+
+                // TEXT ELEMENTS SECOND (so they appear on top)
+
+                // Category name - individually selectable
+                const categoryName = new Konva.Text({
+                    x: x,
+                    y: y + categoryHeight * 0.05,
+                    width: categoryWidth,
+                    height: categoryHeight * 0.6, // 60% of category height for text area
+                    text: data.name,
+                    fontSize: fontSizes.category,
+                    fontFamily: 'Almarai',
+                    fontStyle: 'bold',
+                    fill: '#333',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    draggable: true,
+                    name: 'design-element category-name',
+                    id: `category-name-${index + 1}`
+                });
+
+                // Discount text - individually selectable
+                const discountText = new Konva.Text({
+                    x: x + categoryWidth / 2 - discountBadgeWidth / 2,
+                    y: y + categoryHeight - discountBadgeHeight - categoryHeight * 0.1,
+                    width: discountBadgeWidth,
+                    height: discountBadgeHeight,
+                    text: data.discount + '%',
+                    fontSize: Math.max(fontSizes.category * 0.8, 10), // Proportional but minimum 10px
+                    fontFamily: 'Almarai',
+                    fontStyle: 'bold',
+                    fill: '#ffffff',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    draggable: true,
+                    name: 'design-element discount-text',
+                    id: `discount-text-${index + 1}`
+                });
+
+                // Store individual elements - BACKGROUNDS FIRST, THEN TEXT for proper layering
+                designElements.categories.push(categoryRect);
+                designElements.categories.push(discountRect);
+                designElements.categories.push(categoryName);
+                designElements.categories.push(discountText);
+            });
+        }
+
+        function updateCanvas() {
+            if (!stage) return;
+
+            createBackground();
+            createDesignElements();
+        }
+
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Update UI
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.platform-btn').classList.add('active');
+            
+            document.getElementById('platformName').textContent = platforms[platform].name;
+            document.getElementById('platformDimensions').textContent = platforms[platform].display;
+            
+            initializeCanvas();
+        }
+
+        function editTextElement(textNode) {
+            if (!textNode || textNode.className !== 'Text') return;
+
+            // Get text node position and size
+            const nodePos = textNode.absolutePosition();
+            const stageBox = stage.container().getBoundingClientRect();
+            const scale = stage.scaleX();
+            
+            // Create input element
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = textNode.text();
+            input.style.position = 'absolute';
+            input.style.left = (stageBox.left + nodePos.x * scale) + 'px';
+            input.style.top = (stageBox.top + nodePos.y * scale) + 'px';
+            input.style.width = (textNode.width() * scale) + 'px';
+            input.style.fontSize = (textNode.fontSize() * scale) + 'px';
+            input.style.fontFamily = textNode.fontFamily();
+            input.style.color = textNode.fill();
+            input.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            input.style.border = '2px solid #667eea';
+            input.style.borderRadius = '4px';
+            input.style.padding = '2px 4px';
+            input.style.textAlign = textNode.align();
+            input.style.zIndex = '1000';
+
+            // Hide the text node temporarily
+            textNode.visible(false);
+            designLayer.batchDraw();
+
+            // Add input to page
+            document.body.appendChild(input);
+            input.focus();
+            input.select();
+
+            // Handle input completion
+            function finishEdit() {
+                const newText = input.value.trim();
+                if (newText !== '') {
+                    textNode.text(newText);
+                }
+                textNode.visible(true);
+                designLayer.batchDraw();
+                document.body.removeChild(input);
+                
+                // Show success notification
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'تم تحديث النص بنجاح',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
+            // Event listeners
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    finishEdit();
+                }
+                if (e.key === 'Escape') {
+                    textNode.visible(true);
+                    designLayer.batchDraw();
+                    document.body.removeChild(input);
+                }
+            });
+
+            input.addEventListener('blur', finishEdit);
+        }
+
+        function duplicateSelected() {
+            // Enhanced selection detection for design tools
+            const transformerNodes = transformer.nodes();
+            let targetNode = null;
+
+            if (transformerNodes.length > 0) {
+                targetNode = transformerNodes[0];
+            } else if (selectedNode) {
+                targetNode = selectedNode;
+            }
+
+            if (!targetNode) {
+                showNotification('❌ يرجى تحديد عنصر أولاً - اضغط على أي عنصر في التصميم', 'error');
+                return;
+            }
+
+            const clone = targetNode.clone();
+            clone.x(clone.x() + 20);
+            clone.y(clone.y() + 20);
+            
+            // Ensure cloned element has proper properties
+            if (clone.hasName('design-element')) {
+                // Generate new ID for cloned element
+                const originalId = clone.id();
+                if (originalId) {
+                    clone.id(originalId + '-copy-' + Date.now());
+                }
+            }
+            
+            designLayer.add(clone);
+            
+            transformer.nodes([clone]);
+            selectedNode = clone;
+            
+            designLayer.draw();
+            updateSelectionInfo();
+            showNotification('✅ تم نسخ العنصر بنجاح');
+        }
+
+        function deleteSelected() {
+            // Enhanced selection detection for design tools
+            const transformerNodes = transformer.nodes();
+            let targetNode = null;
+
+            if (transformerNodes.length > 0) {
+                targetNode = transformerNodes[0];
+            } else if (selectedNode) {
+                targetNode = selectedNode;
+            }
+
+            if (!targetNode) {
+                showNotification('❌ يرجى تحديد عنصر أولاً - اضغط على أي عنصر في التصميم', 'error');
+                return;
+            }
+
+            targetNode.destroy();
+            transformer.nodes([]);
+            selectedNode = null;
+            
+            designLayer.draw();
+            updateSelectionInfo();
+            showNotification('✅ تم حذف العنصر');
+        }
+
+        function bringToFront() {
+            // Enhanced selection detection for design tools
+            const transformerNodes = transformer.nodes();
+            let targetNode = null;
+
+            if (transformerNodes.length > 0) {
+                targetNode = transformerNodes[0];
+            } else if (selectedNode) {
+                targetNode = selectedNode;
+            }
+
+            if (!targetNode) {
+                showNotification('❌ يرجى تحديد عنصر أولاً - اضغط على أي عنصر في التصميم', 'error');
+                return;
+            }
+
+            targetNode.moveToTop();
+            transformer.moveToTop();
+            
+            designLayer.draw();
+            showNotification('✅ تم نقل العنصر للأمام');
+        }
+
+        function sendToBack() {
+            // Enhanced selection detection for design tools
+            const transformerNodes = transformer.nodes();
+            let targetNode = null;
+
+            if (transformerNodes.length > 0) {
+                targetNode = transformerNodes[0];
+            } else if (selectedNode) {
+                targetNode = selectedNode;
+            }
+
+            if (!targetNode) {
+                showNotification('❌ يرجى تحديد عنصر أولاً - اضغط على أي عنصر في التصميم', 'error');
+                return;
+            }
+
+            targetNode.moveToBottom();
+            
+            designLayer.draw();
+            showNotification('✅ تم نقل العنصر للخلف');
+        }
+
+        function clearAll() {
+            if (confirm('هل أنت متأكد من مسح جميع العناصر؟')) {
+                designLayer.children.forEach(child => {
+                    if (child !== transformer) {
+                        child.destroy();
+                    }
+                });
+                
+                transformer.nodes([]);
+                selectedNode = null;
+                
+                designLayer.draw();
+                updateSelectionInfo();
+                showNotification('✅ تم مسح جميع العناصر');
+            }
+        }
+
+        function resetPositions() {
+            createDesignElements();
+            transformer.nodes([]);
+            selectedNode = null;
+            updateSelectionInfo();
+            showNotification('✅ تم إعادة تعيين المواضع');
+        }
+
+        function exportFlyer(quality = 1) {
+            const platform = platforms[currentPlatform];
+            const format = document.querySelector('input[name="exportFormat"]:checked').value;
+            const storeName = document.getElementById('storeName').value || 'flyer';
+
+            // Hide transformer during export
+            transformer.visible(false);
+            
+            // Export with high quality
+            const dataURL = stage.toDataURL({
+                mimeType: format === 'jpg' ? 'image/jpeg' : 'image/png',
+                quality: format === 'jpg' ? 0.95 : 1,
+                pixelRatio: quality
+            });
+
+            // Show transformer again
+            transformer.visible(true);
+            designLayer.draw();
+
+            // Download
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = `${storeName}-${currentPlatform}-${quality}x.${format}`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            const qualityText = quality === 1 ? 'عادية' : quality === 2 ? 'عالية' : 'فائقة';
+            showNotification(`✅ تم تصدير العرض بجودة ${qualityText}!`);
+        }
+
+        function showNotification(message, type = 'success') {
+            // Configure SweetAlert2 toast
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'colored-toast'
+                }
+            });
+
+            // Show toast based on type
+            if (type === 'error') {
+                Toast.fire({
+                    icon: 'error',
+                    title: message,
+                    background: '#dc3545',
+                    color: '#fff'
+                });
+            } else if (type === 'warning') {
+                Toast.fire({
+                    icon: 'warning',
+                    title: message,
+                    background: '#ffc107',
+                    color: '#000'
+                });
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: message,
+                    background: '#28a745',
+                    color: '#fff'
+                });
+            }
+        }
+
+        function updateSelectionInfo() {
+            const infoElement = document.getElementById('selectionInfo');
+            const textFormattingPanel = document.getElementById('textFormattingPanel');
+            
+            if (!selectedNode) {
+                infoElement.innerHTML = 'اضغط على أي عنصر لتحديده والتحكم به';
+                infoElement.style.color = '#666';
+                textFormattingPanel.style.display = 'none';
+                return;
+            }
+
+            // Debug information
+            console.log('Selected node debug info:');
+            console.log('- className:', selectedNode.className);
+            console.log('- constructor.name:', selectedNode.constructor.name);
+            console.log('- name():', selectedNode.name());
+            console.log('- id():', selectedNode.id());
+            console.log('- text():', selectedNode.text ? selectedNode.text() : 'N/A');
+            console.log('- hasName check for category-name:', selectedNode.hasName('category-name'));
+            console.log('- hasName check for discount-text:', selectedNode.hasName('discount-text'));
+
+            let elementType = '';
+            let elementDesc = '';
+            let isTextElement = false;
+            
+            // Determine element type based on name and id
+            if (selectedNode.hasName('category-bg')) {
+                elementType = '🟪 خلفية فئة';
+                elementDesc = selectedNode.id().replace('category-bg-', 'الفئة ');
+            } else if (selectedNode.hasName('category-name')) {
+                elementType = '📝 اسم فئة';
+                elementDesc = selectedNode.id().replace('category-name-', 'الفئة ') + ': ' + selectedNode.text();
+                isTextElement = true;
+            } else if (selectedNode.hasName('discount-bg')) {
+                elementType = '🔴 خلفية خصم';
+                elementDesc = selectedNode.id().replace('discount-bg-', 'خصم الفئة ');
+            } else if (selectedNode.hasName('discount-text')) {
+                elementType = '💯 نص خصم';
+                elementDesc = selectedNode.id().replace('discount-text-', 'خصم الفئة ') + ': ' + selectedNode.text();
+                isTextElement = true;
+            } else if (selectedNode.hasName('badge-bg')) {
+                elementType = '🏷️ خلفية شارة';
+                elementDesc = 'شارة الخصم الرئيسية';
+            } else if (selectedNode.hasName('badge-text')) {
+                elementType = '🏷️ نص شارة';
+                elementDesc = 'نص: ' + selectedNode.text();
+                isTextElement = true;
+            } else if (selectedNode.hasName('phone-number')) {
+                elementType = '📞 رقم هاتف';
+                elementDesc = 'رقم: ' + selectedNode.text();
+                isTextElement = true;
+            } else if (selectedNode.className === 'Text' || selectedNode.constructor.name === 'Text') {
+                // This should catch ALL text elements, regardless of their specific names
+                elementType = '📖 نص';
+                elementDesc = selectedNode.text().substring(0, 30) + (selectedNode.text().length > 30 ? '...' : '');
+                isTextElement = true;
+                
+                // Add more specific description based on content
+                const textContent = selectedNode.text();
+                if (textContent.includes('@')) {
+                    elementType = '📱 حساب وسائل التواصل';
+                } else if (textContent.includes('اضغط') || textContent.includes('عرض')) {
+                    elementType = '📢 نص إعلاني';
+                } else if (textContent.includes('%')) {
+                    elementType = '💯 نص خصم';
+                } else if (/\d/.test(textContent) && (textContent.includes('+') || textContent.includes('05') || textContent.includes('06'))) {
+                    elementType = '📞 رقم هاتف';
+                }
+            } else {
+                elementType = '🎨 عنصر';
+                elementDesc = 'عنصر تصميم';
+            }
+            
+            infoElement.innerHTML = `<strong>${elementType}</strong><br><small>${elementDesc}</small>`;
+            infoElement.style.color = '#667eea';
+            
+            // Show/hide text formatting panel
+            if (isTextElement) {
+                textFormattingPanel.style.display = 'block';
+                updateTextFormattingButtons();
+            } else {
+                textFormattingPanel.style.display = 'none';
+            }
+        }
+
+        function updateTextFormattingButtons() {
+            // Enhanced selection detection for formatting buttons
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) return;
+
+            // Update direction buttons
+            const rtlBtn = document.getElementById('rtlBtn');
+            const ltrBtn = document.getElementById('ltrBtn');
+            const direction = textNode.getAttr('direction') || 'rtl';
+            
+            rtlBtn.classList.toggle('active', direction === 'rtl');
+            ltrBtn.classList.toggle('active', direction === 'ltr');
+
+            // Update alignment buttons
+            const leftBtn = document.getElementById('leftBtn');
+            const centerBtn = document.getElementById('centerBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            const align = textNode.align() || 'center';
+            
+            leftBtn.classList.toggle('active', align === 'left');
+            centerBtn.classList.toggle('active', align === 'center');
+            rightBtn.classList.toggle('active', align === 'right');
+
+            // Update font size display
+            const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+            fontSizeDisplay.textContent = Math.round(textNode.fontSize()) + 'px';
+
+            // Update font family dropdown
+            const fontFamilySelect = document.getElementById('fontFamilySelect');
+            if (fontFamilySelect) {
+                fontFamilySelect.value = textNode.fontFamily() || 'Almarai';
+            }
+        }
+
+        function setTextDirection(direction) {
+            // Enhanced selection detection - check transformer's nodes first
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) {
+                showNotification('❌ يرجى تحديد عنصر نص أولاً - اضغط على أي نص في التصميم', 'error');
+                return;
+            }
+
+            // Professional BiDi text handling
+            const text = textNode.text();
+            
+            try {
+                // Use BiDi library for professional text direction handling
+                if (typeof Bidi !== 'undefined') {
+                    let processedText = text;
+                    
+                    if (direction === 'rtl') {
+                        // Apply RTL processing for mixed Arabic/English text
+                        processedText = Bidi(text, { dir: 'rtl' });
+                    } else {
+                        // Apply LTR processing
+                        processedText = Bidi(text, { dir: 'ltr' });
+                    }
+                    
+                    textNode.text(processedText);
+                }
+                
+                // Set Konva text direction attributes
+                textNode.setAttr('direction', direction);
+                
+                // Apply proper text alignment based on direction
+                if (direction === 'rtl') {
+                    textNode.align('right');
+                } else {
+                    textNode.align('left');
+                }
+                
+            } catch (error) {
+                console.warn('BiDi library not fully loaded, using basic direction:', error);
+                // Fallback to basic direction setting
+                textNode.setAttr('direction', direction);
+            }
+            
+            designLayer.draw();
+            
+            // Update selectedNode to the text node for consistency
+            selectedNode = textNode;
+            updateTextFormattingButtons();
+            showNotification(`✅ تم تغيير اتجاه النص إلى ${direction.toUpperCase()} باستخدام مكتبة محترفة`);
+        }
+
+        function setTextAlign(align) {
+            // Enhanced selection detection - check transformer's nodes first
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) {
+                showNotification('❌ يرجى تحديد عنصر نص أولاً - اضغط على أي نص في التصميم', 'error');
+                return;
+            }
+
+            textNode.align(align);
+            designLayer.draw();
+            
+            // Update selectedNode to the text node for consistency
+            selectedNode = textNode;
+            updateTextFormattingButtons();
+            
+            const alignText = align === 'left' ? 'اليسار' : align === 'center' ? 'الوسط' : 'اليمين';
+            showNotification(`✅ تم محاذاة النص إلى ${alignText}`);
+        }
+
+        function adjustFontSize(change) {
+            // Enhanced selection detection - check transformer's nodes first
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) {
+                showNotification('❌ يرجى تحديد عنصر نص أولاً - اضغط على أي نص في التصميم', 'error');
+                return;
+            }
+
+            const currentSize = textNode.fontSize();
+            const newSize = Math.max(8, Math.min(120, currentSize + change));
+            
+            // Professional typography - adjust line height based on font size
+            const optimalLineHeight = newSize * 1.2; // 1.2 is optimal for Arabic/English mix
+            
+            textNode.fontSize(newSize);
+            textNode.lineHeight(optimalLineHeight / newSize); // Konva uses ratio
+            
+            designLayer.draw();
+            
+            // Update selectedNode to the text node for consistency
+            selectedNode = textNode;
+            updateTextFormattingButtons();
+            
+            showNotification(`✅ تم تغيير حجم الخط إلى ${newSize}px مع ضبط احترافي للمسافات`);
+        }
+
+        // Professional text analysis function
+        function analyzeTextDirection(text) {
+            if (!text) return 'ltr';
+            
+            // Use BiDi library for professional direction detection
+            if (typeof Bidi !== 'undefined') {
+                try {
+                    const direction = Bidi.getDirection(text);
+                    return direction;
+                } catch (error) {
+                    console.warn('BiDi analysis failed, using fallback');
+                }
+            }
+            
+            // Fallback: Basic Arabic character detection
+            const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+            return arabicRegex.test(text) ? 'rtl' : 'ltr';
+        }
+
+        // Auto-detect and apply optimal text direction
+        function autoDetectDirection() {
+            // Enhanced selection detection - check transformer's nodes first
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) {
+                showNotification('❌ يرجى تحديد عنصر نص أولاً - اضغط على أي نص في التصميم', 'error');
+                return;
+            }
+
+            const text = textNode.text();
+            const detectedDirection = analyzeTextDirection(text);
+            
+            // Update selectedNode to the text node for consistency
+            selectedNode = textNode;
+            setTextDirection(detectedDirection);
+            showNotification(`🤖 تم اكتشاف الاتجاه تلقائياً: ${detectedDirection.toUpperCase()}`);
+        }
+
+        // Change font family function
+        function changeFontFamily() {
+            // Enhanced selection detection - check transformer's nodes first
+            const transformerNodes = transformer.nodes();
+            let textNode = null;
+
+            if (transformerNodes.length > 0) {
+                const currentNode = transformerNodes[0];
+                if (currentNode.getClassName() === 'Text' || currentNode.constructor.name === 'Text') {
+                    textNode = currentNode;
+                }
+            }
+
+            // Fallback to selectedNode
+            if (!textNode && selectedNode && (selectedNode.getClassName() === 'Text' || selectedNode.constructor.name === 'Text')) {
+                textNode = selectedNode;
+            }
+
+            if (!textNode) {
+                showNotification('❌ يرجى تحديد عنصر نص أولاً - اضغط على أي نص في التصميم', 'error');
+                return;
+            }
+
+            const fontFamilySelect = document.getElementById('fontFamilySelect');
+            const selectedFont = fontFamilySelect.value;
+            
+            // Apply the new font family
+            textNode.fontFamily(selectedFont);
+            designLayer.draw();
+            
+            // Update selectedNode to the text node for consistency
+            selectedNode = textNode;
+            
+            // Get the Arabic name for notification
+            const fontNames = {
+                'Almarai': 'الماريا',
+                'Cairo': 'القاهرة', 
+                'Tajawal': 'تجوال',
+                'Amiri': 'أميري',
+                'Rubik': 'روبيك',
+                'Inter': 'إنتر',
+                'Lato': 'لاتو',
+                'Open Sans': 'أوبن سانز',
+                'Roboto': 'روبوتو',
+                'Poppins': 'بوبينز',
+                'Montserrat': 'مونتسيرات',
+                'Source Sans Pro': 'سورس سانز برو'
+            };
+            
+            const displayName = fontNames[selectedFont] || selectedFont;
+            showNotification(`✅ تم تغيير الخط إلى ${displayName}`);
+        }
+
+        // Background Type Selection
+        function selectBackgroundType(type) {
+            currentBackgroundType = type;
+            
+            const gradientBtn = document.getElementById('gradientBgBtn');
+            const imageBtn = document.getElementById('imageBgBtn');
+            const gradientControls = document.getElementById('gradientControls');
+            const imageControls = document.getElementById('imageControls');
+            
+            if (type === 'gradient') {
+                gradientBtn.classList.add('active');
+                imageBtn.classList.remove('active');
+                gradientControls.style.display = 'block';
+                imageControls.style.display = 'none';
+            } else {
+                gradientBtn.classList.remove('active');
+                imageBtn.classList.add('active');
+                gradientControls.style.display = 'none';
+                imageControls.style.display = 'block';
+            }
+            
+            // Only update background if canvas is initialized
+            if (backgroundLayer) {
+                createBackground();
+                showNotification(`✅ تم تغيير نوع الخلفية إلى ${type === 'gradient' ? 'تدرج لوني' : 'صورة'}`);
+            }
+        }
+
+        // Handle Background Image Upload
+        function handleBackgroundImage() {
+            const fileInput = document.getElementById('backgroundImageInput');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                showNotification('❌ يرجى اختيار ملف صورة صالح', 'error');
+                return;
+            }
+            
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('❌ حجم الملف كبير جداً. يرجى اختيار صورة أقل من 5MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    backgroundImage = img;
+                    
+                    // Show preview
+                    const previewImg = document.getElementById('backgroundPreviewImg');
+                    const previewContainer = document.getElementById('backgroundImagePreview');
+                    const positionControls = document.getElementById('imagePositionControls');
+                    
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    positionControls.style.display = 'block';
+                    
+                    // Reset position controls
+                    document.getElementById('bgImageX').value = 0;
+                    document.getElementById('bgImageY').value = 0;
+                    document.getElementById('bgImageScale').value = 100;
+                    
+                    // Update canvas
+                    createBackground();
+                    showNotification('✅ تم رفع الصورة بنجاح! يمكنك تعديل موضعها الآن');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Update Background Position
+        function updateBackgroundPosition() {
+            if (currentBackgroundType === 'image' && backgroundImage && backgroundLayer) {
+                createBackground();
+            }
+        }
+
+        // Reset Background Position
+        function resetBackgroundPosition() {
+            document.getElementById('bgImageX').value = 0;
+            document.getElementById('bgImageY').value = 0;
+            document.getElementById('bgImageScale').value = 100;
+            updateBackgroundPosition();
+            showNotification('✅ تم إعادة تعيين موضع الصورة');
+        }
+
+        // Remove Background Image
+        function removeBackgroundImage() {
+            backgroundImage = null;
+            backgroundImageNode = null;
+            
+            const previewContainer = document.getElementById('backgroundImagePreview');
+            const positionControls = document.getElementById('imagePositionControls');
+            const fileInput = document.getElementById('backgroundImageInput');
+            
+            previewContainer.style.display = 'none';
+            positionControls.style.display = 'none';
+            fileInput.value = '';
+            
+            // Switch back to gradient
+            selectBackgroundType('gradient');
+            showNotification('✅ تم حذف صورة الخلفية');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeCanvas();
+            // Set default background type after canvas is initialized
+            selectBackgroundType('gradient');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (stage) {
+                const platform = platforms[currentPlatform];
+                const container = document.getElementById('konvaContainer');
+                const maxDisplayWidth = 500; // Increased for better quality
+                const maxDisplayHeight = 700;
+                const scale = Math.min(maxDisplayWidth / platform.width, maxDisplayHeight / platform.height);
+                
+                const displayWidth = platform.width * scale;
+                const displayHeight = platform.height * scale;
+                
+                stage.width(displayWidth);
+                stage.height(displayHeight);
+                stage.scale({ x: scale, y: scale });
+                
+                // Maintain high quality on resize - apply to all layers
+                const pixelRatio = window.devicePixelRatio || 2;
+                stage.getLayers().forEach(layer => {
+                    layer.canvas.setPixelRatio(pixelRatio);
+                });
+                
+                stage.draw();
+            }
+        });
+    </script>
+</body>
+</html>
