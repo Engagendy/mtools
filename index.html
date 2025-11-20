@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Tools Suite | Create Professional Marketing Materials</title>
+    <meta name="description" content="Free marketing tools to create business cards, discount offers, and social media content. Professional designs for all platforms.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #007BFF;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-color: #1a1a1a;
+            --light-color: #f8f9fa;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--gray-700);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .tool-card:hover::before {
+            left: 100%;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 1rem;
+        }
+
+        .tool-description {
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .tool-features li {
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tool-features li i {
+            color: var(--success-color);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+
+        /* Tool Sections */
+        .tool-section {
+            display: none;
+            min-height: 100vh;
+            background: white;
+        }
+
+        .tool-section.active {
+            display: block;
+        }
+
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tool-content {
+            padding: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .tool-card {
+                padding: 1.5rem;
+            }
+
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--gray-200);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: var(--transition);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showHome()">
+                <i class="fas fa-tools"></i>
+                Marketing Tools
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="active" onclick="showHome()"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" onclick="showTool('business-card')"><i class="fas fa-id-card"></i> Business Cards</a></li>
+                <li><a href="#" onclick="showTool('discount-offer')"><i class="fas fa-tags"></i> Discount Offers</a></li>
+                <li><a href="#" onclick="showTool('social-media')"><i class="fas fa-share-nodes"></i> Social Media</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home-section" class="section">
+            <div class="hero-section">
+                <h1 class="hero-title">Marketing Tools Suite</h1>
+                <p class="hero-subtitle">Create professional marketing materials with our free, easy-to-use tools. Design business cards, discount offers, and social media content in minutes.</p>
+            </div>
+
+            <div class="tools-grid">
+                <div class="tool-card" onclick="showTool('business-card')">
+                    <div class="tool-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3 class="tool-title">Business Card Designer</h3>
+                    <p class="tool-description">Create professional bilingual business cards with custom logos, colors, and contact information.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> English & Arabic Support</li>
+                        <li><i class="fas fa-check"></i> Custom Logo Upload</li>
+                        <li><i class="fas fa-check"></i> QR Code Integration</li>
+                        <li><i class="fas fa-check"></i> Print-Ready Export</li>
+                    </ul>
+                    <a href="#" class="btn" onclick="showTool('business-card')">Start Designing</a>
+                </div>
+
+                <div class="tool-card" onclick="showTool('discount-offer')">
+                    <div class="tool-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="tool-title">Discount Offer Creator</h3>
+                    <p class="tool-description">Design attractive discount flyers and promotional materials for your business.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> Drag & Drop Editor</li>
+                        <li><i class="fas fa-check"></i> Multiple Categories</li>
+                        <li><i class="fas fa-check"></i> Custom Colors & Images</li>
+                        <li><i class="fas fa-check"></i> High-Quality Export</li>
+                    </ul>
+                    <a href="#" class="btn" onclick="showTool('discount-offer')">Create Offers</a>
+                </div>
+
+                <div class="tool-card" onclick="showTool('social-media')">
+                    <div class="tool-icon">
+                        <i class="fas fa-share-nodes"></i>
+                    </div>
+                    <h3 class="tool-title">Social Media Designer</h3>
+                    <p class="tool-description">Create content perfectly sized for Instagram, TikTok, Facebook, and other platforms.</p>
+                    <ul class="tool-features">
+                        <li><i class="fas fa-check"></i> Multi-Platform Support</li>
+                        <li><i class="fas fa-check"></i> Perfect Dimensions</li>
+                        <li><i class="fas fa-check"></i> Drag & Drop Elements</li>
+                        <li><i class="fas fa-check"></i> Export for All Platforms</li>
+                    </ul>
+                    <a href="#" class="btn" onclick="showTool('social-media')">Design Content</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tool Sections -->
+        <section id="business-card-section" class="tool-section">
+            <div class="tool-header">
+                <button class="back-btn" onclick="showHome()">
+                    <i class="fas fa-arrow-left"></i> Back to Tools
+                </button>
+                <h1>Business Card Designer</h1>
+                <p>Create professional business cards with bilingual support</p>
+            </div>
+            <div class="tool-content" id="business-card-content">
+                <!-- Business card tool will be loaded here -->
+            </div>
+        </section>
+
+        <section id="discount-offer-section" class="tool-section">
+            <div class="tool-header">
+                <button class="back-btn" onclick="showHome()">
+                    <i class="fas fa-arrow-left"></i> Back to Tools
+                </button>
+                <h1>Discount Offer Creator</h1>
+                <p>Design attractive promotional materials and discount flyers</p>
+            </div>
+            <div class="tool-content" id="discount-offer-content">
+                <!-- Discount offer tool will be loaded here -->
+            </div>
+        </section>
+
+        <section id="social-media-section" class="tool-section">
+            <div class="tool-header">
+                <button class="back-btn" onclick="showHome()">
+                    <i class="fas fa-arrow-left"></i> Back to Tools
+                </button>
+                <h1>Social Media Designer</h1>
+                <p>Create content for Instagram, TikTok, Facebook, and more</p>
+            </div>
+            <div class="tool-content" id="social-media-content">
+                <!-- Social media tool will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="main-footer">
+        <div class="footer-links">
+            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="#"><i class="fas fa-info-circle"></i> About</a>
+        </div>
+        <p>&copy; 2024 Marketing Tools Suite. Free and open-source marketing tools.</p>
+        <p>Made with ❤️ for the community</p>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Navigation state
+        let currentTool = 'home';
+        let toolsLoaded = {};
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            showHome();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Handle browser back/forward
+            window.addEventListener('popstate', function(e) {
+                if (e.state) {
+                    showTool(e.state.tool, false);
+                } else {
+                    showHome(false);
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    switch(e.key) {
+                        case '1':
+                            e.preventDefault();
+                            showTool('business-card');
+                            break;
+                        case '2':
+                            e.preventDefault();
+                            showTool('discount-offer');
+                            break;
+                        case '3':
+                            e.preventDefault();
+                            showTool('social-media');
+                            break;
+                        case 'h':
+                            e.preventDefault();
+                            showHome();
+                            break;
+                    }
+                }
+            });
+        }
+
+        // Show home section
+        function showHome(updateHistory = true) {
+            currentTool = 'home';
+            
+            // Hide all tool sections
+            document.querySelectorAll('.tool-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show home section
+            document.getElementById('home-section').style.display = 'block';
+            document.getElementById('main-footer').style.display = 'block';
+            
+            // Update navigation
+            updateNavigation('home');
+            
+            // Update URL
+            if (updateHistory) {
+                history.pushState({ tool: 'home' }, 'Marketing Tools Suite', '/');
+            }
+            
+            // Update title
+            document.title = 'Marketing Tools Suite | Create Professional Marketing Materials';
+        }
+
+        // Show specific tool
+        function showTool(toolName, updateHistory = true) {
+            if (currentTool === toolName) return;
+            
+            currentTool = toolName;
+            showLoading();
+            
+            // Hide home section and footer
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('main-footer').style.display = 'none';
+            
+            // Hide all tool sections
+            document.querySelectorAll('.tool-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the selected tool section
+            const toolSection = document.getElementById(toolName + '-section');
+            toolSection.classList.add('active');
+            
+            // Load tool content if not already loaded
+            if (!toolsLoaded[toolName]) {
+                loadToolContent(toolName);
+            } else {
+                hideLoading();
+            }
+            
+            // Update navigation
+            updateNavigation(toolName);
+            
+            // Update URL and title
+            if (updateHistory) {
+                const titles = {
+                    'business-card': 'Business Card Designer | Marketing Tools Suite',
+                    'discount-offer': 'Discount Offer Creator | Marketing Tools Suite',
+                    'social-media': 'Social Media Designer | Marketing Tools Suite'
+                };
+                
+                history.pushState({ tool: toolName }, titles[toolName], `/${toolName}`);
+                document.title = titles[toolName];
+            }
+            
+            // Close mobile menu if open
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        // Load tool content dynamically
+        function loadToolContent(toolName) {
+            const contentMap = {
+                'business-card': 'html/business_card_template.html',
+                'discount-offer': 'html/discount_offer_COMPLETE.html',
+                'social-media': 'html/social_media_flyer_generator (11).html'
+            };
+            
+            const filePath = contentMap[toolName];
+            if (!filePath) {
+                showNotification('Tool not found!', 'error');
+                hideLoading();
+                return;
+            }
+            
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load tool');
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    // Extract body content from the loaded HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Get the body content (skip nav/header elements)
+                    const bodyContent = doc.body.innerHTML;
+                    
+                    // Insert into tool content area
+                    const contentContainer = document.getElementById(toolName + '-content');
+                    contentContainer.innerHTML = bodyContent;
+                    
+                    // Extract and inject styles
+                    const styles = doc.querySelectorAll('style');
+                    styles.forEach(style => {
+                        if (!document.querySelector(`style[data-tool="${toolName}"]`)) {
+                            const newStyle = document.createElement('style');
+                            newStyle.setAttribute('data-tool', toolName);
+                            newStyle.textContent = style.textContent;
+                            document.head.appendChild(newStyle);
+                        }
+                    });
+                    
+                    // Extract and execute scripts
+                    const scripts = doc.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        if (script.src) {
+                            // External script
+                            if (!document.querySelector(`script[src="${script.src}"]`)) {
+                                const newScript = document.createElement('script');
+                                newScript.src = script.src;
+                                document.head.appendChild(newScript);
+                            }
+                        } else {
+                            // Inline script
+                            const newScript = document.createElement('script');
+                            newScript.textContent = script.textContent;
+                            document.body.appendChild(newScript);
+                        }
+                    });
+                    
+                    toolsLoaded[toolName] = true;
+                    hideLoading();
+                    showNotification('Tool loaded successfully!');
+                })
+                .catch(error => {
+                    console.error('Error loading tool:', error);
+                    showNotification('Failed to load tool. Please try again.', 'error');
+                    hideLoading();
+                    showHome();
+                });
+        }
+
+        // Update navigation active state
+        function updateNavigation(activeTool) {
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const navMap = {
+                'home': 0,
+                'business-card': 1,
+                'discount-offer': 2,
+                'social-media': 3
+            };
+            
+            const activeIndex = navMap[activeTool];
+            if (activeIndex !== undefined) {
+                const links = document.querySelectorAll('.nav-links a');
+                if (links[activeIndex]) {
+                    links[activeIndex].classList.add('active');
+                }
+            }
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Show loading spinner
+        function showLoading() {
+            document.getElementById('loading').classList.add('active');
+        }
+
+        // Hide loading spinner
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Smooth scroll to top when changing sections
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

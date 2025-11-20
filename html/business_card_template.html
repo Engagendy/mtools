@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Card Designer - AL-ALAMIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --card-bg: #1a1a1a;
+            --card-text: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f5f5;
+            font-family: 'Almarai', sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        /* ===== LEFT SIDE - FORM CONTROLS ===== */
+        .control-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .control-panel h2 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="color"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Almarai', sans-serif;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            background-color: #fafafa;
+        }
+        
+        input[type="color"] {
+            width: 50px;
+            height: 40px;
+            padding: 2px;
+            cursor: pointer;
+        }
+        
+        input[type="file"] {
+            padding: 8px;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .color-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .service-input-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        
+        .service-input-group input {
+            flex: 1;
+        }
+        
+        .btn-small {
+            padding: 6px 10px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-small:hover {
+            background: #dd0000;
+        }
+        
+        .btn-add {
+            padding: 8px 16px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-add:hover {
+            background: #333;
+        }
+        
+        .service-list {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px;
+            background: white;
+            margin-bottom: 4px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .logo-preview {
+            width: 60px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+            overflow: hidden;
+        }
+        
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* ===== RIGHT SIDE - PREVIEW ===== */
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .preview-wrapper {
+            background: #ccc;
+            padding: 30px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 450px;
+        }
+        
+        /* CARD STYLES */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 3.5 / 2;
+            background: var(--card-bg);
+            color: var(--card-text);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            font-family: 'Almarai', sans-serif;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--card-text);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .header-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.1;
+        }
+        
+        .header-text p {
+            font-size: 10px;
+            color: rgba(255,255,255,0.7);
+            margin: 3px 0 0 0;
+            letter-spacing: 1px;
+        }
+        
+        .card-middle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            gap: 20px;
+        }
+        
+        .services {
+            flex: 1;
+        }
+        
+        .service-title {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .service-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .service-badge {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--card-text);
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: 500;
+        }
+        
+        .qr-section {
+            text-align: center;
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            min-width: 85px;
+        }
+        
+        .qr-placeholder {
+            width: 75px;
+            height: 75px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #999;
+            font-weight: 700;
+            overflow: hidden;
+        }
+        
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .qr-text {
+            font-size: 8px;
+            color: #333;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        
+        .card-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .contact-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .contact-icon {
+            width: 14px;
+            height: 14px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7px;
+            color: var(--card-text);
+            flex-shrink: 0;
+        }
+        
+        .website {
+            font-size: 9px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* ARABIC SIDE */
+        .card-arabic {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .card-arabic .card-header {
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .card-arabic .header-text {
+            text-align: right;
+        }
+        
+        .card-arabic .header-text h1,
+        .card-arabic .header-text p {
+            text-align: right;
+        }
+        
+        .card-arabic .services {
+            text-align: right;
+        }
+        
+        .card-arabic .service-items {
+            justify-content: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .card-arabic .card-middle {
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+        
+        .card-arabic .card-footer {
+            text-align: right;
+        }
+        
+        .card-arabic .contact-info {
+            justify-content: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .card-arabic .contact-item {
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            direction: ltr;
+        }
+        
+        .card-arabic .contact-item span {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .card-arabic .website {
+            text-align: right;
+        }
+        
+        .print-button {
+            padding: 12px 24px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Almarai', sans-serif;
+        }
+        
+        .print-button:hover {
+            background: #333;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .button-group button {
+            flex: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-family: 'Almarai', sans-serif;
+        }
+        
+        .tab-button.active {
+            color: #1a1a1a;
+            border-bottom-color: #1a1a1a;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .control-panel {
+                display: none;
+            }
+            .preview-wrapper {
+                background: white;
+                padding: 0;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT SIDE - CONTROLS -->
+        <div class="control-panel">
+            <h2>Business Card Designer</h2>
+            
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('english')">English Side</button>
+                <button class="tab-button" onclick="switchTab('arabic')">Arabic Side</button>
+                <button class="tab-button" onclick="switchTab('design')">Design</button>
+            </div>
+            
+            <!-- ENGLISH TAB -->
+            <div id="english" class="tab-content active">
+                <div class="form-section">
+                    <div class="section-title">👔 English Shop Details</div>
+                    
+                    <div class="form-group">
+                        <label>Shop Name (English)</label>
+                        <input type="text" id="shopNameEn" placeholder="AL-ALAMIA" value="AL-ALAMIA" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tagline/Location</label>
+                        <input type="text" id="taglineEn" placeholder="Sharjah, UAE" value="Sharjah, UAE" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phoneEn" placeholder="+971 XX XXX XXXX" value="+971 XX XXX XXXX" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="emailEn" placeholder="info@alamia.ae" value="info@alamia.ae" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Website</label>
+                        <input type="url" id="websiteEn" placeholder="www.alamia-sharjah.ae" value="www.alamia-sharjah.ae" oninput="updateAllCards()">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">📱 Services</div>
+                    
+                    <div class="service-list" id="serviceListEn"></div>
+                    
+                    <input type="text" id="newServiceEn" placeholder="Add new service..." onkeypress="if(event.key==='Enter') addService('En')">
+                    <button class="btn-add" onclick="addService('En')">+ Add Service</button>
+                </div>
+            </div>
+            
+            <!-- ARABIC TAB -->
+            <div id="arabic" class="tab-content">
+                <div class="form-section">
+                    <div class="section-title">👔 تفاصيل المتجر العربية</div>
+                    
+                    <div class="form-group">
+                        <label>اسم المتجر (عربي)</label>
+                        <input type="text" id="shopNameAr" placeholder="العالمى الشارقة" value="العالمى الشارقة" oninput="updateAllCards()" style="text-align: right;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>الشعار/الموقع</label>
+                        <input type="text" id="taglineAr" placeholder="الإمارات العربية المتحدة" value="الإمارات العربية المتحدة" oninput="updateAllCards()" style="text-align: right;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رقم الهاتف</label>
+                        <input type="tel" id="phoneAr" placeholder="+971 XX XXX XXXX" value="+971 XX XXX XXXX" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="emailAr" placeholder="info@alamia.ae" value="info@alamia.ae" oninput="updateAllCards()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>الموقع الإلكتروني</label>
+                        <input type="url" id="websiteAr" placeholder="www.alamia-sharjah.ae" value="www.alamia-sharjah.ae" oninput="updateAllCards()">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">📱 الخدمات</div>
+                    
+                    <div class="service-list" id="serviceListAr"></div>
+                    
+                    <input type="text" id="newServiceAr" placeholder="إضافة خدمة جديدة..." onkeypress="if(event.key==='Enter') addService('Ar')" style="text-align: right;">
+                    <button class="btn-add" onclick="addService('Ar')">+ إضافة خدمة</button>
+                </div>
+            </div>
+            
+            <!-- DESIGN TAB -->
+            <div id="design" class="tab-content">
+                <div class="form-section">
+                    <div class="section-title">🎨 Colors & Design</div>
+                    
+                    <div class="form-group">
+                        <label>Background Color</label>
+                        <div class="color-group">
+                            <input type="color" id="bgColor" value="#1a1a1a" oninput="changeBackgroundColor(this.value)">
+                            <input type="text" id="bgColorHex" value="#1a1a1a" oninput="changeBackgroundColor(this.value)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Text Color</label>
+                        <div class="color-group">
+                            <input type="color" id="textColor" value="#ffffff" oninput="changeTextColor(this.value)">
+                            <input type="text" id="textColorHex" value="#ffffff" oninput="changeTextColor(this.value)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">📍 Logo & Icon</div>
+                    
+                    <div class="form-group">
+                        <label>Logo/Icon - Upload Image or Emoji</label>
+                        <input type="text" id="logoEmoji" placeholder="📱 (or upload below)" value="📱" maxlength="50" oninput="updateAllCards()">
+                        <div class="logo-preview" id="logoPreview">📱</div>
+                        <input type="file" id="logoUpload" accept="image/*" onchange="uploadLogo()">
+                        <small style="display: block; color: #999; margin-top: 5px;">Upload an image to replace emoji</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">🔖 QR Code</div>
+                    
+                    <div class="form-group">
+                        <label>QR Code - Upload Image</label>
+                        <input type="file" id="qrUpload" accept="image/*" onchange="uploadQR()">
+                        <small style="display: block; color: #999; margin-bottom: 10px;">Upload your QR code image</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>QR Text Label</label>
+                        <input type="text" id="qrLabel" placeholder="SCAN ME" value="SCAN ME" oninput="updateAllCards()">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="print-button" onclick="downloadCard()" style="background: #0066cc;">📥 Download</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RIGHT SIDE - PREVIEW -->
+        <div class="preview-panel">
+            <div class="preview-wrapper">
+                <div class="card" id="cardEnglish">
+                    <div class="card-header">
+                        <div class="logo-icon" id="logoEn">📱</div>
+                        <div class="header-text">
+                            <h1 id="shopNameEnDisplay">AL-ALAMIA</h1>
+                            <p id="taglineEnDisplay">Sharjah, UAE</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <div class="services">
+                            <div class="service-title">Services</div>
+                            <div class="service-items" id="servicesEnDisplay"></div>
+                        </div>
+                        
+                        <div class="qr-section">
+                            <div class="qr-placeholder" id="qrDisplayEn">QR</div>
+                            <div class="qr-text" id="qrLabelDisplay">SCAN ME</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="divider"></div>
+                        <div class="contact-info" id="contactEnDisplay"></div>
+                        <div class="website" id="websiteEnDisplay"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-wrapper">
+                <div class="card card-arabic" id="cardArabic" dir="rtl">
+                    <div class="card-header">
+                        <div class="header-text">
+                            <h1 id="shopNameArDisplay">العالمى الشارقة</h1>
+                            <p id="taglineArDisplay">الإمارات العربية المتحدة</p>
+                        </div>
+                        <div class="logo-icon" id="logoAr">📱</div>
+                    </div>
+                    
+                    <div class="card-middle">
+                        <div class="qr-section">
+                            <div class="qr-placeholder" id="qrDisplayAr">QR</div>
+                            <div class="qr-text" id="qrLabelAr">SCAN ME</div>
+                        </div>
+                        
+                        <div class="services">
+                            <div class="service-title">الخدمات</div>
+                            <div class="service-items" id="servicesArDisplay"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="divider"></div>
+                        <div class="contact-info" id="contactArDisplay"></div>
+                        <div class="website" id="websiteArDisplay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let servicesEn = ['Mobile Phones', 'Laptops', 'Tablets', 'Buy', 'Sell', 'Trade-In'];
+        let servicesAr = ['هواتف ذكية', 'أجهزة كمبيوتر', 'أجهزة لوحية', 'شراء', 'بيع', 'تبديل'];
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function changeBackgroundColor(value) {
+            // Sync both inputs
+            document.getElementById('bgColor').value = value;
+            document.getElementById('bgColorHex').value = value;
+            // Apply color
+            document.documentElement.style.setProperty('--card-bg', value);
+        }
+        
+        function changeTextColor(value) {
+            // Sync both inputs
+            document.getElementById('textColor').value = value;
+            document.getElementById('textColorHex').value = value;
+            // Apply color
+            document.documentElement.style.setProperty('--card-text', value);
+        }
+        
+        function addService(lang) {
+            const inputId = lang === 'En' ? 'newServiceEn' : 'newServiceAr';
+            const input = document.getElementById(inputId);
+            const service = input.value.trim();
+            
+            if (service) {
+                if (lang === 'En') {
+                    servicesEn.push(service);
+                } else {
+                    servicesAr.push(service);
+                }
+                input.value = '';
+                updateAllCards();
+            }
+        }
+        
+        function removeService(lang, index) {
+            if (lang === 'En') {
+                servicesEn.splice(index, 1);
+            } else {
+                servicesAr.splice(index, 1);
+            }
+            updateAllCards();
+        }
+        
+        function updateServiceLists() {
+            const listEn = document.getElementById('serviceListEn');
+            listEn.innerHTML = servicesEn.map((service, index) => `
+                <div class="service-item">
+                    <span>${service}</span>
+                    <button class="btn-small" onclick="removeService('En', ${index})">×</button>
+                </div>
+            `).join('');
+            
+            const listAr = document.getElementById('serviceListAr');
+            listAr.innerHTML = servicesAr.map((service, index) => `
+                <div class="service-item">
+                    <span>${service}</span>
+                    <button class="btn-small" onclick="removeService('Ar', ${index})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        function updateAllCards() {
+            // English
+            const shopNameEn = document.getElementById('shopNameEn').value;
+            const taglineEn = document.getElementById('taglineEn').value;
+            const phoneEn = document.getElementById('phoneEn').value;
+            const emailEn = document.getElementById('emailEn').value;
+            const websiteEn = document.getElementById('websiteEn').value;
+            
+            // Arabic
+            const shopNameAr = document.getElementById('shopNameAr').value;
+            const taglineAr = document.getElementById('taglineAr').value;
+            const phoneAr = document.getElementById('phoneAr').value;
+            const emailAr = document.getElementById('emailAr').value;
+            const websiteAr = document.getElementById('websiteAr').value;
+            
+            // Design
+            const logoEmoji = document.getElementById('logoEmoji').value;
+            const qrLabel = document.getElementById('qrLabel').value;
+            
+            // Update English
+            document.getElementById('shopNameEnDisplay').textContent = shopNameEn;
+            document.getElementById('taglineEnDisplay').textContent = taglineEn;
+            document.getElementById('websiteEnDisplay').textContent = websiteEn ? '🌐 ' + websiteEn : '';
+            document.getElementById('logoEn').textContent = logoEmoji;
+            document.getElementById('servicesEnDisplay').innerHTML = servicesEn.map(s => 
+                `<span class="service-badge">${s}</span>`
+            ).join('');
+            document.getElementById('contactEnDisplay').innerHTML = `
+                ${phoneEn ? `<div class="contact-item"><div class="contact-icon">📱</div><span>${phoneEn}</span></div>` : ''}
+                ${emailEn ? `<div class="contact-item"><div class="contact-icon">✉️</div><span>${emailEn}</span></div>` : ''}
+            `;
+            
+            // Update Arabic
+            document.getElementById('shopNameArDisplay').textContent = shopNameAr;
+            document.getElementById('taglineArDisplay').textContent = taglineAr;
+            document.getElementById('websiteArDisplay').textContent = websiteAr ? '🌐 ' + websiteAr : '';
+            document.getElementById('logoAr').textContent = logoEmoji;
+            document.getElementById('servicesArDisplay').innerHTML = servicesAr.map(s => 
+                `<span class="service-badge">${s}</span>`
+            ).join('');
+            document.getElementById('contactArDisplay').innerHTML = `
+                ${phoneAr ? `<div class="contact-item"><span>${phoneAr}</span><div class="contact-icon">📱</div></div>` : ''}
+                ${emailAr ? `<div class="contact-item"><span>${emailAr}</span><div class="contact-icon">✉️</div></div>` : ''}
+            `;
+            
+            document.getElementById('qrLabelDisplay').textContent = qrLabel;
+            document.getElementById('qrLabelAr').textContent = qrLabel;
+            
+            updateServiceLists();
+        }
+        
+        function uploadLogo() {
+            const file = document.getElementById('logoUpload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logoPreview').innerHTML = `<img src="${e.target.result}">`;
+                    document.getElementById('logoEn').innerHTML = `<img src="${e.target.result}">`;
+                    document.getElementById('logoAr').innerHTML = `<img src="${e.target.result}">`;
+                    document.getElementById('logoEmoji').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function uploadQR() {
+            const file = document.getElementById('qrUpload').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('qrDisplayEn').innerHTML = `<img src="${e.target.result}">`;
+                    document.getElementById('qrDisplayAr').innerHTML = `<img src="${e.target.result}">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function downloadCard() {
+            alert('Download feature would convert the card to PDF. For now, use Print > Save as PDF');
+        }
+        
+        // Initial update
+        updateAllCards();
+    </script>
+</body>
+</html>

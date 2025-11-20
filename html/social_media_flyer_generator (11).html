@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منشئ عروض وسائل التواصل الاجتماعي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .platforms-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .platform-btn {
+            padding: 15px;
+            border: 3px solid white;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .platform-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .platform-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .editor-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        input[type="color"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input[type="color"] {
+            height: 45px;
+            cursor: pointer;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: sticky;
+            bottom: 20px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .preview-panel {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .preview-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .preview-info {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .preview-platform {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .preview-dimensions {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .preview-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .preview-flyer {
+            width: 100%;
+            background: linear-gradient(135deg, #007BFF 0%, #0056b3 50%, #ffffff 100%);
+            position: relative;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        .preview-flyer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+
+        .flyer-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+            padding-top: 20px;
+        }
+
+        .draggable-element {
+            cursor: grab;
+            user-select: none;
+            transition: box-shadow 0.2s;
+            touch-action: none;
+            position: relative;
+            background: transparent;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .draggable-element:active {
+            cursor: grabbing;
+        }
+
+        .draggable-element.selected {
+            outline: 3px dashed #ffff00;
+            outline-offset: 2px;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.6), inset 0 0 10px rgba(102, 126, 234, 0.2);
+            border-radius: 4px;
+        }
+
+        .draggable-element:hover:not(.selected) {
+            outline: 2px solid rgba(102, 126, 234, 0.5);
+            outline-offset: 2px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            width: 100%;
+            margin: 12px 0;
+        }
+
+        .category-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .category-name {
+            display: block;
+            margin-bottom: 4px;
+            word-break: break-word;
+            font-size: 0.9em;
+        }
+
+        .category-discount {
+            background: linear-gradient(135deg, #FF0000, #FF6B6B);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 900;
+            display: inline-block;
+        }
+
+        .flyer-logo {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .flyer-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin: 8px 0;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            word-break: break-word;
+        }
+
+        .flyer-badge {
+            display: inline-block;
+            background: #FF0000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 900;
+            margin: 8px 0;
+        }
+
+        .flyer-text {
+            font-size: 14px;
+            margin: 4px 0;
+            opacity: 0.95;
+            word-break: break-word;
+        }
+
+        .flyer-logo-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .decoration {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 80px;
+        }
+
+        .decoration-1 {
+            top: -20px;
+            left: -20px;
+        }
+
+        .decoration-2 {
+            bottom: -30px;
+            right: -30px;
+        }
+
+        .export-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            z-index: 10000;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-panel {
+                position: static;
+                top: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platforms-selector {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .editor-panel {
+                max-height: none;
+            }
+        }
+
+        .reset-positions-btn {
+            width: 100%;
+            padding: 10px;
+            background: #ffc107;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .reset-positions-btn:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+        }
+
+        .move-controls-section {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .move-controls-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Floating Toolbar Styles */
+        .floating-toolbar {
+            position: fixed;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            z-index: 5000;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 350px;
+        }
+
+        .toolbar-button {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .toolbar-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .toolbar-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            background: #ddd;
+            margin: 0 4px;
+        }
+
+        .size-input-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .size-input-group input {
+            width: 40px;
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .size-input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- الرأس -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-share-nodes"></i>
+                منشئ عروض وسائل التواصل
+            </h1>
+            <p>اختر المنصة وصمم عرضك بأبعاد مثالية</p>
+        </div>
+
+        <!-- اختيار المنصات -->
+        <div class="platforms-selector">
+            <button class="platform-btn active" onclick="selectPlatform('instagram')">
+                <i class="fab fa-instagram"></i><br>Instagram
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('tiktok')">
+                <i class="fab fa-tiktok"></i><br>TikTok
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('facebook')">
+                <i class="fab fa-facebook"></i><br>Facebook
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('snapchat')">
+                <i class="fab fa-snapchat"></i><br>Snapchat
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('twitter')">
+                <i class="fab fa-twitter"></i><br>Twitter
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('linkedin')">
+                <i class="fab fa-linkedin"></i><br>LinkedIn
+            </button>
+        </div>
+
+        <!-- المحتوى -->
+        <div class="content">
+            <!-- قسم التحرير -->
+            <div class="editor-panel">
+                <div class="panel-title">
+                    <i class="fas fa-edit"></i> محرر العرض
+                </div>
+
+                <!-- معلومات المتجر -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-store"></i> معلومات المتجر
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المتجر</label>
+                        <input type="text" id="storeName" value="Alalamy Sharjah" placeholder="أدخل اسم المتجر">
+                    </div>
+                    <div class="form-group">
+                        <label>الشعار أو الجملة الترويجية</label>
+                        <input type="text" id="tagline" value="العالمي ملك السعادة ❤️" placeholder="أدخل الشعار">
+                    </div>
+                </div>
+
+                <!-- العنوان والوصف -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-heading"></i> العناوين والمحتوى
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان العرض</label>
+                        <textarea id="mainTitle" placeholder="أدخل عنوان العرض">عروض خصم متنوعة على جميع الإكسسوارات! 🎉</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف الإضافي</label>
+                        <textarea id="subtitle" placeholder="نص إضافي أو استدعاء للإجراء">اضغط الآن لعرض أفضل العروض</textarea>
+                    </div>
+                </div>
+
+                <!-- الخصومات والفئات -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-tags"></i> الفئات والخصومات
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 1</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category1" value="كفرات موبايل">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount1" value="30" min="0" max="100">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 2</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category2" value="شواحن وكابلات">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount2" value="25" min="0" max="100">
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong style="font-size: 12px; color: #666;">الفئة 3</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category3" value="ماوس ولوحات">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount3" value="20" min="0" max="100">
+                            </div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 12px; color: #666;">الفئة 4</strong>
+                            <div class="form-group" style="margin-bottom: 8px; margin-top: 8px;">
+                                <label>اسم</label>
+                                <input type="text" id="category4" value="سماعات">
+                            </div>
+                            <div class="form-group">
+                                <label>خصم (%)</label>
+                                <input type="number" id="discount4" value="15" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- معلومات الاتصال -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-phone"></i> معلومات الاتصال
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف (اختياري)</label>
+                        <input type="tel" id="phoneNumber" placeholder="+971 50 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label>حساب وسائل التواصل</label>
+                        <input type="text" id="socialHandle" value="@alalamy.sharjah" placeholder="@username">
+                    </div>
+                </div>
+
+                <!-- الألوان والخلفية -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-image"></i> الشعار
+                    </div>
+                    <div class="form-group">
+                        <label>تحميل الشعار</label>
+                        <input type="file" id="logoImage" accept="image/*">
+                        <small>📤 اختر صورة للشعار (PNG/JPG)</small>
+                    </div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>حجم الشعار (عرض)</label>
+                            <input type="range" id="logoWidth" min="20" max="200" value="80" style="width: 100%; cursor: pointer;">
+                            <span id="logoWidthValue">80</span>px
+                        </div>
+                        <div class="form-group">
+                            <label>حجم الشعار (ارتفاع)</label>
+                            <input type="range" id="logoHeight" min="20" max="200" value="80" style="width: 100%; cursor: pointer;">
+                            <span id="logoHeightValue">80</span>px
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="showLogo" onchange="updatePreview()">
+                            إظهار الشعار
+                        </label>
+                    </div>
+                </div>
+
+                <!-- الألوان والخلفية -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-palette"></i> الألوان والخلفية
+                    </div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label>لون الخلفية</label>
+                            <input type="color" id="bgColor" value="#007BFF">
+                        </div>
+                        <div class="form-group">
+                            <label>لون الخصم</label>
+                            <input type="color" id="accentColor" value="#FF0000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>صورة الخلفية (اختياري)</label>
+                        <input type="file" id="backgroundImage" accept="image/*">
+                        <small>📤 اختر صورة لاستخدامها كخلفية (تدعم PNG/JPG)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="useBackgroundImage" onchange="updatePreview()">
+                            استخدام صورة الخلفية بدلاً من اللون
+                        </label>
+                    </div>
+                </div>
+
+                <!-- التحكم في حركة العناصر -->
+                <div class="section-group">
+                    <div class="move-controls-section">
+                        <div class="move-controls-title">
+                            <i class="fas fa-arrows-alt"></i> حرّك العناصر
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                            اضغط على أي عنصر واسحبه لتحريكه في المعاينة
+                        </p>
+                        <button class="reset-positions-btn" onclick="resetPositions()">
+                            <i class="fas fa-undo"></i> إعادة تعيين المواضع
+                        </button>
+                    </div>
+                </div>
+
+                <!-- خيارات التصدير -->
+                <div class="section-group">
+                    <div class="section-title">
+                        <i class="fas fa-file-export"></i> تنسيق التصدير
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="png" checked style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>PNG</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                            <input type="radio" name="exportFormat" value="jpg" style="margin: 0; margin-right: 8px; cursor: pointer;">
+                            <span>JPG</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="export-btn" onclick="exportFlyer()">
+                    <i class="fas fa-download"></i> تصدير للمنصة الحالية
+                </button>
+            </div>
+
+            <!-- قسم المعاينة -->
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-info">
+                        <div class="preview-platform" id="platformName">Instagram Feed</div>
+                        <div class="preview-dimensions" id="platformDimensions">1080 × 1350 px</div>
+                    </div>
+                    <div class="preview-wrapper" id="previewWrapper">
+                        <div class="preview-flyer" id="previewFlyer">
+                            <div class="decoration decoration-1">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="decoration decoration-2">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <div class="flyer-content" id="flyerContent">
+                                <img class="flyer-logo-image draggable-element" id="previewLogoImage" style="display: none; width: 80px; height: 80px; cursor: grab;">
+                                <div class="flyer-logo draggable-element" id="previewLogo">Alalamy Sharjah</div>
+                                <div class="flyer-title draggable-element" id="previewTitle">عروض خصم متنوعة! 🎉</div>
+                                <div class="flyer-badge draggable-element" id="previewBadge">من 15% إلى 30%</div>
+                                
+                                <!-- الفئات -->
+                                <div class="categories-grid draggable-element" id="categoriesGrid">
+                                    <div class="category-item">
+                                        <span class="category-name" id="cat1">كفرات موبايل</span>
+                                        <span class="category-discount" id="dis1">30%</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <span class="category-name" id="cat2">شواحن</span>
+                                        <span class="category-discount" id="dis2">25%</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <span class="category-name" id="cat3">ماوس</span>
+                                        <span class="category-discount" id="dis3">20%</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <span class="category-name" id="cat4">سماعات</span>
+                                        <span class="category-discount" id="dis4">15%</span>
+                                    </div>
+                                </div>
+
+                                <div class="flyer-text draggable-element" id="previewSubtitle">اضغط الآن للعروض</div>
+                                <div class="flyer-text draggable-element" id="previewHandle">@alalamy.sharjah</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        const platforms = {
+            instagram: {
+                name: 'Instagram Feed',
+                width: 1080,
+                height: 1350,
+                display: '1080 × 1350 px'
+            },
+            instastory: {
+                name: 'Instagram Story',
+                width: 1080,
+                height: 1920,
+                display: '1080 × 1920 px'
+            },
+            tiktok: {
+                name: 'TikTok',
+                width: 1080,
+                height: 1920,
+                display: '1080 × 1920 px'
+            },
+            snapchat: {
+                name: 'Snapchat',
+                width: 1080,
+                height: 1920,
+                display: '1080 × 1920 px'
+            },
+            facebook: {
+                name: 'Facebook',
+                width: 1200,
+                height: 1500,
+                display: '1200 × 1500 px'
+            },
+            twitter: {
+                name: 'Twitter',
+                width: 1024,
+                height: 512,
+                display: '1024 × 512 px'
+            },
+            linkedin: {
+                name: 'LinkedIn',
+                width: 1200,
+                height: 627,
+                display: '1200 × 627 px'
+            }
+        };
+
+        let selectedElement = null;
+        let isDragging = false;
+        const elementPositions = {};
+        let currentPlatform = 'instagram';
+        let currentToolbar = null;
+        let elementStyles = {}; // Store element styling preferences
+
+        // Text formatting options
+        const textAlignments = ['right', 'center', 'left']; // Fixed for RTL: right, center, left
+        const fontSizes = {}; // Store font sizes for elements
+
+        function showTextToolbar(element, event) {
+            // Remove existing toolbar
+            if (currentToolbar) {
+                currentToolbar.remove();
+            }
+
+            const isTextElement = element.classList.contains('flyer-logo') || 
+                                element.classList.contains('flyer-title') || 
+                                element.classList.contains('flyer-badge') ||
+                                element.classList.contains('flyer-text') ||
+                                element.id === 'previewSubtitle' ||
+                                element.id === 'previewHandle';
+
+            const isLogoImage = element.id === 'previewLogoImage';
+
+            if (!isTextElement && !isLogoImage) return;
+
+            // Create toolbar
+            const toolbar = document.createElement('div');
+            toolbar.className = 'floating-toolbar';
+
+            // Handle logo image separately
+            if (isLogoImage) {
+                const currentWidth = element.style.width || '80px';
+                const currentHeight = element.style.height || '80px';
+                const widthValue = parseInt(currentWidth);
+                const heightValue = parseInt(currentHeight);
+
+                // Width control
+                const widthContainer = document.createElement('div');
+                widthContainer.style.display = 'flex';
+                widthContainer.style.alignItems = 'center';
+                widthContainer.style.gap = '8px';
+
+                const widthLabel = document.createElement('label');
+                widthLabel.textContent = 'العرض:';
+                widthLabel.style.fontSize = '12px';
+                widthLabel.style.fontWeight = '600';
+                widthLabel.style.minWidth = '50px';
+                widthContainer.appendChild(widthLabel);
+
+                const widthInput = document.createElement('input');
+                widthInput.type = 'number';
+                widthInput.min = '10';
+                widthInput.max = '300';
+                widthInput.value = widthValue;
+                widthInput.style.width = '50px';
+                widthInput.style.padding = '6px';
+                widthInput.style.border = '2px solid #ddd';
+                widthInput.style.borderRadius = '4px';
+                widthInput.style.fontSize = '12px';
+                widthInput.oninput = (e) => {
+                    element.style.width = e.target.value + 'px';
+                    document.getElementById('logoWidth').value = e.target.value;
+                    document.getElementById('logoWidthValue').textContent = e.target.value;
+                };
+                widthContainer.appendChild(widthInput);
+
+                const widthUnit = document.createElement('span');
+                widthUnit.textContent = 'px';
+                widthUnit.style.fontSize = '12px';
+                widthContainer.appendChild(widthUnit);
+                toolbar.appendChild(widthContainer);
+
+                // Divider
+                const divider1 = document.createElement('div');
+                divider1.className = 'toolbar-divider';
+                divider1.style.height = '30px';
+                toolbar.appendChild(divider1);
+
+                // Height control
+                const heightContainer = document.createElement('div');
+                heightContainer.style.display = 'flex';
+                heightContainer.style.alignItems = 'center';
+                heightContainer.style.gap = '8px';
+
+                const heightLabel = document.createElement('label');
+                heightLabel.textContent = 'الارتفاع:';
+                heightLabel.style.fontSize = '12px';
+                heightLabel.style.fontWeight = '600';
+                heightLabel.style.minWidth = '50px';
+                heightContainer.appendChild(heightLabel);
+
+                const heightInput = document.createElement('input');
+                heightInput.type = 'number';
+                heightInput.min = '10';
+                heightInput.max = '300';
+                heightInput.value = heightValue;
+                heightInput.style.width = '50px';
+                heightInput.style.padding = '6px';
+                heightInput.style.border = '2px solid #ddd';
+                heightInput.style.borderRadius = '4px';
+                heightInput.style.fontSize = '12px';
+                heightInput.oninput = (e) => {
+                    element.style.height = e.target.value + 'px';
+                    document.getElementById('logoHeight').value = e.target.value;
+                    document.getElementById('logoHeightValue').textContent = e.target.value;
+                };
+                heightContainer.appendChild(heightInput);
+
+                const heightUnit = document.createElement('span');
+                heightUnit.textContent = 'px';
+                heightUnit.style.fontSize = '12px';
+                heightContainer.appendChild(heightUnit);
+                toolbar.appendChild(heightContainer);
+
+                // Close button
+                const divider2 = document.createElement('div');
+                divider2.className = 'toolbar-divider';
+                divider2.style.height = '30px';
+                toolbar.appendChild(divider2);
+
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'toolbar-button';
+                closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                closeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    toolbar.remove();
+                    currentToolbar = null;
+                };
+                toolbar.appendChild(closeBtn);
+
+                document.body.appendChild(toolbar);
+                currentToolbar = toolbar;
+
+                // Position toolbar below and to the right of the element
+                const rect = element.getBoundingClientRect();
+                toolbar.style.left = Math.max(10, rect.right - 180) + 'px';
+                toolbar.style.top = Math.max(10, rect.bottom + 15) + 'px';
+                
+                return;
+            }
+
+            // Get current style
+            const currentAlign = window.getComputedStyle(element).textAlign;
+            const currentSize = window.getComputedStyle(element).fontSize;
+
+            // Alignment buttons
+            const alignContainer = document.createElement('div');
+            alignContainer.style.display = 'flex';
+            alignContainer.style.gap = '4px';
+
+            ['يمين', 'وسط', 'يسار'].forEach((label, idx) => {
+                const align = textAlignments[idx];
+                const btn = document.createElement('button');
+                btn.className = 'toolbar-button';
+                if (currentAlign === align) btn.classList.add('active');
+                // Map correct icons: 0=right, 1=center, 2=left
+                const iconMap = {
+                    'right': 'align-right',
+                    'center': 'align-center',
+                    'left': 'align-left'
+                };
+                btn.innerHTML = `<i class="fas fa-${iconMap[align]}"></i> ${label}`;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    element.style.textAlign = align;
+                    fontSizes[element.id] = { align: align, size: fontSizes[element.id]?.size };
+                    showTextToolbar(element, event);
+                };
+                alignContainer.appendChild(btn);
+            });
+
+            toolbar.appendChild(alignContainer);
+
+            // Divider
+            const divider1 = document.createElement('div');
+            divider1.className = 'toolbar-divider';
+            divider1.style.height = '30px';
+            toolbar.appendChild(divider1);
+
+            // Text Direction buttons (LTR/RTL)
+            const directionContainer = document.createElement('div');
+            directionContainer.style.display = 'flex';
+            directionContainer.style.gap = '4px';
+
+            const currentDirection = window.getComputedStyle(element).direction || 'rtl';
+            
+            ['RTL', 'LTR'].forEach((label) => {
+                const direction = label === 'RTL' ? 'rtl' : 'ltr';
+                const btn = document.createElement('button');
+                btn.className = 'toolbar-button';
+                if (currentDirection === direction) btn.classList.add('active');
+                btn.innerHTML = `<i class="fas fa-arrow-${direction === 'rtl' ? 'right' : 'left'}"></i> ${label}`;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    element.style.direction = direction;
+                    fontSizes[element.id] = { 
+                        align: fontSizes[element.id]?.align || currentAlign, 
+                        size: fontSizes[element.id]?.size,
+                        direction: direction
+                    };
+                    showTextToolbar(element, event);
+                };
+                directionContainer.appendChild(btn);
+            });
+
+            toolbar.appendChild(directionContainer);
+
+            // Divider
+            const divider2 = document.createElement('div');
+            divider2.className = 'toolbar-divider';
+            divider2.style.height = '30px';
+            toolbar.appendChild(divider2);
+
+            // Font size controls
+            const sizeContainer = document.createElement('div');
+            sizeContainer.className = 'size-input-group';
+            sizeContainer.style.display = 'flex';
+            sizeContainer.style.alignItems = 'center';
+            sizeContainer.style.gap = '8px';
+
+            const sizeLabel = document.createElement('label');
+            sizeLabel.textContent = 'الحجم:';
+            sizeLabel.style.fontSize = '12px';
+            sizeLabel.style.fontWeight = '600';
+            sizeLabel.style.minWidth = '40px';
+            sizeContainer.appendChild(sizeLabel);
+
+            const sizeInput = document.createElement('input');
+            sizeInput.type = 'number';
+            sizeInput.min = '8';
+            sizeInput.max = '100';
+            sizeInput.value = parseInt(currentSize);
+            sizeInput.style.width = '50px';
+            sizeInput.style.padding = '6px';
+            sizeInput.style.border = '2px solid #ddd';
+            sizeInput.style.borderRadius = '4px';
+            sizeInput.style.fontSize = '12px';
+            sizeInput.oninput = (e) => {
+                const newSize = e.target.value;
+                element.style.fontSize = newSize + 'px';
+                fontSizes[element.id] = { 
+                    align: fontSizes[element.id]?.align || currentAlign, 
+                    size: newSize,
+                    direction: fontSizes[element.id]?.direction || currentDirection
+                };
+            };
+            sizeInput.onblur = (e) => {
+                updatePreview();
+            };
+            sizeContainer.appendChild(sizeInput);
+
+            // Decrease button
+            const decreaseBtn = document.createElement('button');
+            decreaseBtn.className = 'toolbar-button';
+            decreaseBtn.innerHTML = '<i class="fas fa-minus"></i>';
+            decreaseBtn.style.padding = '6px 8px';
+            decreaseBtn.onclick = (e) => {
+                e.stopPropagation();
+                const currentVal = parseInt(sizeInput.value);
+                if (currentVal > 8) {
+                    sizeInput.value = currentVal - 1;
+                    sizeInput.oninput({ target: sizeInput });
+                    updatePreview();
+                }
+            };
+            sizeContainer.appendChild(decreaseBtn);
+
+            // Increase button
+            const increaseBtn = document.createElement('button');
+            increaseBtn.className = 'toolbar-button';
+            increaseBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            increaseBtn.style.padding = '6px 8px';
+            increaseBtn.onclick = (e) => {
+                e.stopPropagation();
+                const currentVal = parseInt(sizeInput.value);
+                if (currentVal < 100) {
+                    sizeInput.value = currentVal + 1;
+                    sizeInput.oninput({ target: sizeInput });
+                    updatePreview();
+                }
+            };
+            sizeContainer.appendChild(increaseBtn);
+
+            const sizeUnit = document.createElement('span');
+            sizeUnit.textContent = 'px';
+            sizeUnit.style.fontSize = '12px';
+            sizeUnit.style.color = '#666';
+            sizeContainer.appendChild(sizeUnit);
+
+            toolbar.appendChild(sizeContainer);
+
+            // Close button
+            const divider3 = document.createElement('div');
+            divider3.className = 'toolbar-divider';
+            divider3.style.height = '30px';
+            toolbar.appendChild(divider3);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'toolbar-button';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                toolbar.remove();
+                currentToolbar = null;
+            };
+            toolbar.appendChild(closeBtn);
+
+            // Position toolbar above the element
+            document.body.appendChild(toolbar);
+            currentToolbar = toolbar;
+
+            // Position toolbar below the element
+            const rect = element.getBoundingClientRect();
+            toolbar.style.left = Math.max(10, rect.right - 180) + 'px';
+            toolbar.style.top = Math.max(10, rect.bottom + 15) + 'px';
+
+            // Allow dragging toolbar
+            let isDraggingToolbar = false;
+            let offsetX = 0, offsetY = 0;
+
+            toolbar.onmousedown = (e) => {
+                if (e.target.closest('.toolbar-button') || e.target.closest('input')) return;
+                isDraggingToolbar = true;
+                offsetX = e.clientX - toolbar.offsetLeft;
+                offsetY = e.clientY - toolbar.offsetTop;
+                e.preventDefault();
+            };
+
+            document.addEventListener('mousemove', function toolbarDrag(e) {
+                if (!isDraggingToolbar) return;
+                toolbar.style.left = (e.clientX - offsetX) + 'px';
+                toolbar.style.top = (e.clientY - offsetY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDraggingToolbar = false;
+            });
+        }
+
+        function initDragAndDrop() {
+            // تنظيف المستمعات القديمة
+            const draggables = document.querySelectorAll('.draggable-element');
+            draggables.forEach(element => {
+                element.onmousedown = null;
+                element.onclick = null;
+            });
+
+            draggables.forEach(element => {
+                // Keep elements in normal flow - use transform for positioning
+                element.style.position = 'relative';
+                element.style.left = 'auto';
+                element.style.top = 'auto';
+                element.style.zIndex = '1';
+
+                // Restore saved transform if it exists
+                if (elementPositions[element.id] && elementPositions[element.id].transform) {
+                    element.style.transform = elementPositions[element.id].transform;
+                } else {
+                    element.style.transform = 'translate(0, 0)';
+                }
+
+                element.onmousedown = (e) => {
+                    if (e.button !== 0) return; // زر الفأرة الأيسر فقط
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    selectElement(element);
+                    startDrag(e, element);
+                };
+
+                element.onclick = (e) => {
+                    e.stopPropagation();
+                    selectElement(element);
+                    showTextToolbar(element, e);
+                };
+            });
+
+            // إلغاء التحديد عند الضغط على الخلفية
+            const previewFlyer = document.getElementById('previewFlyer');
+            previewFlyer.onclick = (e) => {
+                if (e.target === previewFlyer || e.target.id === 'flyerContent') {
+                    deselectElement();
+                }
+            };
+        }
+
+        function startDrag(e, element) {
+            isDragging = true;
+            const previewFlyer = document.getElementById('previewFlyer');
+            const parentRect = previewFlyer.getBoundingClientRect();
+            
+            // Get current position
+            const rect = element.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+
+            // Store original transform in case it exists
+            const originalTransform = element.style.transform || '';
+            
+            // Get starting position
+            const startX = e.clientX;
+            const startY = e.clientY;
+
+            // رفع z-index للعنصر المحدد
+            element.style.zIndex = '1000';
+
+            function onMouseMove(moveEvent) {
+                if (!isDragging) return;
+
+                // Calculate difference from start
+                const deltaX = moveEvent.clientX - startX;
+                const deltaY = moveEvent.clientY - startY;
+
+                // Apply transform for smooth dragging without affecting layout
+                element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            }
+
+            function onMouseUp(upEvent) {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+                
+                // خفض z-index
+                element.style.zIndex = '1';
+                
+                // Save final position as transform
+                const computedStyle = window.getComputedStyle(element);
+                const transform = computedStyle.transform;
+                
+                // Extract translate values from transform matrix
+                if (transform && transform !== 'none') {
+                    const values = transform.split('(')[1].split(')')[0].split(',');
+                    const x = parseFloat(values[4]);
+                    const y = parseFloat(values[5]);
+                    elementPositions[element.id] = {
+                        x: x,
+                        y: y,
+                        transform: element.style.transform
+                    };
+                }
+            }
+
+            document.addEventListener('mousemove', onMouseMove, { passive: true });
+            document.addEventListener('mouseup', onMouseUp, { once: true });
+        }
+
+        function selectElement(element) {
+            deselectElement();
+            selectedElement = element;
+            element.classList.add('selected');
+        }
+
+        function deselectElement() {
+            if (selectedElement) {
+                selectedElement.classList.remove('selected');
+                selectedElement = null;
+            }
+            // Hide toolbar
+            if (currentToolbar) {
+                currentToolbar.remove();
+                currentToolbar = null;
+            }
+        }
+
+        function resetPositions() {
+            const draggables = document.querySelectorAll('.draggable-element');
+            draggables.forEach(element => {
+                element.style.position = 'relative';
+                element.style.left = 'auto';
+                element.style.top = 'auto';
+                element.style.transform = 'translate(0, 0)';
+                element.style.zIndex = 'auto';
+                element.classList.remove('selected');
+            });
+            
+            // إعادة تعيين المواضع المحفوظة
+            for (let key in elementPositions) {
+                delete elementPositions[key];
+            }
+            
+            selectedElement = null;
+            showNotification('✅ تم إعادة تعيين المواضع');
+            
+            // إعادة التهيئة
+            setTimeout(() => initDragAndDrop(), 50);
+        }
+
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            
+            // تحديث الأزرار
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.platform-btn').classList.add('active');
+            
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const platform = platforms[currentPlatform];
+            const storeName = document.getElementById('storeName').value || 'Alalamy';
+            const mainTitle = document.getElementById('mainTitle').value;
+            const subtitle = document.getElementById('subtitle').value;
+            
+            // الفئات والخصومات
+            const cat1 = document.getElementById('category1').value;
+            const cat2 = document.getElementById('category2').value;
+            const cat3 = document.getElementById('category3').value;
+            const cat4 = document.getElementById('category4').value;
+            const dis1 = document.getElementById('discount1').value;
+            const dis2 = document.getElementById('discount2').value;
+            const dis3 = document.getElementById('discount3').value;
+            const dis4 = document.getElementById('discount4').value;
+            
+            const discounts = [parseInt(dis1), parseInt(dis2), parseInt(dis3), parseInt(dis4)];
+            const minDiscount = Math.min(...discounts);
+            const maxDiscount = Math.max(...discounts);
+            
+            const bgColor = document.getElementById('bgColor').value;
+            const accentColor = document.getElementById('accentColor').value;
+            const socialHandle = document.getElementById('socialHandle').value;
+            const useBackgroundImage = document.getElementById('useBackgroundImage').checked;
+            const backgroundImageFile = document.getElementById('backgroundImage').files[0];
+
+            // تحديث اسم المنصة والأبعاد
+            document.getElementById('platformName').textContent = platform.name;
+            document.getElementById('platformDimensions').textContent = platform.display;
+
+            // تحديث النسبة (aspect ratio) والارتفاع الكامل
+            const previewWrapper = document.getElementById('previewWrapper');
+            const aspectRatio = platform.height / platform.width;
+            previewWrapper.style.aspectRatio = `${platform.width} / ${platform.height}`;
+            previewWrapper.style.minHeight = '100%';
+
+            // تحديث الـ flyer ليأخذ الارتفاع الكامل
+            const previewFlyer = document.getElementById('previewFlyer');
+            previewFlyer.style.minHeight = '100%';
+            previewFlyer.style.height = 'auto';
+
+            // التعامل مع الخلفية (لون أو صورة)
+            if (useBackgroundImage && backgroundImageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewFlyer.style.backgroundImage = `url('${e.target.result}')`;
+                    previewFlyer.style.backgroundSize = 'cover';
+                    previewFlyer.style.backgroundPosition = 'center';
+                    previewFlyer.style.backgroundAttachment = 'fixed';
+                    // الحفاظ على طبقة شفافة على الصورة
+                    previewFlyer.style.background = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${e.target.result}')`;
+                    previewFlyer.style.backgroundSize = 'cover';
+                    previewFlyer.style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(backgroundImageFile);
+            } else {
+                previewFlyer.style.backgroundImage = 'none';
+                previewFlyer.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${bgColor}dd 50%, #ffffff 100%)`;
+            }
+
+            // معالجة الشعار
+            const showLogo = document.getElementById('showLogo').checked;
+            const logoImg = document.getElementById('previewLogoImage');
+            const logoWidth = document.getElementById('logoWidth').value;
+            const logoHeight = document.getElementById('logoHeight').value;
+            
+            if (showLogo && logoImg.src) {
+                logoImg.style.display = 'block';
+                logoImg.style.width = logoWidth + 'px';
+                logoImg.style.height = logoHeight + 'px';
+            } else {
+                logoImg.style.display = 'none';
+            }
+
+            // التحقق مما إذا كانت المنصة أفقية
+            const isHorizontal = platform.width > platform.height;
+            const flyerContent = document.getElementById('flyerContent');
+            const categoriesGrid = document.getElementById('categoriesGrid');
+
+            if (isHorizontal) {
+                // للتصاميم الأفقية (Twitter, LinkedIn)
+                flyerContent.classList.add('horizontal');
+                flyerContent.style.flexDirection = 'column';
+                flyerContent.style.gap = '6px';
+                flyerContent.style.justifyContent = 'center';
+                
+                categoriesGrid.style.display = 'grid';
+                categoriesGrid.style.gridTemplateColumns = '1fr 1fr 1fr 1fr';
+                categoriesGrid.style.gap = '4px';
+                categoriesGrid.style.width = '100%';
+                categoriesGrid.style.margin = '4px 0';
+            } else {
+                // للتصاميم العمودية
+                flyerContent.classList.remove('horizontal');
+                flyerContent.style.flexDirection = 'column';
+                
+                categoriesGrid.style.display = 'grid';
+                categoriesGrid.style.gridTemplateColumns = '1fr 1fr';
+                categoriesGrid.style.gap = '8px';
+                categoriesGrid.style.width = '100%';
+            }
+
+            // تحديث النصوص
+            document.getElementById('previewLogo').textContent = storeName;
+            document.getElementById('previewTitle').textContent = mainTitle;
+            document.getElementById('previewBadge').textContent = `من ${minDiscount}% إلى ${maxDiscount}%`;
+            document.getElementById('previewBadge').style.background = accentColor;
+            document.getElementById('previewSubtitle').textContent = subtitle;
+            document.getElementById('previewHandle').textContent = socialHandle;
+
+            // تحديث الفئات والخصومات
+            document.getElementById('cat1').textContent = cat1;
+            document.getElementById('cat2').textContent = cat2;
+            document.getElementById('cat3').textContent = cat3;
+            document.getElementById('cat4').textContent = cat4;
+            document.getElementById('dis1').textContent = dis1 + '%';
+            document.getElementById('dis2').textContent = dis2 + '%';
+            document.getElementById('dis3').textContent = dis3 + '%';
+            document.getElementById('dis4').textContent = dis4 + '%';
+
+            // تحديث لون الخصومات
+            const discountElements = document.querySelectorAll('.category-discount');
+            discountElements.forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`;
+            });
+
+            // تحديث أحجام الخطوط حسب المنصة
+            adjustFontSizes(platform, isHorizontal);
+            
+            // Restore custom font sizes and text alignments
+            Object.keys(fontSizes).forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element && fontSizes[elementId].size) {
+                    element.style.fontSize = fontSizes[elementId].size + 'px';
+                }
+                if (element && fontSizes[elementId].align) {
+                    element.style.textAlign = fontSizes[elementId].align;
+                }
+                if (element && fontSizes[elementId].direction) {
+                    element.style.direction = fontSizes[elementId].direction;
+                }
+            });
+        }
+
+        function adjustFontSizes(platform, isHorizontal) {
+            const previewFlyer = document.getElementById('previewFlyer');
+            let logoSize, titleSize, badgeSize, textSize, categorySize;
+
+            if (isHorizontal) {
+                // للتصاميم الأفقية - تصغير أكثر لأن المساحة محدودة
+                logoSize = '14px';
+                titleSize = '16px';
+                badgeSize = '12px';
+                textSize = '10px';
+                categorySize = '8px';
+                
+                // تقليل الـ padding للفئات
+                document.querySelectorAll('.category-item').forEach(el => {
+                    el.style.padding = '4px';
+                });
+            } else if (platform.width > 1200) {
+                // للتصاميم الطويلة الكبيرة
+                logoSize = '32px';
+                titleSize = '42px';
+                badgeSize = '28px';
+                textSize = '16px';
+                categorySize = '12px';
+                
+                document.querySelectorAll('.category-item').forEach(el => {
+                    el.style.padding = '8px';
+                });
+            } else if (platform.width > 1000) {
+                // للتصاميم الطويلة المتوسطة
+                logoSize = '28px';
+                titleSize = '36px';
+                badgeSize = '24px';
+                textSize = '14px';
+                categorySize = '11px';
+                
+                document.querySelectorAll('.category-item').forEach(el => {
+                    el.style.padding = '8px';
+                });
+            } else {
+                // للتصاميم الطويلة الصغيرة
+                logoSize = '20px';
+                titleSize = '24px';
+                badgeSize = '18px';
+                textSize = '12px';
+                categorySize = '10px';
+                
+                document.querySelectorAll('.category-item').forEach(el => {
+                    el.style.padding = '8px';
+                });
+            }
+
+            document.getElementById('previewLogo').style.fontSize = logoSize;
+            document.getElementById('previewTitle').style.fontSize = titleSize;
+            document.getElementById('previewBadge').style.fontSize = badgeSize;
+            document.querySelectorAll('.flyer-text').forEach(el => {
+                el.style.fontSize = textSize;
+            });
+            document.querySelectorAll('.category-item').forEach(el => {
+                el.style.fontSize = categorySize;
+            });
+        }
+
+        function exportFlyer() {
+            const platform = platforms[currentPlatform];
+            const storeName = document.getElementById('storeName').value || 'discount';
+            const format = document.querySelector('input[name="exportFormat"]:checked').value;
+            const previewFlyer = document.getElementById('previewFlyer');
+
+            html2canvas(previewFlyer, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false,
+                allowTaint: true,
+                useCORS: true,
+                width: platform.width,
+                height: platform.height
+            }).then(canvas => {
+                const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
+                const extension = format === 'jpg' ? 'jpg' : 'png';
+                const image = canvas.toDataURL(mimeType);
+
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = `${storeName}-${currentPlatform}.${extension}`;
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showNotification(`✅ تم تصدير العرض لـ ${platform.name} بنجاح!`);
+            }).catch(err => {
+                console.error('خطأ في التصدير:', err);
+                showNotification('❌ حدث خطأ في التصدير', 'error');
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'export-notification';
+            notification.textContent = message;
+            notification.style.background = type === 'error' ? '#dc3545' : '#28a745';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // تحديث فوري عند تغيير أي حقل
+        const allInputs = document.querySelectorAll('input, textarea, select');
+        allInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                updatePreview();
+                setTimeout(() => initDragAndDrop(), 50);
+            });
+            input.addEventListener('input', () => {
+                updatePreview();
+                setTimeout(() => initDragAndDrop(), 50);
+            });
+        });
+
+        // مستمع خاص لتحميل صورة الخلفية
+        document.getElementById('backgroundImage').addEventListener('change', () => {
+            updatePreview();
+            setTimeout(() => initDragAndDrop(), 50);
+        });
+
+        // مستمع لتحميل الشعار
+        document.getElementById('logoImage').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const logoImg = document.getElementById('previewLogoImage');
+                    logoImg.src = event.target.result;
+                    document.getElementById('showLogo').checked = true;
+                    updatePreview();
+                    setTimeout(() => initDragAndDrop(), 50);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // مستمعات لتغيير حجم الشعار
+        document.getElementById('logoWidth').addEventListener('input', (e) => {
+            document.getElementById('logoWidthValue').textContent = e.target.value;
+            const logoImg = document.getElementById('previewLogoImage');
+            logoImg.style.width = e.target.value + 'px';
+            updatePreview();
+        });
+
+        document.getElementById('logoHeight').addEventListener('input', (e) => {
+            document.getElementById('logoHeightValue').textContent = e.target.value;
+            const logoImg = document.getElementById('previewLogoImage');
+            logoImg.style.height = e.target.value + 'px';
+            updatePreview();
+        });
+
+        // تحديث أولي عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            setTimeout(() => initDragAndDrop(), 200);
+        });
+
+        // تحديث ثاني كـ backup
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => initDragAndDrop(), 100);
+            });
+        } else {
+            setTimeout(() => initDragAndDrop(), 100);
+        }
+    </script>
+</body>
+</html>
