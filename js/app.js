@@ -2409,13 +2409,13 @@ setTimeout(() => {
             const navValue = button.getAttribute('data-nav');
 
             // Remove active classes
-            button.classList.remove('text-indigo-600', 'bg-indigo-50', 'font-semibold');
+            button.classList.remove('text-indigo-600', 'bg-indigo-50', 'font-semibold', 'rounded-md');
             button.classList.add('text-gray-500');
 
             // Add active classes if this is the active tool
             if (navValue === activeTool) {
                 button.classList.remove('text-gray-500');
-                button.classList.add('text-indigo-600', 'bg-indigo-50', 'font-semibold');
+                button.classList.add('text-indigo-600', 'bg-indigo-50', 'font-semibold', 'rounded-md');
             }
         });
     }
