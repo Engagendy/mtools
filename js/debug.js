@@ -112,11 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         window.debugTools.testFileAccess();
 
-        // Quick comprehensive system test
-        if (window.i18n && window.app) {
-            console.log('🧪 Running quick system test...');
-            window.debugTools.testTranslations();
-        }
+        // Translation test removed from auto-run to prevent language override
+        // You can still manually run: window.debugTools.testTranslations()
     }, 1000);
 });
 

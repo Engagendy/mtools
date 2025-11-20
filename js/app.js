@@ -2404,19 +2404,18 @@ setTimeout(() => {
      * Update navigation active states
      */
     updateNavigation(activeTool) {
-        // Update desktop navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-            if (link.dataset.tool === activeTool) {
-                link.classList.add('active');
-            }
-        });
+        // Update desktop navigation buttons
+        document.querySelectorAll('[data-nav]').forEach(button => {
+            const navValue = button.getAttribute('data-nav');
 
-        // Update mobile navigation
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.classList.remove('bg-primary-50', 'text-primary-600');
-            if (link.dataset.tool === activeTool) {
-                link.classList.add('bg-primary-50', 'text-primary-600');
+            // Remove active classes
+            button.classList.remove('text-indigo-600', 'bg-indigo-50', 'font-semibold');
+            button.classList.add('text-gray-500');
+
+            // Add active classes if this is the active tool
+            if (navValue === activeTool) {
+                button.classList.remove('text-gray-500');
+                button.classList.add('text-indigo-600', 'bg-indigo-50', 'font-semibold');
             }
         });
     }

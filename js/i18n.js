@@ -714,8 +714,8 @@ class I18nSystem {
             this.setLanguage(langParam);
             return;
         }
-        // Default to English instead of browser detection
-        this.setLanguage('en');
+        // Default to Arabic instead of browser detection
+        this.setLanguage('ar');
     }
 
     setLanguage(lang) {
