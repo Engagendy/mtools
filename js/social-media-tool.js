@@ -42,6 +42,10 @@ let isInitializing = false;
 let currentBackgroundType = 'gradient';
 let backgroundImage = null;
 let backgroundImageNode = null;
+let photoElementCounter = 0;
+let currentPhotoShape = 'free';
+let shapeElementCounter = 0;
+let currentShapeFillMode = 'solid';
 
 // Design elements storage
 let designElements = {
@@ -136,13 +140,20 @@ function initializeCanvas() {
 
     // Create transformer for selection
     transformer = new Konva.Transformer({
-        rotateEnabled: false,
+        rotateEnabled: true,
+        keepRatio: false,
+        enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'middle-left', 'middle-right', 'top-center', 'bottom-center'],
         borderStroke: '#667eea',
         borderStrokeWidth: 2,
         anchorStroke: '#667eea',
         anchorStrokeWidth: 2,
         anchorFill: '#ffffff',
-        anchorSize: 8
+        anchorSize: 8,
+        boundBoxFunc: (oldBox, newBox) => {
+            newBox.width = Math.max(20, newBox.width);
+            newBox.height = Math.max(20, newBox.height);
+            return newBox;
+        }
     });
     designLayer.add(transformer);
 
@@ -155,9 +166,11 @@ function initializeCanvas() {
             return;
         }
 
-        if (e.target.hasName('design-element')) {
-            transformer.nodes([e.target]);
-            selectedNode = e.target;
+        const targetNode = getSelectableNode(e.target);
+
+        if (targetNode) {
+            transformer.nodes([targetNode]);
+            selectedNode = targetNode;
             updateSelectionInfo();
         } else {
             transformer.nodes([]);
@@ -168,10 +181,13 @@ function initializeCanvas() {
 
     // Double-click text editing functionality
     stage.on('dblclick dbltap', function (e) {
-        if (e.target.hasName('design-element') && e.target.className === 'Text') {
-            editTextElement(e.target);
+        const targetNode = getSelectableNode(e.target);
+        if (targetNode && targetNode.className === 'Text') {
+            editTextElement(targetNode);
         }
     });
+
+    setupCanvasKeyboardShortcuts();
 
     console.log('✅ Enhanced canvas initialized successfully');
 
@@ -182,6 +198,46 @@ function initializeCanvas() {
 
     isInitialized = true;
     isInitializing = false;
+}
+
+function getSelectableNode(node) {
+    if (!node || node === stage) return null;
+    if (node.hasName && node.hasName('design-element')) return node;
+    const parent = node.getParent && node.getParent();
+    if (parent && parent.hasName && parent.hasName('design-element')) return parent;
+    return null;
+}
+
+function setupCanvasKeyboardShortcuts() {
+    if (window.__socialCanvasKeyboardReady) return;
+    window.__socialCanvasKeyboardReady = true;
+
+    window.addEventListener('keydown', function (e) {
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+        if (!stage || !selectedNode) return;
+
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            deleteSelected();
+            e.preventDefault();
+            return;
+        }
+
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'd') {
+            duplicateSelected();
+            e.preventDefault();
+            return;
+        }
+
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            const distance = e.shiftKey ? 10 : 1;
+            const xMove = e.key === 'ArrowLeft' ? -distance : e.key === 'ArrowRight' ? distance : 0;
+            const yMove = e.key === 'ArrowUp' ? -distance : e.key === 'ArrowDown' ? distance : 0;
+            selectedNode.move({ x: xMove, y: yMove });
+            designLayer.draw();
+            e.preventDefault();
+        }
+    });
 }
 
 /**
@@ -238,8 +294,11 @@ function createDesignElements() {
     const isHorizontal = platform.width > platform.height;
     const textColor = document.getElementById('textColor')?.value || '#ffffff';
 
-    // Clear design layer (except transformer)
-    const childrenToRemove = designLayer.children.filter(child => child !== transformer);
+    // Clear generated template elements while preserving manually placed photos.
+    const childrenToRemove = designLayer.children.filter(child => (
+        child !== transformer &&
+        !(child.hasName && (child.hasName('photo-element') || child.hasName('shape-element')))
+    ));
     childrenToRemove.forEach(child => child.destroy());
 
     // Reset design elements storage
@@ -445,6 +504,8 @@ function createDesignElements() {
 
     // Add elements in proper layering order
     addElementsToLayer();
+    designLayer.find('.photo-element, .shape-element').forEach(element => element.moveToTop());
+    transformer.moveToTop();
     designLayer.draw();
 }
 
@@ -454,24 +515,18 @@ function createDesignElements() {
 function createCategoriesGrid(isHorizontal, fontSizes, spacing, platform, accentColor, baseScale) {
     designElements.categories = [];
 
-    const categoryData = [
-        {
-            name: document.getElementById('category1')?.value || 'كفرات موبايل',
-            discount: document.getElementById('discount1')?.value || '30'
-        },
-        {
-            name: document.getElementById('category2')?.value || 'شواحن وكابلات',
-            discount: document.getElementById('discount2')?.value || '25'
-        },
-        {
-            name: document.getElementById('category3')?.value || 'ماوس ولوحات',
-            discount: document.getElementById('discount3')?.value || '20'
-        },
-        {
-            name: document.getElementById('category4')?.value || 'سماعات',
-            discount: document.getElementById('discount4')?.value || '15'
-        }
+    const categoryNameInputs = Array.from(document.querySelectorAll('.category-name'));
+    const categoryDiscountInputs = Array.from(document.querySelectorAll('.category-discount'));
+    const fallbackCategories = [
+        { name: 'كفرات موبايل', discount: '30' },
+        { name: 'شواحن وكابلات', discount: '25' },
+        { name: 'ماوس ولوحات', discount: '20' },
+        { name: 'سماعات', discount: '15' }
     ];
+    const categoryData = (categoryNameInputs.length ? categoryNameInputs : fallbackCategories).map((input, index) => ({
+        name: input.value || fallbackCategories[index]?.name || `فئة ${index + 1}`,
+        discount: categoryDiscountInputs[index]?.value || fallbackCategories[index]?.discount || '10'
+    })).slice(0, 8);
 
     const categoryWidth = isHorizontal ? (platform.width * 0.85) / 4 : (platform.width * 0.85) / 2;
     const categoryHeight = platform.height * 0.08;
@@ -743,6 +798,312 @@ function duplicateSelected() {
     showNotification('✅ تم نسخ العنصر بنجاح');
 }
 
+function handlePhotoElementUpload() {
+    const fileInput = document.getElementById('photoElementInput');
+    const file = fileInput?.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showNotification('❌ يرجى اختيار ملف صورة صالح', 'error');
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        showNotification('❌ حجم الصورة كبير. اختر صورة أقل من 10MB', 'error');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        addPhotoElement(e.target.result, file.name);
+        fileInput.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function addPhotoElement(src, fileName = 'photo') {
+    if (!designLayer || !stage) return;
+
+    const img = new Image();
+    img.onload = function () {
+        const platform = platforms[currentPlatform];
+        const maxWidth = platform.width * 0.38;
+        const maxHeight = platform.height * 0.28;
+        const ratio = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+        const width = Math.max(120, img.width * ratio);
+        const height = Math.max(120, img.height * ratio);
+        const x = platform.width / 2 - width / 2 + (photoElementCounter % 3) * 30;
+        const y = platform.height / 2 - height / 2 + (photoElementCounter % 3) * 30;
+
+        const photo = createPhotoNode({
+            image: img,
+            x,
+            y,
+            width,
+            height,
+            shape: currentPhotoShape,
+            fileName
+        });
+
+        designLayer.add(photo);
+        photo.moveToTop();
+        transformer.moveToTop();
+        transformer.nodes([photo]);
+        selectedNode = photo;
+        designLayer.draw();
+        updateSelectionInfo();
+        showNotification('✅ تمت إضافة الصورة كعنصر حر. اسحب الزوايا لتغيير الحجم.');
+    };
+    img.src = src;
+}
+
+function createPhotoNode({ image, x, y, width, height, shape, fileName, id }) {
+    const baseAttrs = {
+        draggable: true,
+        name: `design-element photo-element photo-${shape}`,
+        id: id || `photo-element-${Date.now()}-${photoElementCounter++}`,
+        photoFileName: fileName,
+        photoShape: shape,
+        sourceImage: image
+    };
+
+    if (shape === 'circle') {
+        const diameter = Math.min(width, height);
+        const scale = Math.max(diameter / image.width, diameter / image.height);
+        return new Konva.Circle({
+            ...baseAttrs,
+            x: x + diameter / 2,
+            y: y + diameter / 2,
+            radius: diameter / 2,
+            fillPatternImage: image,
+            fillPatternScale: { x: scale, y: scale },
+            fillPatternOffset: { x: image.width / 2, y: image.height / 2 }
+        });
+    }
+
+    return new Konva.Image({
+        ...baseAttrs,
+        x,
+        y,
+        image,
+        width,
+        height,
+        crop: getCoverCrop(image, width, height),
+        cornerRadius: shape === 'rounded' ? Math.min(width, height) * 0.12 : 0,
+        globalCompositeOperation: 'source-over'
+    });
+}
+
+function getCoverCrop(img, targetWidth, targetHeight) {
+    const imageRatio = img.width / img.height;
+    const targetRatio = targetWidth / targetHeight;
+    let cropWidth = img.width;
+    let cropHeight = img.height;
+
+    if (targetRatio > imageRatio) {
+        cropHeight = img.width / targetRatio;
+    } else {
+        cropWidth = img.height * targetRatio;
+    }
+
+    return {
+        x: Math.max(0, (img.width - cropWidth) / 2),
+        y: Math.max(0, (img.height - cropHeight) / 2),
+        width: cropWidth,
+        height: cropHeight
+    };
+}
+
+function applyPhotoClip(photo, shape) {
+    if (photo.getClassName && photo.getClassName() === 'Image') {
+        photo.cornerRadius(0);
+    }
+
+    if (shape === 'rounded' && photo.getClassName && photo.getClassName() === 'Image') {
+        photo.cornerRadius(Math.min(photo.width(), photo.height()) * 0.12);
+    }
+}
+
+function setPhotoShape(shape) {
+    currentPhotoShape = shape;
+    document.querySelectorAll('[data-photo-shape]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.photoShape === shape);
+    });
+
+    const targetNode = getSelectedNode();
+    if (targetNode && targetNode.hasName && targetNode.hasName('photo-element')) {
+        replaceSelectedPhotoShape(targetNode, shape);
+        designLayer.draw();
+        updateSelectionInfo();
+        showNotification('✅ تم تغيير شكل الصورة المحددة');
+    }
+}
+
+function replaceSelectedPhotoShape(targetNode, shape) {
+    const image = targetNode.getAttr('sourceImage') || (targetNode.image && targetNode.image()) || targetNode.fillPatternImage?.();
+    if (!image) return;
+
+    const box = targetNode.getClientRect({ relativeTo: designLayer });
+    const replacement = createPhotoNode({
+        image,
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height,
+        shape,
+        fileName: targetNode.getAttr('photoFileName') || 'photo',
+        id: targetNode.id()
+    });
+
+    replacement.rotation(targetNode.rotation());
+    replacement.opacity(targetNode.opacity());
+    replacement.scaleX(1);
+    replacement.scaleY(1);
+    replacement.zIndex(targetNode.zIndex());
+    targetNode.destroy();
+    designLayer.add(replacement);
+    replacement.zIndex(Math.max(0, Math.min(replacement.zIndex(), designLayer.children.length - 1)));
+    transformer.nodes([replacement]);
+    selectedNode = replacement;
+    transformer.moveToTop();
+}
+
+function setSelectedOpacity(value) {
+    const targetNode = getSelectedNode();
+    if (!targetNode) {
+        showNotification('❌ يرجى تحديد عنصر أولاً', 'error');
+        return;
+    }
+
+    targetNode.opacity(Math.max(0.1, Math.min(1, Number(value) / 100)));
+    designLayer.draw();
+    updateSelectionInfo();
+}
+
+function addShapeElement(type) {
+    if (!designLayer || !stage) return;
+
+    const platform = platforms[currentPlatform];
+    const width = Math.max(140, platform.width * 0.18);
+    const height = Math.max(100, platform.height * 0.10);
+    const offset = (shapeElementCounter % 4) * 30;
+    const x = platform.width / 2 - width / 2 + offset;
+    const y = platform.height / 2 - height / 2 + offset;
+    const node = createShapeNode({
+        type,
+        x,
+        y,
+        width,
+        height,
+        id: `shape-element-${Date.now()}-${shapeElementCounter++}`
+    });
+
+    designLayer.add(node);
+    node.moveToTop();
+    transformer.moveToTop();
+    transformer.nodes([node]);
+    selectedNode = node;
+    designLayer.draw();
+    updateSelectionInfo();
+    showNotification('✅ تمت إضافة الشكل. يمكنك سحبه وتغيير حجمه ولونه.');
+}
+
+function getShapeColors() {
+    return {
+        color1: document.getElementById('shapeColor1')?.value || '#ffd43b',
+        color2: document.getElementById('shapeColor2')?.value || '#ff6b6b'
+    };
+}
+
+function getShapeFillAttrs(width, height) {
+    const { color1, color2 } = getShapeColors();
+    if (currentShapeFillMode === 'gradient') {
+        return {
+            fill: undefined,
+            fillLinearGradientStartPoint: { x: 0, y: 0 },
+            fillLinearGradientEndPoint: { x: width, y: height },
+            fillLinearGradientColorStops: [0, color1, 1, color2]
+        };
+    }
+
+    return {
+        fill: color1,
+        fillLinearGradientColorStops: undefined
+    };
+}
+
+function createShapeNode({ type, x, y, width, height, id }) {
+    const fillAttrs = getShapeFillAttrs(width, height);
+    const common = {
+        draggable: true,
+        name: `design-element shape-element shape-${type}`,
+        id,
+        shapeType: type,
+        ...fillAttrs,
+        shadowColor: 'rgba(0,0,0,0.18)',
+        shadowBlur: 10,
+        shadowOffset: { x: 0, y: 4 },
+        shadowOpacity: 0.5
+    };
+
+    if (type === 'circle') {
+        return new Konva.Circle({
+            ...common,
+            x: x + width / 2,
+            y: y + height / 2,
+            radius: Math.min(width, height) / 2
+        });
+    }
+
+    if (type === 'triangle') {
+        return new Konva.RegularPolygon({
+            ...common,
+            x: x + width / 2,
+            y: y + height / 2,
+            sides: 3,
+            radius: Math.min(width, height) / 2
+        });
+    }
+
+    if (type === 'star') {
+        return new Konva.Star({
+            ...common,
+            x: x + width / 2,
+            y: y + height / 2,
+            numPoints: 5,
+            innerRadius: Math.min(width, height) * 0.22,
+            outerRadius: Math.min(width, height) / 2
+        });
+    }
+
+    return new Konva.Rect({
+        ...common,
+        x,
+        y,
+        width,
+        height,
+        cornerRadius: type === 'roundrect' ? Math.min(width, height) * 0.18 : 0
+    });
+}
+
+function setShapeFillMode(mode) {
+    currentShapeFillMode = mode;
+    document.querySelectorAll('[data-shape-fill-mode]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.shapeFillMode === mode);
+    });
+    applySelectedShapeFill();
+}
+
+function applySelectedShapeFill() {
+    const targetNode = getSelectedNode();
+    if (!targetNode || !(targetNode.hasName && targetNode.hasName('shape-element'))) return;
+
+    const box = targetNode.getClientRect({ skipTransform: true });
+    targetNode.setAttrs(getShapeFillAttrs(box.width || 120, box.height || 120));
+    designLayer.draw();
+    updateSelectionInfo();
+}
+
 function deleteSelected() {
     const targetNode = getSelectedNode();
     if (!targetNode) {
@@ -853,6 +1214,12 @@ function updateSelectionInfo() {
         elementType = '📞 رقم هاتف';
         elementDesc = 'رقم: ' + selectedNode.text();
         isTextElement = true;
+    } else if (selectedNode.hasName('photo-element')) {
+        elementType = '🖼️ صورة حرة';
+        elementDesc = selectedNode.getAttr('photoFileName') || 'صورة قابلة للسحب والتحجيم';
+    } else if (selectedNode.hasName('shape-element')) {
+        elementType = '⬛ شكل حر';
+        elementDesc = selectedNode.getAttr('shapeType') || 'شكل قابل للسحب والتحجيم';
     } else if (selectedNode.className === 'Text' || selectedNode.constructor.name === 'Text') {
         elementType = '📖 نص';
         elementDesc = selectedNode.text().substring(0, 30) + (selectedNode.text().length > 30 ? '...' : '');
@@ -887,6 +1254,11 @@ function updateSelectionInfo() {
         } else {
             textFormattingPanel.style.display = 'none';
         }
+    }
+
+    const opacityControl = document.getElementById('selectedOpacity');
+    if (opacityControl) {
+        opacityControl.value = Math.round((selectedNode.opacity ? selectedNode.opacity() : 1) * 100);
     }
 }
 
@@ -1016,7 +1388,7 @@ function changeFontFamily() {
         return;
     }
 
-    const fontFamilySelect = document.getElementById('fontFamilySelect');
+    const fontFamilySelect = document.getElementById('fontFamilySelect') || document.getElementById('fontSelect');
     const selectedFont = fontFamilySelect?.value || 'Almarai';
 
     textNode.fontFamily(selectedFont);
@@ -1079,7 +1451,7 @@ function updateTextFormattingButtons() {
     if (fontSizeDisplay) fontSizeDisplay.textContent = Math.round(textNode.fontSize()) + 'px';
 
     // Update font family dropdown
-    const fontFamilySelect = document.getElementById('fontFamilySelect');
+    const fontFamilySelect = document.getElementById('fontFamilySelect') || document.getElementById('fontSelect');
     if (fontFamilySelect) fontFamilySelect.value = textNode.fontFamily() || 'Almarai';
 }
 
@@ -1192,9 +1564,9 @@ function removeBackgroundImage() {
 /**
  * Professional Export Functionality
  */
-function exportFlyer(quality = 1) {
+function exportFlyer(quality = 1, formatOverride = null) {
     const platform = platforms[currentPlatform];
-    const format = document.querySelector('input[name="exportFormat"]:checked')?.value || 'png';
+    const format = formatOverride || document.querySelector('input[name="exportFormat"]:checked')?.value || 'png';
     const storeName = document.getElementById('storeName')?.value || 'flyer';
 
     // Hide transformer during export
@@ -1281,7 +1653,14 @@ window.selectPlatform = selectPlatform;
 window.updateCanvas = updateCanvas;
 window.selectBackgroundType = selectBackgroundType;
 window.handleBackgroundImage = handleBackgroundImage;
+window.handlePhotoElementUpload = handlePhotoElementUpload;
+window.setPhotoShape = setPhotoShape;
+window.setSelectedOpacity = setSelectedOpacity;
+window.addShapeElement = addShapeElement;
+window.setShapeFillMode = setShapeFillMode;
+window.applySelectedShapeFill = applySelectedShapeFill;
 window.updateBackgroundPosition = updateBackgroundPosition;
+window.updateBackgroundImage = updateBackgroundPosition;
 window.resetBackgroundPosition = resetBackgroundPosition;
 window.removeBackgroundImage = removeBackgroundImage;
 window.duplicateSelected = duplicateSelected;
@@ -1296,6 +1675,30 @@ window.adjustFontSize = adjustFontSize;
 window.autoDetectDirection = autoDetectDirection;
 window.changeFontFamily = changeFontFamily;
 window.exportFlyer = exportFlyer;
+window.exportDesign = function (format, quality) {
+    exportFlyer(quality || 1, format || 'png');
+};
+
+window.addCategory = function () {
+    const container = document.getElementById('categoriesContainer');
+    if (!container) return;
+
+    const count = container.querySelectorAll('.category-item').length + 1;
+    const item = document.createElement('div');
+    item.className = 'category-item';
+    item.innerHTML = `
+        <div class="form-group">
+            <label>اسم الفئة</label>
+            <input type="text" class="category-name" value="فئة ${count}" onchange="updateCanvas()">
+        </div>
+        <div class="form-group">
+            <label>نسبة الخصم (%)</label>
+            <input type="number" class="category-discount" value="10" min="0" max="100" onchange="updateCanvas()">
+        </div>
+    `;
+    container.appendChild(item);
+    updateCanvas();
+};
 
 // Additional text formatting functions for compatibility
 window.makeTextBold = function () {

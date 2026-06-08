@@ -586,6 +586,24 @@ class MarketingToolsApp {
         color: white;
     }
 
+    .social-media-tool .shape-toggle {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .social-media-tool .shape-toggle .btn {
+        background: #eef2ff;
+        color: #4f46e5;
+        border: 1px solid #c7d2fe;
+    }
+
+    .social-media-tool .shape-toggle .btn.active {
+        background: #667eea;
+        color: #ffffff;
+    }
+
     .social-media-tool .image-controls {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -713,10 +731,60 @@ class MarketingToolsApp {
                     <div class="section-title">
                         <i class="fas fa-tools"></i> أدوات التصميم
                     </div>
+
+                    <div class="form-group">
+                        <label>إضافة صورة حرة</label>
+                        <input type="file" id="photoElementInput" accept="image/*" onchange="handlePhotoElementUpload()">
+                        <div class="shape-toggle">
+                            <button type="button" class="btn active" data-photo-shape="free" onclick="setPhotoShape('free')">
+                                <i class="fas fa-vector-square"></i> حر
+                            </button>
+                            <button type="button" class="btn" data-photo-shape="rounded" onclick="setPhotoShape('rounded')">
+                                <i class="fas fa-square"></i> ناعم
+                            </button>
+                            <button type="button" class="btn" data-photo-shape="circle" onclick="setPhotoShape('circle')">
+                                <i class="fas fa-circle"></i> دائري
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>إضافة شكل حر</label>
+                        <div class="shape-toggle">
+                            <button type="button" class="btn" onclick="addShapeElement('rect')">
+                                <i class="fas fa-square"></i> مربع
+                            </button>
+                            <button type="button" class="btn" onclick="addShapeElement('roundrect')">
+                                <i class="fas fa-square-full"></i> ناعم
+                            </button>
+                            <button type="button" class="btn" onclick="addShapeElement('circle')">
+                                <i class="fas fa-circle"></i> دائرة
+                            </button>
+                            <button type="button" class="btn" onclick="addShapeElement('triangle')">
+                                <i class="fas fa-play"></i> مثلث
+                            </button>
+                            <button type="button" class="btn" onclick="addShapeElement('star')">
+                                <i class="fas fa-star"></i> نجمة
+                            </button>
+                        </div>
+                        <div class="shape-toggle">
+                            <button type="button" class="btn active" data-shape-fill-mode="solid" onclick="setShapeFillMode('solid')">لون</button>
+                            <button type="button" class="btn" data-shape-fill-mode="gradient" onclick="setShapeFillMode('gradient')">تدرج</button>
+                        </div>
+                        <div class="image-controls">
+                            <input type="color" id="shapeColor1" value="#ffd43b" onchange="applySelectedShapeFill()" title="لون الشكل الأول">
+                            <input type="color" id="shapeColor2" value="#ff6b6b" onchange="applySelectedShapeFill()" title="لون التدرج الثاني">
+                        </div>
+                    </div>
                     
                     <!-- Selection Info -->
                     <div class="selection-info" id="selectionInfo">
                         اضغط على أي عنصر لتحديده والتحكم به
+                    </div>
+
+                    <div class="form-group">
+                        <label>شفافية العنصر المحدد</label>
+                        <input type="range" id="selectedOpacity" min="10" max="100" value="100" oninput="setSelectedOpacity(this.value)">
                     </div>
 
                     <!-- Text Formatting Panel -->
@@ -801,8 +869,8 @@ class MarketingToolsApp {
                     </div>
                     
                     <div class="background-toggle">
-                        <button type="button" class="btn active" onclick="selectBackgroundType('gradient')">تدرج لوني</button>
-                        <button type="button" class="btn" onclick="selectBackgroundType('image')">صورة خلفية</button>
+                        <button type="button" id="gradientBgBtn" class="btn active" onclick="selectBackgroundType('gradient')">تدرج لوني</button>
+                        <button type="button" id="imageBgBtn" class="btn" onclick="selectBackgroundType('image')">صورة خلفية</button>
                     </div>
                     
                     <div id="gradientControls">
@@ -819,12 +887,12 @@ class MarketingToolsApp {
                     <div id="imageControls" style="display: none;">
                         <div class="form-group">
                             <label>رفع صورة خلفية</label>
-                            <input type="file" id="backgroundImageUpload" accept="image/*" onchange="handleBackgroundImageUpload(event)">
+                            <input type="file" id="backgroundImageInput" accept="image/*" onchange="handleBackgroundImage()">
                         </div>
                         <div class="image-controls">
-                            <input type="range" id="bgImageX" min="-50" max="50" value="0" onchange="updateBackgroundImage()" title="موضع أفقي">
-                            <input type="range" id="bgImageY" min="-50" max="50" value="0" onchange="updateBackgroundImage()" title="موضع رأسي">
-                            <input type="range" id="bgImageScale" min="50" max="200" value="100" onchange="updateBackgroundImage()" title="الحجم">
+                            <input type="range" id="bgImageX" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" title="موضع أفقي">
+                            <input type="range" id="bgImageY" min="-50" max="50" value="0" onchange="updateBackgroundPosition()" title="موضع رأسي">
+                            <input type="range" id="bgImageScale" min="50" max="200" value="100" onchange="updateBackgroundPosition()" title="الحجم">
                         </div>
                     </div>
                 </div>
@@ -842,13 +910,13 @@ class MarketingToolsApp {
 
 
                 <div class="export-section">
-                    <button type="button" class="btn btn-success" onclick="exportDesign('png', 2)">
+                    <button type="button" class="btn btn-success" onclick="exportFlyer(2)">
                         <i class="fas fa-download"></i><br>تصدير عالي الجودة
                     </button>
-                    <button type="button" class="btn btn-success" onclick="exportDesign('png', 1)">
+                    <button type="button" class="btn btn-success" onclick="exportFlyer(1)">
                         <i class="fas fa-download"></i><br>تصدير جودة عادية
                     </button>
-                    <button type="button" class="btn btn-success" onclick="exportDesign('jpg', 3)">
+                    <button type="button" class="btn btn-success" onclick="exportFlyer(3)">
                         <i class="fas fa-download"></i><br>تصدير جودة فائقة
                     </button>
                 </div>
@@ -1641,14 +1709,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                 Formatting</span>
                         </div>
                         <div class="formatting-controls">
-                            <label>
+                            <label data-discount-text-control>
                                 <span data-i18n="discount_offer.design.font_size">Font Size</span>
                                 <input type="range" id="discount-text-font-size" min="12" max="72" value="24"
                                     style="width: 120px;">
                                 <span id="discount-font-size-value">24px</span>
                             </label>
 
-                            <label>
+                            <label data-discount-text-control>
                                 <span data-i18n="discount_offer.design.font_family">Font Family</span>
                                 <select id="discount-text-font-family" style="width: 150px;">
                                     <option value="Almarai">Almarai</option>
@@ -1658,7 +1726,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </select>
                             </label>
 
-                            <div>
+                            <div data-discount-text-control>
                                 <label data-i18n="discount_offer.design.alignment">Alignment</label>
                                 <div style="display: flex; gap: 5px; margin-top: 5px;">
                                     <button class="btn-align" id="discount-text-align-left" data-align="left"><i
@@ -1670,6 +1738,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                             </div>
 
+                            <label>
+                                <span>Opacity</span>
+                                <input type="range" id="discount-element-opacity" min="10" max="100" value="100"
+                                    style="width: 120px;">
+                            </label>
+
                             <button class="btn-primary" id="discount-element-copy" style="width: auto; margin-top: 0;">
                                 <i class="fas fa-copy"></i> <span data-i18n="discount_offer.design.copy">Copy</span>
                             </button>
@@ -1677,6 +1751,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button class="btn-danger" id="discount-element-delete" style="width: auto;">
                                 <i class="fas fa-trash"></i> <span
                                     data-i18n="discount_offer.design.delete">Delete</span>
+                            </button>
+
+                            <button class="btn-primary" onclick="bringDiscountSelectedForward()" style="width: auto; margin-top: 0;">
+                                <i class="fas fa-arrow-up"></i> Front
+                            </button>
+
+                            <button class="btn-primary" onclick="sendDiscountSelectedBackward()" style="width: auto; margin-top: 0;">
+                                <i class="fas fa-arrow-down"></i> Back
                             </button>
                         </div>
                     </div>
@@ -1705,6 +1787,43 @@ document.addEventListener('DOMContentLoaded', function() {
                         data-i18n="discount_offer.design.images">🖼️ Images</div>
 
                     <div class="space-y-4">
+                        <div class="form-group">
+                            <label>Free Shape</label>
+                            <div class="shape-toggle" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                                <button type="button" class="btn-primary" onclick="addDiscountShapeElement('rect')" style="width: auto; margin-top: 0;">Rect</button>
+                                <button type="button" class="btn-primary" onclick="addDiscountShapeElement('roundrect')" style="width: auto; margin-top: 0;">Rounded</button>
+                                <button type="button" class="btn-primary" onclick="addDiscountShapeElement('circle')" style="width: auto; margin-top: 0;">Circle</button>
+                                <button type="button" class="btn-primary" onclick="addDiscountShapeElement('triangle')" style="width: auto; margin-top: 0;">Triangle</button>
+                                <button type="button" class="btn-primary" onclick="addDiscountShapeElement('star')" style="width: auto; margin-top: 0;">Star</button>
+                            </div>
+                            <div class="shape-toggle" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;">
+                                <button type="button" class="btn-primary active" data-discount-shape-fill-mode="solid"
+                                    onclick="setDiscountShapeFillMode('solid')" style="width: auto; margin-top: 0;">Solid</button>
+                                <button type="button" class="btn-primary" data-discount-shape-fill-mode="gradient"
+                                    onclick="setDiscountShapeFillMode('gradient')" style="width: auto; margin-top: 0;">Gradient</button>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+                                <input type="color" id="discount-shape-color-1" value="#ffd43b" onchange="applyDiscountSelectedShapeFill()">
+                                <input type="color" id="discount-shape-color-2" value="#ff6b6b" onchange="applyDiscountSelectedShapeFill()">
+                            </div>
+                            <small>Shapes are independent objects. Resize, rotate, recolor, layer, copy, or delete them.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Free Photo / Product Image</label>
+                            <input type="file" id="discount-free-photo-upload" accept="image/*"
+                                onchange="handleDiscountFreePhotoUpload()">
+                            <div class="shape-toggle" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px;">
+                                <button type="button" class="btn-primary active" data-discount-photo-shape="free"
+                                    onclick="setDiscountPhotoShape('free')" style="width: auto; margin-top: 0;">Free</button>
+                                <button type="button" class="btn-primary" data-discount-photo-shape="rounded"
+                                    onclick="setDiscountPhotoShape('rounded')" style="width: auto; margin-top: 0;">Rounded</button>
+                                <button type="button" class="btn-primary" data-discount-photo-shape="circle"
+                                    onclick="setDiscountPhotoShape('circle')" style="width: auto; margin-top: 0;">Circle</button>
+                            </div>
+                            <small>Added photos are independent objects. Drag, resize, rotate, copy, layer, or delete them.</small>
+                        </div>
+
                         <div class="form-group">
                             <label data-i18n="discount_offer.design.logo">Logo</label>
                             <input type="file" id="discount-logo-upload" accept="image/*">
@@ -2461,8 +2580,8 @@ setTimeout(() => {
      */
     showNotification(message, type = 'success') {
         // Use unified notification system
-        if (window.showNotification) {
-            window.showNotification(message, type);
+        if (window.Notifications?.show) {
+            window.Notifications.show(message, type);
         } else {
             console.log(`[${type.toUpperCase()}] ${message}`);
         }

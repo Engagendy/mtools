@@ -6,6 +6,10 @@ let discountDesignLayer = null;
 let discountTransformer = null;
 let discountCanvasInitialized = false;
 let selectedDiscountElement = null;
+let discountFreePhotoCounter = 0;
+let currentDiscountPhotoShape = 'free';
+let discountFreeShapeCounter = 0;
+let currentDiscountShapeFillMode = 'solid';
 
 // Discount card formats - multiple templates
 const discountFormats = {
@@ -86,7 +90,9 @@ let discountData = {
         logoWidth: 60,
         logoHeight: 60,
         qrImages: [null, null, null, null],
-        backgroundImage: null
+        backgroundImage: null,
+        freePhotos: [],
+        freeShapes: []
     }
 };
 
@@ -247,6 +253,10 @@ function initializeDiscountTool() {
             return;
         }
 
+        if (e.target.getParent && e.target.getParent() === discountTransformer) {
+            return;
+        }
+
         if (e.target.getLayer() === discountDesignLayer && e.target !== discountTransformer) {
             discountTransformer.nodes([e.target]);
             selectedDiscountElement = e.target;
@@ -255,6 +265,8 @@ function initializeDiscountTool() {
             // Show text panel if text is selected
             if (e.target.getClassName() === 'Text') {
                 showDiscountTextPanel(e.target);
+            } else {
+                showDiscountElementPanel(e.target);
             }
 
             // Switch to design tab
@@ -277,27 +289,14 @@ function initializeDiscountTool() {
 
         // Delete
         if (e.key === 'Delete' || e.key === 'Backspace') {
-            discountTransformer.nodes([]);
-            selectedDiscountElement.remove();
-            selectedDiscountElement = null;
-            hideDiscountTextPanel();
-            discountDesignLayer.draw();
+            removeDiscountSelectedElement();
             e.preventDefault();
         }
 
         // Copy (Ctrl/Cmd + D)
         if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
             e.preventDefault();
-            if (selectedDiscountElement) {
-                const clone = selectedDiscountElement.clone({
-                    x: selectedDiscountElement.x() + 10,
-                    y: selectedDiscountElement.y() + 10
-                });
-                discountDesignLayer.add(clone);
-                discountTransformer.nodes([clone]);
-                selectedDiscountElement = clone;
-                discountDesignLayer.draw();
-            }
+            duplicateDiscountSelectedElement();
         }
 
         // Arrow keys
@@ -318,6 +317,11 @@ function initializeDiscountTool() {
                         selectedDiscountElement.y(selectedDiscountElement.y() + moveDistance);
                         break;
                 }
+                if (selectedDiscountElement.hasName?.('free-photo')) {
+                    saveDiscountFreePhotoNode(selectedDiscountElement, selectedDiscountElement.id());
+                } else if (selectedDiscountElement.hasName?.('free-shape')) {
+                    saveDiscountFreeShapeNode(selectedDiscountElement, selectedDiscountElement.id());
+                }
                 discountDesignLayer.draw();
                 e.preventDefault();
             }
@@ -335,6 +339,93 @@ function initializeDiscountTool() {
 
     discountCanvasInitialized = true;
     console.log('Discount Tool initialized successfully');
+}
+
+function removeDiscountSelectedElement() {
+    if (!selectedDiscountElement ||
+        selectedDiscountElement.isDestroyed ||
+        !selectedDiscountElement.getLayer()) {
+        return;
+    }
+
+    if (selectedDiscountElement.hasName?.('free-photo')) {
+        const id = selectedDiscountElement.id();
+        discountData.design.freePhotos = discountData.design.freePhotos.filter(photo => photo.id !== id);
+    } else if (selectedDiscountElement.hasName?.('free-shape')) {
+        const id = selectedDiscountElement.id();
+        discountData.design.freeShapes = discountData.design.freeShapes.filter(shape => shape.id !== id);
+    }
+
+    discountTransformer.nodes([]);
+    selectedDiscountElement.remove();
+    selectedDiscountElement = null;
+    hideDiscountTextPanel();
+    discountDesignLayer.draw();
+}
+
+function duplicateDiscountSelectedElement() {
+    if (!selectedDiscountElement ||
+        selectedDiscountElement.isDestroyed ||
+        !selectedDiscountElement.getLayer()) {
+        return;
+    }
+
+    if (selectedDiscountElement.hasName?.('free-photo')) {
+        saveDiscountFreePhotoNode(selectedDiscountElement, selectedDiscountElement.id());
+        const source = discountData.design.freePhotos.find(photo => photo.id === selectedDiscountElement.id());
+        if (!source) return;
+
+        const copy = {
+            ...source,
+            id: `discount-free-photo-${Date.now()}-${discountFreePhotoCounter++}`,
+            x: source.x + 15,
+            y: source.y + 15
+        };
+        discountData.design.freePhotos.push(copy);
+        const img = new Image();
+        img.onload = function () {
+            const node = createDiscountPhotoNode(img, copy);
+            attachDiscountFreePhotoEvents(node, copy.id);
+            discountDesignLayer.add(node);
+            discountTransformer.nodes([node]);
+            selectedDiscountElement = node;
+            discountTransformer.moveToTop();
+            discountDesignLayer.draw();
+        };
+        img.src = copy.src;
+        return;
+    }
+
+    if (selectedDiscountElement.hasName?.('free-shape')) {
+        saveDiscountFreeShapeNode(selectedDiscountElement, selectedDiscountElement.id());
+        const source = discountData.design.freeShapes.find(shape => shape.id === selectedDiscountElement.id());
+        if (!source) return;
+
+        const copy = {
+            ...source,
+            id: `discount-free-shape-${Date.now()}-${discountFreeShapeCounter++}`,
+            x: source.x + 15,
+            y: source.y + 15
+        };
+        discountData.design.freeShapes.push(copy);
+        const node = createDiscountShapeNode(copy);
+        attachDiscountFreeShapeEvents(node, copy.id);
+        discountDesignLayer.add(node);
+        discountTransformer.nodes([node]);
+        selectedDiscountElement = node;
+        discountTransformer.moveToTop();
+        discountDesignLayer.draw();
+        return;
+    }
+
+    const clone = selectedDiscountElement.clone({
+        x: selectedDiscountElement.x() + 10,
+        y: selectedDiscountElement.y() + 10
+    });
+    discountDesignLayer.add(clone);
+    discountTransformer.nodes([clone]);
+    selectedDiscountElement = clone;
+    discountDesignLayer.draw();
 }
 
 // Text editor (inline editing)
@@ -409,6 +500,10 @@ function showDiscountTextPanel(textNode) {
     if (!panel) return;
 
     panel.style.display = 'block';
+    panel.classList.remove('hidden');
+    document.querySelectorAll('[data-discount-text-control]').forEach(control => {
+        control.style.display = '';
+    });
 
     // Update control values
     const fontSizeSlider = document.getElementById('discount-text-font-size');
@@ -425,10 +520,25 @@ function showDiscountTextPanel(textNode) {
     }
 }
 
+function showDiscountElementPanel(node) {
+    const panel = document.getElementById('discount-text-formatting-panel');
+    if (!panel) return;
+
+    panel.style.display = 'block';
+    panel.classList.remove('hidden');
+    document.querySelectorAll('[data-discount-text-control]').forEach(control => {
+        control.style.display = 'none';
+    });
+
+    const opacity = document.getElementById('discount-element-opacity');
+    if (opacity) opacity.value = Math.round((node.opacity ? node.opacity() : 1) * 100);
+}
+
 function hideDiscountTextPanel() {
     const panel = document.getElementById('discount-text-formatting-panel');
     if (panel) {
         panel.style.display = 'none';
+        panel.classList.add('hidden');
     }
 }
 
@@ -1028,8 +1138,383 @@ function createDiscountDesign() {
     });
     discountDesignLayer.add(phoneText);
 
+    renderDiscountFreePhotos();
+    renderDiscountFreeShapes();
     discountDesignLayer.draw();
 }
+
+function renderDiscountFreePhotos() {
+    discountData.design.freePhotos.forEach((photoData) => {
+        const img = new Image();
+        img.onload = function () {
+            const node = createDiscountPhotoNode(img, photoData);
+            attachDiscountFreePhotoEvents(node, photoData.id);
+            discountDesignLayer.add(node);
+            discountTransformer.moveToTop();
+            discountDesignLayer.draw();
+        };
+        img.src = photoData.src;
+    });
+}
+
+function createDiscountPhotoNode(img, photoData) {
+    const shape = photoData.shape || 'free';
+    const baseAttrs = {
+        draggable: true,
+        name: `free-photo free-photo-${shape}`,
+        id: photoData.id,
+        sourceImage: img
+    };
+
+    if (shape === 'circle') {
+        const diameter = Math.min(photoData.width, photoData.height);
+        const scale = Math.max(diameter / img.width, diameter / img.height);
+        return new Konva.Circle({
+            ...baseAttrs,
+            x: photoData.x + diameter / 2,
+            y: photoData.y + diameter / 2,
+            radius: diameter / 2,
+            rotation: photoData.rotation || 0,
+            scaleX: photoData.scaleX || 1,
+            scaleY: photoData.scaleY || 1,
+            opacity: photoData.opacity ?? 1,
+            fillPatternImage: img,
+            fillPatternScale: { x: scale, y: scale },
+            fillPatternOffset: { x: img.width / 2, y: img.height / 2 }
+        });
+    }
+
+    return new Konva.Image({
+        ...baseAttrs,
+        x: photoData.x,
+        y: photoData.y,
+        image: img,
+        width: photoData.width,
+        height: photoData.height,
+        rotation: photoData.rotation || 0,
+        scaleX: photoData.scaleX || 1,
+        scaleY: photoData.scaleY || 1,
+        opacity: photoData.opacity ?? 1,
+        crop: getDiscountCoverCrop(img, photoData.width, photoData.height),
+        cornerRadius: shape === 'rounded' ? Math.min(photoData.width, photoData.height) * 0.12 : 0
+    });
+}
+
+function getDiscountCoverCrop(img, targetWidth, targetHeight) {
+    const imageRatio = img.width / img.height;
+    const targetRatio = targetWidth / targetHeight;
+    let cropWidth = img.width;
+    let cropHeight = img.height;
+
+    if (targetRatio > imageRatio) {
+        cropHeight = img.width / targetRatio;
+    } else {
+        cropWidth = img.height * targetRatio;
+    }
+
+    return {
+        x: Math.max(0, (img.width - cropWidth) / 2),
+        y: Math.max(0, (img.height - cropHeight) / 2),
+        width: cropWidth,
+        height: cropHeight
+    };
+}
+
+function attachDiscountFreePhotoEvents(node, id) {
+    const sync = () => saveDiscountFreePhotoNode(node, id);
+    node.on('dragend transformend', sync);
+}
+
+function saveDiscountFreePhotoNode(node, id) {
+    const index = discountData.design.freePhotos.findIndex(photo => photo.id === id);
+    if (index === -1) return;
+
+    const box = node.getClientRect({ relativeTo: discountDesignLayer });
+    discountData.design.freePhotos[index] = {
+        ...discountData.design.freePhotos[index],
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height,
+        rotation: node.rotation(),
+        scaleX: 1,
+        scaleY: 1,
+        opacity: node.opacity()
+    };
+}
+
+window.handleDiscountFreePhotoUpload = function () {
+    const input = document.getElementById('discount-free-photo-upload');
+    const file = input?.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        window.showNotification?.('❌ Please choose a valid image', 'error');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        addDiscountFreePhoto(event.target.result);
+        input.value = '';
+    };
+    reader.readAsDataURL(file);
+};
+
+function addDiscountFreePhoto(src) {
+    const format = discountFormats[currentDiscountFormat];
+    const img = new Image();
+    img.onload = function () {
+        const maxWidth = format.width * 0.38;
+        const maxHeight = format.height * 0.28;
+        const ratio = Math.min(maxWidth / img.width, maxHeight / img.height, 1);
+        const width = Math.max(90, img.width * ratio);
+        const height = Math.max(90, img.height * ratio);
+        const photoData = {
+            id: `discount-free-photo-${Date.now()}-${discountFreePhotoCounter++}`,
+            src,
+            shape: currentDiscountPhotoShape,
+            x: format.width / 2 - width / 2,
+            y: format.height / 2 - height / 2,
+            width,
+            height,
+            rotation: 0,
+            scaleX: 1,
+            scaleY: 1,
+            opacity: 1
+        };
+
+        discountData.design.freePhotos.push(photoData);
+        const node = createDiscountPhotoNode(img, photoData);
+        attachDiscountFreePhotoEvents(node, photoData.id);
+        discountDesignLayer.add(node);
+        discountTransformer.nodes([node]);
+        selectedDiscountElement = node;
+        discountTransformer.moveToTop();
+        showDiscountElementPanel(node);
+        discountDesignLayer.draw();
+        window.showNotification?.('✅ Photo added. Drag, resize, rotate, layer, or delete it.', 'success');
+    };
+    img.src = src;
+}
+
+window.setDiscountPhotoShape = function (shape) {
+    currentDiscountPhotoShape = shape;
+    document.querySelectorAll('[data-discount-photo-shape]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.discountPhotoShape === shape);
+    });
+
+    if (selectedDiscountElement && selectedDiscountElement.hasName?.('free-photo')) {
+        const id = selectedDiscountElement.id();
+        saveDiscountFreePhotoNode(selectedDiscountElement, id);
+        const photo = discountData.design.freePhotos.find(item => item.id === id);
+        if (photo) {
+            photo.shape = shape;
+            selectedDiscountElement.destroy();
+            const img = new Image();
+            img.onload = function () {
+                const node = createDiscountPhotoNode(img, photo);
+                attachDiscountFreePhotoEvents(node, photo.id);
+                discountDesignLayer.add(node);
+                discountTransformer.nodes([node]);
+                selectedDiscountElement = node;
+                discountTransformer.moveToTop();
+                discountDesignLayer.draw();
+            };
+            img.src = photo.src;
+        }
+    }
+};
+
+window.setDiscountSelectedOpacity = function (value) {
+    if (!selectedDiscountElement) return;
+    selectedDiscountElement.opacity(Math.max(0.1, Math.min(1, Number(value) / 100)));
+    if (selectedDiscountElement.hasName?.('free-photo')) {
+        saveDiscountFreePhotoNode(selectedDiscountElement, selectedDiscountElement.id());
+    } else if (selectedDiscountElement.hasName?.('free-shape')) {
+        saveDiscountFreeShapeNode(selectedDiscountElement, selectedDiscountElement.id());
+    }
+    discountDesignLayer.draw();
+};
+
+function renderDiscountFreeShapes() {
+    discountData.design.freeShapes.forEach((shapeData) => {
+        const node = createDiscountShapeNode(shapeData);
+        attachDiscountFreeShapeEvents(node, shapeData.id);
+        discountDesignLayer.add(node);
+        discountTransformer.moveToTop();
+    });
+}
+
+function getDiscountShapeColors() {
+    return {
+        color1: document.getElementById('discount-shape-color-1')?.value || '#ffd43b',
+        color2: document.getElementById('discount-shape-color-2')?.value || '#ff6b6b'
+    };
+}
+
+function getDiscountShapeFillAttrs(shapeData) {
+    const color1 = shapeData.color1 || getDiscountShapeColors().color1;
+    const color2 = shapeData.color2 || getDiscountShapeColors().color2;
+    const fillMode = shapeData.fillMode || currentDiscountShapeFillMode;
+
+    if (fillMode === 'gradient') {
+        return {
+            fill: undefined,
+            fillLinearGradientStartPoint: { x: 0, y: 0 },
+            fillLinearGradientEndPoint: { x: shapeData.width, y: shapeData.height },
+            fillLinearGradientColorStops: [0, color1, 1, color2]
+        };
+    }
+
+    return {
+        fill: color1,
+        fillLinearGradientColorStops: undefined
+    };
+}
+
+function createDiscountShapeNode(shapeData) {
+    const type = shapeData.type || 'rect';
+    const fillAttrs = getDiscountShapeFillAttrs(shapeData);
+    const common = {
+        draggable: true,
+        name: `free-shape free-shape-${type}`,
+        id: shapeData.id,
+        shapeType: type,
+        rotation: shapeData.rotation || 0,
+        opacity: shapeData.opacity ?? 1,
+        ...fillAttrs,
+        shadowColor: 'rgba(0,0,0,0.18)',
+        shadowBlur: 10,
+        shadowOffset: { x: 0, y: 4 },
+        shadowOpacity: 0.5
+    };
+
+    if (type === 'circle') {
+        return new Konva.Circle({
+            ...common,
+            x: shapeData.x + shapeData.width / 2,
+            y: shapeData.y + shapeData.height / 2,
+            radius: Math.min(shapeData.width, shapeData.height) / 2
+        });
+    }
+
+    if (type === 'triangle') {
+        return new Konva.RegularPolygon({
+            ...common,
+            x: shapeData.x + shapeData.width / 2,
+            y: shapeData.y + shapeData.height / 2,
+            sides: 3,
+            radius: Math.min(shapeData.width, shapeData.height) / 2
+        });
+    }
+
+    if (type === 'star') {
+        return new Konva.Star({
+            ...common,
+            x: shapeData.x + shapeData.width / 2,
+            y: shapeData.y + shapeData.height / 2,
+            numPoints: 5,
+            innerRadius: Math.min(shapeData.width, shapeData.height) * 0.22,
+            outerRadius: Math.min(shapeData.width, shapeData.height) / 2
+        });
+    }
+
+    return new Konva.Rect({
+        ...common,
+        x: shapeData.x,
+        y: shapeData.y,
+        width: shapeData.width,
+        height: shapeData.height,
+        cornerRadius: type === 'roundrect' ? Math.min(shapeData.width, shapeData.height) * 0.18 : 0
+    });
+}
+
+function attachDiscountFreeShapeEvents(node, id) {
+    const sync = () => saveDiscountFreeShapeNode(node, id);
+    node.on('dragend transformend', sync);
+}
+
+function saveDiscountFreeShapeNode(node, id) {
+    const index = discountData.design.freeShapes.findIndex(shape => shape.id === id);
+    if (index === -1) return;
+
+    const box = node.getClientRect({ relativeTo: discountDesignLayer });
+    discountData.design.freeShapes[index] = {
+        ...discountData.design.freeShapes[index],
+        x: box.x,
+        y: box.y,
+        width: Math.max(20, box.width),
+        height: Math.max(20, box.height),
+        rotation: node.rotation(),
+        opacity: node.opacity()
+    };
+}
+
+window.addDiscountShapeElement = function (type) {
+    const format = discountFormats[currentDiscountFormat];
+    const { color1, color2 } = getDiscountShapeColors();
+    const width = Math.max(90, format.width * 0.22);
+    const height = Math.max(70, format.height * 0.10);
+    const offset = (discountFreeShapeCounter % 4) * 15;
+    const shapeData = {
+        id: `discount-free-shape-${Date.now()}-${discountFreeShapeCounter++}`,
+        type,
+        fillMode: currentDiscountShapeFillMode,
+        color1,
+        color2,
+        x: format.width / 2 - width / 2 + offset,
+        y: format.height / 2 - height / 2 + offset,
+        width,
+        height,
+        rotation: 0,
+        opacity: 1
+    };
+
+    discountData.design.freeShapes.push(shapeData);
+    const node = createDiscountShapeNode(shapeData);
+    attachDiscountFreeShapeEvents(node, shapeData.id);
+    discountDesignLayer.add(node);
+    discountTransformer.nodes([node]);
+    selectedDiscountElement = node;
+    discountTransformer.moveToTop();
+    showDiscountElementPanel(node);
+    discountDesignLayer.draw();
+};
+
+window.setDiscountShapeFillMode = function (mode) {
+    currentDiscountShapeFillMode = mode;
+    document.querySelectorAll('[data-discount-shape-fill-mode]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.discountShapeFillMode === mode);
+    });
+    window.applyDiscountSelectedShapeFill();
+};
+
+window.applyDiscountSelectedShapeFill = function () {
+    if (!selectedDiscountElement || !selectedDiscountElement.hasName?.('free-shape')) return;
+    const shape = discountData.design.freeShapes.find(item => item.id === selectedDiscountElement.id());
+    if (!shape) return;
+
+    const { color1, color2 } = getDiscountShapeColors();
+    shape.fillMode = currentDiscountShapeFillMode;
+    shape.color1 = color1;
+    shape.color2 = color2;
+    selectedDiscountElement.setAttrs(getDiscountShapeFillAttrs(shape));
+    discountDesignLayer.draw();
+};
+
+window.bringDiscountSelectedForward = function () {
+    if (!selectedDiscountElement) return;
+    selectedDiscountElement.moveToTop();
+    discountTransformer.moveToTop();
+    discountDesignLayer.draw();
+};
+
+window.sendDiscountSelectedBackward = function () {
+    if (!selectedDiscountElement) return;
+    selectedDiscountElement.moveToBottom();
+    discountDesignLayer.draw();
+};
 
 
 // Setup form handlers
@@ -1229,33 +1714,21 @@ function setupDiscountTextFormattingHandlers() {
     // Copy
     if (copyBtn) {
         copyBtn.addEventListener('click', () => {
-            if (selectedDiscountElement &&
-                !selectedDiscountElement.isDestroyed &&
-                selectedDiscountElement.getLayer()) {
-                const clone = selectedDiscountElement.clone({
-                    x: selectedDiscountElement.x() + 10,
-                    y: selectedDiscountElement.y() + 10
-                });
-                discountDesignLayer.add(clone);
-                discountTransformer.nodes([clone]);
-                selectedDiscountElement = clone;
-                discountDesignLayer.draw();
-            }
+            duplicateDiscountSelectedElement();
         });
     }
 
     // Delete
     if (deleteBtn) {
         deleteBtn.addEventListener('click', () => {
-            if (selectedDiscountElement &&
-                !selectedDiscountElement.isDestroyed &&
-                selectedDiscountElement.getLayer()) {
-                discountTransformer.nodes([]);
-                selectedDiscountElement.remove();
-                selectedDiscountElement = null;
-                hideDiscountTextPanel();
-                discountDesignLayer.draw();
-            }
+            removeDiscountSelectedElement();
+        });
+    }
+
+    const opacity = document.getElementById('discount-element-opacity');
+    if (opacity) {
+        opacity.addEventListener('input', function () {
+            window.setDiscountSelectedOpacity(this.value);
         });
     }
 }
